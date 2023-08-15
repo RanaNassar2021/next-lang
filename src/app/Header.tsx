@@ -66,8 +66,8 @@ export default function Header() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleClose}>The Designer</MenuItem>
-              <MenuItem onClick={handleClose}>PICTURA Designs</MenuItem>
+              <MenuItem onClick={handleClose}> The Designer</MenuItem>
+              <MenuItem onClick={handleClose}> <Link href='/PicturaDesigns'>PICTURA Designs</Link> </MenuItem>
             </Menu>
             <Button className={classes.btnB}>New Trends</Button>
             <Button className={classes.btnB}>Vote & Win</Button>

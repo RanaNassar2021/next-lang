@@ -1,0 +1,259 @@
+[
+    {
+        "id": 1,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 1",
+        "category": "T-Shirt",
+        "price": "400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 2,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 2",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 3,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 3",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 4,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 4",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 5,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 5",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 6,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 6",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 7,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 7",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 8,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 8",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 9,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 9",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 10,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 10",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 11,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 11",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 12,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 12",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 13,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 13",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 14,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 14",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 15,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 15",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    },
+    {
+        "id": 16,
+        "images":[
+            "/Assets/Images/best3.jpg",
+            "/Assets/Images/best4.jpg",
+            "/Assets/Images/best5.jpg",
+            "/Assets/Images/best6.jpg",
+            "/Assets/Images/best7.jpg"
+        ],
+        "currentImageIndex": 0,
+        "title": "cool oversize short sleeve t-shirt 16",
+        "category": "T-Shirt",
+        "price":"400 EGP",
+        "isMouseOver":false,
+        "isClicked":false
+    }
+
+]

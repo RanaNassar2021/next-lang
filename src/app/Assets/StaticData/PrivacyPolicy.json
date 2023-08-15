@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "title": "1. Information We Collect",
+        "description": "1.1 Personal Information: When you use our services, we may collect personal information, such as your name, email address, phone number, and shipping address. This information is necessary for processing your orders and providing a personalized experience. 1.2 Design Information: When you create custom designs on the PICTURA platform, we may collect and store your design specifications, images, and other related data to fulfill your orders and improve our services. 1.3 Usage Information: We collect information about your interactions with the PICTURA website and services, such as your IP address, browser type, device information, and browsing patterns. This information helps us analyze user behavior, improve our website, and enhance your overall experience."
+    },
+    {
+        "id": 2,
+        "title": "2. Use of Personal Information",
+        "description": "2.1 Order Fulfillment: We use your personal information to process and fulfill your orders, including verifying payment details, producing custom designs, and arranging shipping and delivery. 2.2 Communication: We may use your contact information to communicate with you regarding your orders, provide customer support, and send you relevant updates, promotions, or newsletters. You have the option to opt out of receiving marketing communications at any time. 2.3 Improving Services: We may analyze usage data and feedback to improve our website, products, and services, ensuring a better user experience and addressing customer preferences and needs."
+    },
+    {
+        "id": 3,
+        "title": "3. Data Protection and Security",
+        "description": "3.1 PICTURA takes appropriate technical and organizational measures to safeguard your personal information against unauthorized access, loss, or alteration. We follow industry-standard practices to protect data during transmission and storage. 3.2 We restrict access to your personal information to authorized personnel who need it for the purposes outlined in this Privacy Policy. We ensure that all employees and third-party service providers comply with strict confidentiality obligations. 3.3 While we implement security measures to protect your data, no method of transmission or storage over the internet is 100% secure. Therefore, we cannot guarantee absolute security of your personal information. You understand and accept this inherent risk."
+    },
+    {
+        "id": 4,
+        "title": "4. Sharing of Personal Information",
+        "description": "4.1 We may share your personal information with trusted third-party service providers who assist us in delivering our services, such as payment processors, shipping partners, and customer support providers. These service providers are contractually obligated to protect your personal information and can only use it for the specified purposes. 4.2 We may disclose your personal information when required to do so by law, court order, or other legal processes. We may also disclose information to protect our rights, safety, and property, or the rights, safety, and property of others."
+    },
+    {
+        "id": 5,
+        "title": "5. Retention of Personal Information",
+        "description": "5.1 We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. 5.2 If you wish to have your personal information removed from our systems, please contact us using the information provided in the 'Contact PICTURA' section below. However, please note that certain information may be retained for legitimate business purposes or as required by law."
+    },
+    {
+        "id": 6,
+        "title": "6. Your Rights",
+        "description": "6.1 You have the right to access, update, correct, or delete your personal information held by PICTURA. You can do so by contacting us using the information provided in the 'Contact PICTURA' section below. 6.2 You have the right to withdraw your consent for the processing of your personal information at any time, subject to legal and contractual obligations. However, withdrawal of consent may affect your ability to use certain features or services provided by PICTURA"
+    },
+    {
+        "id": 7,
+        "title": "7. Contact PICTURA",
+        "description": "If you have any questions, concerns, or requests regarding this Privacy Policy or the handling of your personal information, please contact us using the following information: Email: [privacy@pictura.com] Phone: [+1 (XXX) XXX-XXXX] We will make reasonable efforts to address your inquiries and resolve any issues promptly and in accordance with applicable privacy laws. By using the PICTURA website and services, you acknowledge and consent to the collection, use, and protection of your personal information as described in this Privacy Policy, under the laws and regulations of Egypt."
+    }
+]
