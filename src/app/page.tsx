@@ -1,24 +1,16 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Box, Typography, Grid, Card, CardContent, CardMedia, Button } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Divider } from '@mui/material';
 
 // Images
 import Designer from './Assets/Images/theDesigner.jpg';
 import Design1 from './Assets/Images/design1.jpg';
 import Design2 from './Assets/Images/design2.jpg';
 import Design3 from './Assets/Images/design3.jpg';
-import HoodyMen from './Assets/Images/hoody.jpg';
-import best2 from './Assets/Images/best2.jpg';
-import best3 from './Assets/Images/best3.jpg';
-import best4 from './Assets/Images/best4.jpg';
-import best5 from './Assets/Images/best5.jpg';
-import best6 from './Assets/Images/best6.jpg';
-import best7 from './Assets/Images/best7.jpg';
 import flashSaleBanner from './Assets/Images/flashSaleBanner.png';
 import buyNow from './Assets/Images/BuyNow.png';
 import newTrendG from './Assets/Images/newTrendG.jpg';
 import newTrendM from './Assets/Images/newTrendM.jpg';
-import vote1 from './Assets/Images/vote1.jpg';
 import tiktok from './Assets/Images/tiktok.jpg';
 import tiktokIcon from './Assets/Images/tiktokb.png';
 import instagram from './Assets/Images/insta.jpg';
@@ -32,11 +24,11 @@ import * as MuiIcons from '@mui/icons-material';
 
 // styles
 import useStyles from './HomePage.Styles';
-import { styled } from '@mui/material/styles';
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+
 
 // static Data
-import flashSaleSliders from './Assets/StaticData/FlashSale.json';
+import flashSaleData from './Assets/StaticData/FlashSale.json';
+import bestSellerData from './Assets/StaticData/BestSeller.json';
 import votesData from './Assets/StaticData/Vote.json'
 
 // Slider
@@ -45,14 +37,12 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import Header from './Header';
 import Footer from './Footer';
 import CustomizedProgressBars from './Progress/Progress';
-import ProductCard from './Card/Card';
 import '@splidejs/react-splide/css';
 
 export default function Home() {
   const Icons: any = MuiIcons;
   const { classes } = useStyles();
 
-  const [hover, setHover] = useState(false);
 
   const [votes, setVotes] = useState(votesData)
   const handleMouseOverVote = (id: number) => {
@@ -68,31 +58,25 @@ export default function Home() {
     }));
   }
 
- 
+
 
   function Heading() {
     return (
       <Box className={classes.hoverBox}>
-        <Box style={{ width:'100%', color:'white'}}>
-        <CustomizedProgressBars/>
+        <Box style={{ width: '100%', color: 'white' }}>
+          <CustomizedProgressBars />
         </Box>
       </Box>
     );
   }
 
- 
-
-
-  const flashSaleImages: any = [
-    { key: '01', value: HoodyMen }, { key: '02', value: best2 }, { key: '03', value: best3 }
-  ]
 
   return (
     <React.Fragment>
-
       <Header></Header>
-
       <Box className="flex  flex-col items-center justify-between">
+
+        {/* The dsigner & Pictura designs */}
         <Box className={classes.container} sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Box className={classes.theDesigner} style={{ backgroundImage: `url(${Designer.src})`, backgroundSize: 'cover' }}>
             <Box className={classes.designerContent}>
@@ -103,17 +87,17 @@ export default function Home() {
           <Box className={classes.picturaDesigns} >
             <Box >
               <Link href='/PicturaDesigns'>
-              <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: true, speed: 1000, pagination: false }}>
-                <SplideSlide>
-                  <Image src={Design1} alt='pictura designs' />
-                </SplideSlide>
-                <SplideSlide>
-                  <Image src={Design2} alt='pictura designs' />
-                </SplideSlide>
-                <SplideSlide>
-                  <Image src={Design3} alt='pictura designs' />
-                </SplideSlide>
-              </Splide>
+                <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: true, speed: 1000, pagination: false }}>
+                  <SplideSlide>
+                    <Image src={Design1} alt='pictura designs' />
+                  </SplideSlide>
+                  <SplideSlide>
+                    <Image src={Design2} alt='pictura designs' />
+                  </SplideSlide>
+                  <SplideSlide>
+                    <Image src={Design3} alt='pictura designs' />
+                  </SplideSlide>
+                </Splide>
               </Link>
             </Box>
             <Box className={classes.picturaContent}>
@@ -160,385 +144,73 @@ export default function Home() {
             <Typography variant='h4'>Best Seller</Typography>
           </Box>
 
-          {/* slider */}
-          <Box className={classes.slider}>
-            <Splide options={{ type: 'loop', autoWidth: false, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
-              <SplideSlide>
-                <Grid container spacing={2} sx={{ mt: 3 }}>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}
-                    >
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={HoodyMen.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best2.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best3.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best4.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={2} sx={{ mt: 2 }}>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best5.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best6.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best7.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={HoodyMen.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </SplideSlide>
-              <SplideSlide>
-                <Grid container spacing={2} sx={{ mt: 3 }}>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }} >
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best7.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best3.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={HoodyMen.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best5.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={2} sx={{ mt: 2 }}>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={HoodyMen.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best4.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best2.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={6} md={3} lg={3}>
-                    <Card sx={{ maxWidth: 345 }} >
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best6.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </SplideSlide>
-            </Splide>
+          {/* best seller slider map using grid */}
+          <Box  className={classes.sliderFlashSale}>
+          <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 2000, pagination: false }} style={{ width: '100%' }}>
+            <SplideSlide>
+            <Box   sx={{
+                   display: 'grid',
+                   gap: 2,
+                   gridTemplateColumns: 'repeat(4, 1fr)',
+                      }}>
+              {bestSellerData.map(bestSeller =>{
+                return(
+                  <Card key={bestSeller.id} style={{ width: '230px' }}>
+                  <CardMedia
+                    sx={{ height: 220 }}
+                    image={bestSeller.image}
+                    title="product image"
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                      {bestSeller.title}
+                    </Typography>
+                    <Box className={classes.cardFooter}>
+                      <Typography color="text.secondary">{bestSeller.category}</Typography>
+                      <Typography>{bestSeller.price}</Typography>
+                    </Box>
+                  </CardContent>
+                </Card>
+                )
+              })
+              }
+            </Box>
+            </SplideSlide>
+          </Splide>
           </Box>
         </Box>
 
         {/* Mobile view */}
 
         <Box className={classes.bestSellerContainer} sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Divider style={{paddingTop:20}}></Divider>
           <Box className={classes.title}>
             Best Seller
           </Box>
           <Box className={classes.slider}>
             <Splide className={classes.slider} options={{ type: 'loop', autoWidth: false, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
-              <SplideSlide className={classes.sliderCard}>
-                <Card sx={{ maxWidth: 345 }} >
-                  <CardMedia
-                    sx={{ height: 220 }}
-                    image={best6.src}
-                    title="product image"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                      cool oversize short sleeve T-Shirt
-                    </Typography>
-                    <Box className={classes.cardFooter}>
-                      <Typography color="text.secondary">T-Shirt</Typography>
-                      <Typography>300 EGP</Typography>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </SplideSlide>
-              <SplideSlide className={classes.sliderCard}>
-                <Card sx={{ maxWidth: 345 }} >
-                  <CardMedia
-                    sx={{ height: 220 }}
-                    image={best5.src}
-                    title="product image"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                      cool oversize short sleeve T-Shirt
-                    </Typography>
-                    <Box className={classes.cardFooter}>
-                      <Typography color="text.secondary">T-Shirt</Typography>
-                      <Typography>300 EGP</Typography>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </SplideSlide>
-              <SplideSlide className={classes.sliderCard}>
-                <Card sx={{ maxWidth: 345 }} >
-                  <CardMedia
-                    sx={{ height: 220 }}
-                    image={best4.src}
-                    title="product image"
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                      cool oversize short sleeve T-Shirt
-                    </Typography>
-                    <Box className={classes.cardFooter}>
-                      <Typography color="text.secondary">T-Shirt</Typography>
-                      <Typography>300 EGP</Typography>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </SplideSlide>
-
+              {bestSellerData.map(bestSeller => {
+                return (
+                  <SplideSlide className={classes.sliderCard}>
+                    <Card sx={{ maxWidth: 345 }} key={bestSeller.id} >
+                      <CardMedia
+                        sx={{ height: 220 }}
+                        image={bestSeller.image}
+                        title="product image"
+                      />
+                      <CardContent className={classes.cardContent}>
+                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                          {bestSeller.title}
+                        </Typography>
+                        <Box className={classes.cardFooter}>
+                          <Typography color="text.secondary">{bestSeller.category}</Typography>
+                          <Typography>{bestSeller.price}</Typography>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </SplideSlide>
+                )
+              })}
             </Splide>
           </Box>
         </Box>
@@ -548,127 +220,33 @@ export default function Home() {
           <Image src={flashSaleBanner} alt='flash sale' />
         </Box>
 
-        {/* flash sale slider */}
+        {/* flash sale map */}
         <Box className={classes.flashSaleContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Box className={classes.sliderFlashSale}>
-            <Splide options={{ type: 'loop', autoWidth: false, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
+            <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 3000, pagination: false }} style={{ width: '100%' }}>
               <SplideSlide>
-                <Grid container spacing={2} sx={{ mt: 0 }}>
-                  <Grid item xs={6} md={4} lg={4}>
-                    <Card sx={{ maxWidth: 345 }} >
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={HoodyMen.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={6} md={4} lg={4}>
-                    <Card sx={{ maxWidth: 345 }} >
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best2.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6} md={4} lg={4}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best3.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </SplideSlide>
-              <SplideSlide>
-                <Grid container spacing={2} sx={{ mt: 0 }}>
-                  <Grid item xs={6} md={4} lg={4}>
-                    <Card sx={{ maxWidth: 345 }}>
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best7.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-
-                  <Grid item xs={6} md={4} lg={4}>
-                    <Card sx={{ maxWidth: 345 }} >
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={best3.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6} md={4} lg={4}>
-                    <Card sx={{ maxWidth: 345 }} >
-                      <CardMedia
-                        sx={{ height: 220 }}
-                        image={HoodyMen.src}
-                        title="product image"
-                      />
-                      <CardContent className={classes.cardContent}>
-                        <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                          cool oversize short sleeve T-Shirt
-                        </Typography>
-                        <Box className={classes.cardFooter}>
-                          <Typography color="text.secondary">T-Shirt</Typography>
-                          <Typography>300 EGP</Typography>
-                        </Box>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
+                <Box style={{ display: 'flex', gap: 25 }}>
+                  {flashSaleData.map(flashSale => {
+                    return (
+                      <Card key={flashSale.id} style={{ width: '300px' }}>
+                        <CardMedia
+                          sx={{ height: 220 }}
+                          image={flashSale.image}
+                          title="product image"
+                        />
+                        <CardContent className={classes.cardContent}>
+                          <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                            {flashSale.title}
+                          </Typography>
+                          <Box className={classes.cardFooter}>
+                            <Typography color="text.secondary">{flashSale.category}</Typography>
+                            <Typography>{flashSale.price}</Typography>
+                          </Box>
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
+                </Box>
               </SplideSlide>
             </Splide>
           </Box>
@@ -676,68 +254,37 @@ export default function Home() {
             <Button className={classes.buyNowBtn}><Image src={buyNow} alt='flash sale button' width={200} height={80} /> </Button>
           </Box>
         </Box>
+
+        {/* flash sale slider */}
       </Box>
 
       {/* Mobile view */}
 
-      <Box className={classes.bestSellerContainer} sx={{ display: { xs: 'flex', md: 'none' } }}>
-        <Box className={classes.slider}>
-          <Splide className={classes.slider} options={{ type: 'loop', autoWidth: false, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
-            <SplideSlide className={classes.sliderCard}>
-              <Card sx={{ maxWidth: 345 }} >
-                <CardMedia
-                  sx={{ height: 220 }}
-                  image={best6.src}
-                  title="product image"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                    cool oversize short sleeve T-Shirt
-                  </Typography>
-                  <Box className={classes.cardFooter}>
-                    <Typography color="text.secondary">T-Shirt</Typography>
-                    <Typography>300 EGP</Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            </SplideSlide>
-            <SplideSlide className={classes.sliderCard}>
-              <Card sx={{ maxWidth: 345 }} >
-                <CardMedia
-                  sx={{ height: 220 }}
-                  image={best5.src}
-                  title="product image"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                    cool oversize short sleeve T-Shirt
-                  </Typography>
-                  <Box className={classes.cardFooter}>
-                    <Typography color="text.secondary">T-Shirt</Typography>
-                    <Typography>300 EGP</Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            </SplideSlide>
-            <SplideSlide className={classes.sliderCard}>
-              <Card sx={{ maxWidth: 345 }} >
-                <CardMedia
-                  sx={{ height: 220 }}
-                  image={best4.src}
-                  title="product image"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                    cool oversize short sleeve T-Shirt
-                  </Typography>
-                  <Box className={classes.cardFooter}>
-                    <Typography color="text.secondary">T-Shirt</Typography>
-                    <Typography>300 EGP</Typography>
-                  </Box>
-                </CardContent>
-              </Card>
-            </SplideSlide>
-
+      <Box className={classes.flashSaleContainer} sx={{ display: { xs: 'flex', md: 'none' } }}>
+        <Box className={classes.sliderFlashSaleMobile}>
+          <Splide className={classes.sliderFlashSaleMobile} options={{ type: 'loop', autoWidth: false, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
+            {flashSaleData.map(flashSale => {
+              return (
+                <SplideSlide className={classes.sliderCard}>
+                  <Card sx={{ maxWidth: 345 }} key={flashSale.id} >
+                    <CardMedia
+                      sx={{ height: 220 }}
+                      image={flashSale.image}
+                      title="product image"
+                    />
+                    <CardContent className={classes.cardContent}>
+                      <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                        {flashSale.title}
+                      </Typography>
+                      <Box className={classes.cardFooter}>
+                        <Typography color="text.secondary">{flashSale.category}</Typography>
+                        <Typography>{flashSale.price}</Typography>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </SplideSlide>
+              )
+            })}
           </Splide>
         </Box>
       </Box>
@@ -787,19 +334,43 @@ export default function Home() {
       </Box>
 
       {/* vote & win section */}
-      <Box className={classes.voteContainer}>
+      <Box sx={{display:{xs:'none',md:'block'}}}>
+      <Box className={classes.voteContainer} >
         <Typography variant='h6'>Vote & Win</Typography>
         <Typography>Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.</Typography>
       </Box>
       <Box className={classes.voteCardsContainer}>
         {votes.map(vote => {
           return (
-            <Box key={vote.id} onMouseOver={e => handleMouseOverVote(vote.id)} onMouseOut={e => handleMouseOutVote(vote.id)} className={classes.voteBox}>
-              <Image src={vote1} alt='vote & win first design' />
+            <Box key={vote.id}  className={classes.voteBox}>
+              <Image width={200} height={300} src={vote.image} alt='vote & win first design' onMouseOver={e => handleMouseOverVote(vote.id)} onMouseOut={e => handleMouseOutVote(vote.id)} />
               {vote.isMouseOver && <Heading />}
             </Box>
           )
         })}
+      </Box>
+      </Box>
+
+      {/* Mobile view */}
+      <Box sx={{display:{xs:'flex',md:'none'}}}>
+        <Box className={classes.voteMobileContainer}>
+        <Typography variant='h6'>Vote & Win</Typography>
+        <Typography>Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.</Typography>
+        <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 3000, pagination: false }} style={{ width: '100%' }}>
+        
+          {votes.map(vote => {
+          return (
+            <SplideSlide>
+            <Box key={vote.id}>
+              <Image width={200} height={300} src={vote.image} alt='vote & win first design' onMouseOver={e => handleMouseOverVote(vote.id)} onMouseOut={e => handleMouseOutVote(vote.id)} />
+              {vote.isMouseOver && <Heading />}
+            </Box>
+            </SplideSlide>
+          )
+        })}
+          
+        </Splide>
+        </Box>
       </Box>
 
       {/* follow on social media */}

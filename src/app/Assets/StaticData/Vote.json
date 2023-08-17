@@ -1,27 +1,32 @@
 [
     {
         "id": 1,
+        "image": "/Assets/Images/vote1.jpg",
         "title": "cool design 1",
         "isMouseOver":false
     },
     {
         "id": 2,
+        "image": "/Assets/Images/vote1.jpg",
         "title": " cool design 2",
         "isMouseOver":false
     },
     {
         "id": 3,
+        "image": "/Assets/Images/vote1.jpg",
         "title": " cool design 3",
         "isMouseOver":false
     },
     {
         "id": 4,
+        "image": "/Assets/Images/vote1.jpg",
         "title": " cool design 4",
         "isMouseOver":false
     },
 
     {
         "id": 5,
+        "image": "/Assets/Images/vote1.jpg",
         "title": " cool design 5",
         "isMouseOver":false
     }

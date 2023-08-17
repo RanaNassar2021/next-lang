@@ -1,42 +1,56 @@
 [
     {
         "id": 1,
-        "image": "/Assets/Images/best3.jpg",
+        "image": "/Assets/Images/best2.jpg",
         "title": "cool oversize short sleeve t-shirt 1",
         "category": "T-Shirt",
         "price": "300 EGP"
     },
     {
         "id": 2,
-        "image":"/Assets/Images/best4.jpg",
+        "image":"/Assets/Images/best3.jpg",
         "title": "cool oversize short sleeve t-shirt 2",
         "category": "T-Shirt",
         "price":"300 EGP"
     },
     {
         "id": 3,
-        "image":"/Assets/Images/best5.jpg",
+        "image":"/Assets/Images/best4.jpg",
         "title": "cool oversize short sleeve t-shirt 3",
         "category": "T-Shirt",
         "price":"300 EGP"
     },
     {
         "id": 4,
-        "image":"/Assets/Images/best6.jpg",
+        "image":"/Assets/Images/best5.jpg",
         "title": "cool oversize short sleeve t-shirt 4",
         "category": "T-Shirt",
         "price":"300 EGP"
     },
     {
         "id": 5,
-        "image":"/Assets/Images/best7.jpg",
+        "image":"/Assets/Images/best6.jpg",
         "title": "cool oversize short sleeve t-shirt 5",
         "category": "T-Shirt",
         "price":"300 EGP"
     },
     {
         "id": 6,
-        "image":"/Assets/Images/best2.jpg",
+        "image":"/Assets/Images/best7.jpg",
+        "title": "cool oversize short sleeve t-shirt 6",
+        "category": "T-Shirt",
+        "price":"300 EGP"
+    },
+    {
+        "id": 7,
+        "image":"/Assets/Images/hoody.jpg",
+        "title": "cool oversize short sleeve t-shirt 6",
+        "category": "T-Shirt",
+        "price":"300 EGP"
+    },
+    {
+        "id": 8,
+        "image":"/Assets/Images/best3.jpg",
         "title": "cool oversize short sleeve t-shirt 6",
         "category": "T-Shirt",
         "price":"300 EGP"

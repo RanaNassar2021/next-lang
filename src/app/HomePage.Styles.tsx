@@ -130,7 +130,8 @@ const useStyles = makeStyles()((theme: any) => {
             justifyContent: 'center',
             paddingLeft: '20ch',
             paddingRight: '20ch',
-            marginTop: 40,
+            marginTop: 0,
+            height:'auto',
             marginBottom: 40,
             width: '100%',
             [theme.breakpoints.down('md')]: {
@@ -138,11 +139,14 @@ const useStyles = makeStyles()((theme: any) => {
                 marginBottom: 20,
                 paddingLeft: '1ch',
                 paddingRight: '1ch',
+                paddingBottom:40
             },
         },
         title: {
             display: 'flex',
             justifyContent: 'center',
+            marginTop:40,
+            marginBottom:40,
             [theme.breakpoints.down('md')]: {
                 fontSize: '30px',
                 marginBottom: 20
@@ -157,6 +161,42 @@ const useStyles = makeStyles()((theme: any) => {
             [theme.breakpoints.down('md')]: {
                 width: '100%',
                 margin: 0
+            },
+            '& .splide__arrow': {
+                backgroundColor: 'transparent !important',
+                marginTop: 18,
+                [theme.breakpoints.down('md')]: {
+                    marginTop: 0,
+                },
+            },
+            '& .splide__arrow--prev': {
+                left: '-80px',
+                fontSize: '25px',
+                [theme.breakpoints.down('md')]: {
+                    left: '10px',
+                    fontSize: '18px'
+                },
+            },
+            '& .splide__arrow--next': {
+                backgroundColor: 'transparent !important',
+                right: '-80px',
+                fontSize: '25px',
+                [theme.breakpoints.down('md')]: {
+                    right: '10px',
+                    fontSize: '18px',
+                    backgroundColor: 'transparent !important'
+                },
+            },
+        },
+        sliderFlashSaleMobile: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            paddingLeft: 0,
+            [theme.breakpoints.down('md')]: {
+                width: '100%',
+                margin: 0,
+                backgroundColor:'white'
             },
             '& .splide__arrow': {
                 backgroundColor: 'transparent !important',
@@ -214,6 +254,9 @@ const useStyles = makeStyles()((theme: any) => {
             height: 'auto',
             display: 'flex',
             justifyContent: 'center',
+            [theme.breakpoints.down('md')]:{
+               paddingBottom:20
+            }
         },
         flashSale: {
             width: '100%',
@@ -237,6 +280,7 @@ const useStyles = makeStyles()((theme: any) => {
         flashSaleContainer: {
             display: 'flex',
             flexDirection: 'column',
+            backgroundColor:'white',
             justifyContent: 'center',
             paddingLeft: '20ch',
             paddingRight: '20ch',
@@ -245,12 +289,15 @@ const useStyles = makeStyles()((theme: any) => {
             marginBottom: 40,
             width: '100%',
             [theme.breakpoints.down('md')]: {
-                marginTop: 20,
+                marginTop: 0,
                 marginBottom: 20,
                 paddingLeft: '1ch',
                 paddingRight: '1ch',
+                paddingBottom:40,
+                backgroundColor:'white'
             },
         },
+       
         sliderFlashSale: {
             width: '100%',
             display: 'flex',
@@ -259,11 +306,11 @@ const useStyles = makeStyles()((theme: any) => {
             paddingLeft: 0,
             [theme.breakpoints.down('md')]: {
                 width: '100%',
-                margin: 0
+                marginTop: 0
             },
             '& .splide__arrow': {
                 backgroundColor: 'transparent !important',
-                marginTop: 12,
+                marginTop: 8,
                 [theme.breakpoints.down('md')]: {
                     marginTop: 0,
                 },
@@ -287,11 +334,13 @@ const useStyles = makeStyles()((theme: any) => {
                 },
             },
         },
+      
         buyNow:{
             display:'flex',
             justifyContent:'center',
             height:80,
             marginTop:20,
+            marginBottom: 40
         },
         buyNowBtn:{
             backgroundColor:'#FF6F61',
@@ -344,6 +393,7 @@ const useStyles = makeStyles()((theme: any) => {
             display:'flex',
             width:'100%',
             flexDirection:'column',
+            marginTop:100,
             justifyContent:'center'
         },
         newTrendCardMobile: {
@@ -442,7 +492,19 @@ const useStyles = makeStyles()((theme: any) => {
                 opacity: 0.6,
             }
         },
-     
+        voteMobileContainer:{
+                width:'100%',
+                justifyContent:'center',
+                marginTop:40,
+                '& h6':{
+                    display:'flex',
+                    justifyContent:'center'
+                },
+                '& p':{
+                    textAlign:'center',
+                    marginBottom:10
+                }
+        },
         socialMediaContainer:{
             paddingLeft:'20ch',
             paddingRight: '20ch',
