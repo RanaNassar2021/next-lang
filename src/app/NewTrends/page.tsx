@@ -4,10 +4,25 @@ import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, CardMedia,
 import Header from "../Header";
 import Footer from "../Footer";
 import Filter from "../Filter/Filter";
-import cardsData from '../Assets/StaticData/PicturaMen.json';
+import ImagesCard from "../Card/page";
+
+// Static Data
+import cardsData from '../Assets/StaticData/NewTrends.json';
+import SliderData from '../Assets/StaticData/SliderData.json'
 
 // styles
-import useStyles from "./PicturaMen.Styles";
+import useStyles from "./NewTrends.Styles";
+
+// Images
+import newTrend1 from '../Assets/Images/best3.jpg';
+import newTrend2 from '../Assets/Images/newTrendM.jpg';
+import newTrend3 from '../Assets/Images/best6.jpg';
+import Image from "next/image";
+
+
+// slider
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
 
 // Material ui
 import * as MuiIcons from '@mui/icons-material';
@@ -18,46 +33,43 @@ import LocalMallIcon from '@mui/icons-material/LocalMall';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 
-export default function PicturaMen() {
+export default function PicturaWomen() {
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
 
 
     const [cards, setCards] = useState(cardsData)
-    let sliderIntervals: NodeJS.Timeout[] = [];
 
     const handleMouseOver = (id: number) => {
         setCards(prev => prev.map(card => {
-            if (card.id == id){
+            if (card.id == id) {
                 card.isMouseOver = true;
-                setInterval(() => {
-                    if (card.currentImageIndex <= card.images.length) card.currentImageIndex += 1;
-                    else  card.currentImageIndex;
-                }, 1000)
+                card.hoverImage = true;
+                console.log(card.hoverImage);
             }
             return card
         }))
     }
 
-   /* const handleMouseEnter = (id: number) => {
-       for (const card of cards) {
-        if (card.id == id){
-                sliderIntervals.push(setInterval(() => {
-                    console.log(card.currentImageIndex)
-                    if (card.images.length <= card.currentImageIndex) card.currentImageIndex = 0;
-                    else card.currentImageIndex += 1;
-                    setCards(prev => [...cards])
-                }, 2000))
-            }
-        }
-    }  */
+    /*   const handleMouseEnter = (id: number) => {
+           for (const card of cards) {
+               if (card.id == id){
+                   sliderIntervals.push(setInterval(() => {
+                       console.log(card.currentImageIndex)
+                       if (card.images.length <= card.currentImageIndex) card.currentImageIndex = 0;
+                       else card.currentImageIndex += 1;
+                       setCards(prev => [...cards])
+                   }, 2000))
+               }
+           }
+     }   */
 
     const handleMouseOut = (id: number) => {
-        
-        sliderIntervals.forEach(x => clearInterval(x));
         setCards(prev => prev.map(card => {
-            if(card.id == id) {
+            if (card.id == id) {
                 card.isMouseOver = false;
+                card.hoverImage = false;
+                console.log(card.hoverImage);
                 card.currentImageIndex = 0;
             }
             return card
@@ -67,17 +79,32 @@ export default function PicturaMen() {
 
     const [cart, setCart] = useState(false);
 
-  
-
-
-
-   function handleAddToCart (id: number) {
-    setCart(true) ;
-    setCards(prev => prev.map(x=>{
-        if(x.id == id && cart == true) x.isClicked = true;
+    const [imageHover, setImageHover] = useState(false);
+    
+    function handleMouseEnter (id: number) {
+        setImageHover(true);
+       setCards(prev => prev.map(x =>{
+        if (x.id == id) x.hoverImage = true;
         return x
-    }))
-   };
+       }))
+    };
+    function handleMouseLeave (id: number) {
+        setImageHover(false);
+        setCards(prev => prev.map(x =>{
+            if(x.id == id) x.hoverImage = false;
+            return x
+        }))
+    }
+
+
+
+    function handleAddToCart(id: number) {
+        setCart(true);
+        setCards(prev => prev.map(x => {
+            if (x.id == id && cart == true) x.isClicked = true;
+            return x
+        }))
+    };
 
 
     return (
@@ -184,17 +211,29 @@ export default function PicturaMen() {
                                 <Grid item xs={2} sm={3} md={3} key={card.id}>
                                     <Card sx={{ maxWidth: 345 }}  onMouseOver={e => handleMouseOver(card.id)} onMouseOut={e => handleMouseOut(card.id)}
                                         className={classes.card}>
-                                        <CardMedia
-                                            sx={{ height: 220, }}
-                                            image={card.images[0]}
-                                            title="product image"
-                                        />
+                                      {card.hoverImage ? ( 
+                                              <ImagesCard ></ImagesCard>
+                                        ): (
+                                            <Box>
+                                                   <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 1000, pagination: false, arrows: false }}>
+                                                        <SplideSlide>
+                                                            <Image src={newTrend1} alt="product picture" height={300} />
+                                                        </SplideSlide>
+                                                        <SplideSlide>
+                                                            <Image src={newTrend1} alt="product picture" height={300} />
+                                                        </SplideSlide>
+                                                        <SplideSlide>
+                                                            <Image src={newTrend1} alt="product picture" height={300} />
+                                                        </SplideSlide>
+                                                    </Splide>
+                                            </Box>
+                                       )}
+
                                         {card.isMouseOver ? (<Box className={classes.hoverBox}> <Box>
                                             <FavoriteBorderIcon></FavoriteBorderIcon>
                                         </Box>
                                             <Box>
-                                                {
-                                                    card.isClicked ? (<Box className={classes.sizes}>
+                                                {card.isClicked ? (<Box className={classes.sizes}>
                                                                         <Box className={classes.sizeBox}>
                                                                             XS
                                                                         </Box>

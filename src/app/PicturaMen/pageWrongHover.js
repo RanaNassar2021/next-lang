@@ -14,6 +14,10 @@ import * as MuiIcons from '@mui/icons-material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 
+// Images
+import Men from '../Assets/Images/best3.jpg';
+
+
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -22,53 +26,44 @@ export default function PicturaMen() {
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
 
-
     const [cards, setCards] = useState(cardsData)
     let sliderIntervals: NodeJS.Timeout[] = [];
-
     const handleMouseOver = (id: number) => {
         setCards(prev => prev.map(card => {
             if (card.id == id){
                 card.isMouseOver = true;
                 setInterval(() => {
-                    if (card.currentImageIndex <= card.images.length) card.currentImageIndex += 1;
-                    else  card.currentImageIndex;
+                    if (card.images.length >= card.currentImageIndex) card.currentImageIndex = 0;
+                    else ++card.currentImageIndex;
                 }, 1000)
             }
             return card
         }))
     }
 
-   /* const handleMouseEnter = (id: number) => {
-       for (const card of cards) {
-        if (card.id == id){
+    const handleMouseEnter = (id: number) => {
+        for (const card of cards) {
+            if (card.id == id){
                 sliderIntervals.push(setInterval(() => {
                     console.log(card.currentImageIndex)
                     if (card.images.length <= card.currentImageIndex) card.currentImageIndex = 0;
                     else card.currentImageIndex += 1;
                     setCards(prev => [...cards])
-                }, 2000))
+                }, 1000))
             }
         }
-    }  */
+    }
 
     const handleMouseOut = (id: number) => {
-        
         sliderIntervals.forEach(x => clearInterval(x));
-        setCards(prev => prev.map(card => {
-            if(card.id == id) {
-                card.isMouseOver = false;
-                card.currentImageIndex = 0;
-            }
-            return card
+        setCards(prev => prev.map(x => {
+            x.isMouseOver = false;
+            x.currentImageIndex = 0;
+            return x
         }))
     }
 
-
     const [cart, setCart] = useState(false);
-
-  
-
 
 
    function handleAddToCart (id: number) {
@@ -182,11 +177,11 @@ export default function PicturaMen() {
                         {cards.map(card => {
                             return (
                                 <Grid item xs={2} sm={3} md={3} key={card.id}>
-                                    <Card sx={{ maxWidth: 345 }}  onMouseOver={e => handleMouseOver(card.id)} onMouseOut={e => handleMouseOut(card.id)}
+                                    <Card sx={{ maxWidth: 345 }} onMouseEnter={e => handleMouseEnter(card.id)} onMouseOver={e => handleMouseOver(card.id)} onMouseOut={e => handleMouseOut(card.id)}
                                         className={classes.card}>
                                         <CardMedia
                                             sx={{ height: 220, }}
-                                            image={card.images[0]}
+                                            image={card.images[card.currentImageIndex]}
                                             title="product image"
                                         />
                                         {card.isMouseOver ? (<Box className={classes.hoverBox}> <Box>

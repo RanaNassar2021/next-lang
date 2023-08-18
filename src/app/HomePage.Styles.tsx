@@ -340,11 +340,20 @@ const useStyles = makeStyles()((theme: any) => {
             justifyContent:'center',
             height:80,
             marginTop:20,
-            marginBottom: 40
+            marginBottom: 40,
+            [theme.breakpoints.down('md')]:{
+                height:20,
+                marginBottom:20
+            }
         },
         buyNowBtn:{
             backgroundColor:'#FF6F61',
-            borderRadius:'15px'
+            borderRadius:'15px',
+            height:'80px',
+            [theme.breakpoints.down('md')]:{
+                height:'40px'
+            }
+       
         },
         newTrendsContainer:{
             display:'flex',

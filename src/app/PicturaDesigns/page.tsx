@@ -33,10 +33,13 @@ export default function Pictura () {
                 </Box>
 
                 <Box className={classes.contentFlashSale}>
+                    <Link href="/FlashSale">
                 <Image src={flashSale} alt='Pictura flash sale section'/>
+                </Link>
                 </Box>
 
                 <Box className={classes.content}>
+                <Link href='/PicturaWomen'>
                 <Image src={women} alt='Pictura Women section'/>
                 <Box className={classes.maskWomen}>
                     <Typography variant="h6">For Women</Typography>
@@ -44,7 +47,7 @@ export default function Pictura () {
                     <Divider style={{ position:'absolute', left:'88%', backgroundColor:'white',marginTop:10,width:30, fontSize:'bold'}}></Divider>
                     <Typography style={{color:'white', fontWeight:'bold',fontSize:'16px',marginTop:20}}>Shop Now</Typography>
                  </Box>
-                 
+                 </Link>
                 </Box>
             </Box>
 

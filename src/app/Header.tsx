@@ -52,7 +52,7 @@ export default function Header() {
           </Box>
           <Divider />
           <Box className={classes.bottomHeader}>
-            <Button className={classes.btnB}>Home</Button>
+            <Button className={classes.btnB}> <Link href="/"> Home</Link></Button>
             <Button className={classes.btnB} aria-controls={open ? 'basic-menu' : undefined}
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
@@ -66,14 +66,14 @@ export default function Header() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleClose}> The Designer</MenuItem>
+              <MenuItem onClick={handleClose}> <Link href="/Card"> The Designer</Link> </MenuItem>
               <MenuItem onClick={handleClose}> <Link href='/PicturaDesigns'>PICTURA Designs</Link> </MenuItem>
             </Menu>
-            <Button className={classes.btnB}>New Trends</Button>
-            <Button className={classes.btnB}>Vote & Win</Button>
-            <Button className={classes.btnB}> <Image src={flashSale}
+            <Button className={classes.btnB}><Link href="/NewTrends"> New Trends</Link></Button>
+            <Button className={classes.btnB}> <Link href="#VoteWin">Vote & Win</Link></Button>
+            <Button className={classes.btnB}> <Link href="/FlashSale"> <Image src={flashSale}
               width={100}
-              alt="Picture of flash sale logo" /></Button>
+              alt="Picture of flash sale logo" /> </Link></Button>
           </Box>
         </Box>
       </Box>

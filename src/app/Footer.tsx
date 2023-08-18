@@ -34,22 +34,28 @@ export default function Footer() {
                     </Box>
                     <Box className={classes.socialMedia}>
                         <Box>
+                            <Link href="https://www.facebook.com/">
                         <Image src={fb}
                                 width={20}
                                 height={20}
                                 alt="Pictura facebook account" />
+                                </Link>
                         </Box>
                         <Box>
+                            <Link href="https://www.instagram.com/">
                         <Image src={inst}
                                 width={20}
                                 height={20}
                                 alt="Pictura Instagram account" />
+                                </Link>
                         </Box>
                         <Box>
+                            <Link href="https://www.tiktok.com/en/">
                         <Image src={tiktok}
                                 width={20}
                                 height={20}
                                 alt="Pictura Tiktok account" />
+                                </Link>
                         </Box>
                     </Box>
                 </Box>
@@ -61,16 +67,22 @@ export default function Footer() {
                         <Typography>The Designer</Typography>
                     </Box>
                     <Box>
+                        <Link href="/PicturaDesigns">
                         <Typography>PICTURA Designs</Typography>
+                        </Link>
                     </Box>
-                    <Box>
+                    <Box> 
+                        <Link href="/NewTrends">
                         <Typography>New Trends</Typography>
+                        </Link>
                     </Box>
                     <Box>
+                    <Link href="/FlashSale">
                     <Image src={flashSale}
                                 width={70}
                                 height={15}
                                 alt="Pictura flashsale page" />
+                                </Link>
                     </Box>
                 </Box>
                 <Box className={classes.footerContent}>
@@ -78,7 +90,9 @@ export default function Footer() {
                         <Typography variant='h6'>about us</Typography>
                     </Box>
                     <Box>
+                        <Link href="/AboutUs">
                         <Typography>Our journey</Typography>
+                        </Link>
                     </Box>
                     <Box>
                         <Typography>FAQ</Typography>

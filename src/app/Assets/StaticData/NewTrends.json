@@ -2,92 +2,98 @@
     {
         "id": 1,
         "images": [
-            "/Assets/Images/best3.jpg",
-            "/Assets/Images/best3.jpg",
-            "/Assets/Images/best3.jpg", 
-            "/Assets/Images/best3.jpg"
+            "/Assets/Images/newTrendG.jpg",
+            "/Assets/Images/newTrendG.jpg",
+            "/Assets/Images/newTrendG.jpg", 
+            "/Assets/Images/newTrendG.jpg"
         ],
         "title": "cool oversize short sleeve t-shirt 1",
         "category": "T-Shirt",
         "price": "300 EGP",
         "currentImageIndex": 0,
         "isMouseOver" : false,
-        "isClicked": false
+        "isClicked": false,
+        "hoverImage": false
     },
     {
         "id": 2,
         "images": [
-            "/Assets/Images/best4.jpg",
-            "/Assets/Images/best4.jpg",
-            "/Assets/Images/best4.jpg",
-            "/Assets/Images/best4.jpg"
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg"
         ],
         "title": "cool oversize short sleeve t-shirt 2",
         "category": "T-Shirt",
         "price":"300 EGP",
         "currentImageIndex": 0,
         "isMouseOver" : false,
-        "isClicked": false
+        "isClicked": false,
+        "hoverImage": false
     },
     {
         "id": 3,
         "images": [
-            "/Assets/Images/best5.jpg",
-            "/Assets/Images/best5.jpg",
-            "/Assets/Images/best5.jpg",
-            "/Assets/Images/best5.jpg"
+            "/Assets/Images/newTrendG.jpg",
+            "/Assets/Images/newTrendG.jpg",
+            "/Assets/Images/newTrendG.jpg",
+            "/Assets/Images/newTrendG.jpg"
         ],
         "title": "cool oversize short sleeve t-shirt 3",
         "category": "T-Shirt",
         "price":"300 EGP",
         "currentImageIndex": 0,
         "isMouseOver" : false,
-        "isClicked": false
+        "isClicked": false,
+        "hoverImage": false
     },
     {
         "id": 4,
         "images": [
-            "/Assets/Images/best6.jpg",
-            "/Assets/Images/best6.jpg",
-            "/Assets/Images/best6.jpg",
-            "/Assets/Images/best6.jpg"
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg"
         ],
         "title": "cool oversize short sleeve t-shirt 4",
         "category": "T-Shirt",
         "price":"300 EGP",
         "currentImageIndex": 0,
         "isMouseOver" : false,
-        "isClicked": false
+        "isClicked": false,
+        "hoverImage": false
     },
     {
         "id": 5,
         "images": [
-            "/Assets/Images/best7.jpg",
-            "/Assets/Images/best7.jpg",
-            "/Assets/Images/best7.jpg",
-            "/Assets/Images/best7.jpg"
+            "/Assets/Images/newTrendG.jpg",
+            "/Assets/Images/newTrendG.jpg",
+            "/Assets/Images/newTrendG.jpg",
+            "/Assets/Images/newTrendG.jpg"
         ],
         "title": "cool oversize short sleeve t-shirt 5",
         "category": "T-Shirt",
         "price":"300 EGP",
         "currentImageIndex": 0,
         "isMouseOver" : false,
-        "isClicked": false
+        "isClicked": false,
+        "hoverImage": false
     },
     {
         "id": 6,
         "images": [
-            "/Assets/Images/best2.jpg",
-            "/Assets/Images/best2.jpg",
-            "/Assets/Images/best2.jpg",
-            "/Assets/Images/best2.jpg"
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg",
+            "/Assets/Images/newTrendM.jpg"
         ],
         "title": "cool oversize short sleeve t-shirt 6",
         "category": "T-Shirt",
         "price":"300 EGP",
         "currentImageIndex": 0,
         "isMouseOver" : false,
-        "isClicked": false
+        "isClicked": false,
+        "hoverImage": false
     }
 
 ]

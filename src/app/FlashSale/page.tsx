@@ -4,10 +4,10 @@ import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, CardMedia,
 import Header from "../Header";
 import Footer from "../Footer";
 import Filter from "../Filter/Filter";
-import cardsData from '../Assets/StaticData/PicturaMen.json';
+import cardsData from '../Assets/StaticData/FlashSale.json';
 
 // styles
-import useStyles from "./PicturaMen.Styles";
+import useStyles from "./FlashSale.Styles";
 
 // Material ui
 import * as MuiIcons from '@mui/icons-material';
@@ -18,7 +18,7 @@ import LocalMallIcon from '@mui/icons-material/LocalMall';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 
-export default function PicturaMen() {
+export default function PicturaWomen() {
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
 
@@ -39,9 +39,9 @@ export default function PicturaMen() {
         }))
     }
 
-   /* const handleMouseEnter = (id: number) => {
-       for (const card of cards) {
-        if (card.id == id){
+ /*   const handleMouseEnter = (id: number) => {
+        for (const card of cards) {
+            if (card.id == id){
                 sliderIntervals.push(setInterval(() => {
                     console.log(card.currentImageIndex)
                     if (card.images.length <= card.currentImageIndex) card.currentImageIndex = 0;
@@ -50,7 +50,7 @@ export default function PicturaMen() {
                 }, 2000))
             }
         }
-    }  */
+  }   */
 
     const handleMouseOut = (id: number) => {
         

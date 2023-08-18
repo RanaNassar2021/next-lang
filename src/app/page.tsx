@@ -1,6 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Divider } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Divider, Dialog , DialogActions, DialogContent, DialogContentText , DialogTitle, } from '@mui/material';
+import Slide from '@mui/material/Slide';
+import { TransitionProps } from '@mui/material/transitions';
 
 // Images
 import Designer from './Assets/Images/theDesigner.jpg';
@@ -14,7 +16,8 @@ import newTrendM from './Assets/Images/newTrendM.jpg';
 import tiktok from './Assets/Images/tiktok.jpg';
 import tiktokIcon from './Assets/Images/tiktokb.png';
 import instagram from './Assets/Images/insta.jpg';
-import facebook from './Assets/Images/facebook.jpg'
+import facebook from './Assets/Images/facebook.jpg';
+import redShirt from './Assets/Images/best4.jpg'
 
 
 import Image from 'next/image';
@@ -39,9 +42,43 @@ import Footer from './Footer';
 import CustomizedProgressBars from './Progress/Progress';
 import '@splidejs/react-splide/css';
 
+//Axios
+import Axios from 'axios';
+
+
+
+// Vote & Win Registeration check
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export default function Home() {
   const Icons: any = MuiIcons;
   const { classes } = useStyles();
+
+  const [flashData, setFlashData] = useState<{ userId: number ;id: number; title: string; body: string }[]>([]);
+
+  useEffect(()=>{
+    Axios.get('https://jsonplaceholder.typicode.com/posts')
+    .then(res => setFlashData(res.data)
+    ).catch(err => console.log( 'Error fetching flash Sale data',err))
+  },[])
+
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
   const [votes, setVotes] = useState(votesData)
@@ -231,7 +268,7 @@ export default function Home() {
                       <Card key={flashSale.id} style={{ width: '300px' }}>
                         <CardMedia
                           sx={{ height: 220 }}
-                          image={flashSale.image}
+                          image={flashSale.images[0]}
                           title="product image"
                         />
                         <CardContent className={classes.cardContent}>
@@ -251,7 +288,9 @@ export default function Home() {
             </Splide>
           </Box>
           <Box className={classes.buyNow}>
+            <Link href="/FlashSale">
             <Button className={classes.buyNowBtn}><Image src={buyNow} alt='flash sale button' width={200} height={80} /> </Button>
+            </Link>
           </Box>
         </Box>
 
@@ -269,7 +308,7 @@ export default function Home() {
                   <Card sx={{ maxWidth: 345 }} key={flashSale.id} >
                     <CardMedia
                       sx={{ height: 220 }}
-                      image={flashSale.image}
+                      image={flashSale.images[0]}
                       title="product image"
                     />
                     <CardContent className={classes.cardContent}>
@@ -287,6 +326,11 @@ export default function Home() {
             })}
           </Splide>
         </Box>
+        <Box className={classes.buyNow}>
+            <Link href="/FlashSale">
+            <Button className={classes.buyNowBtn}><Image src={buyNow} alt='flash sale button' width={100} height={20} /> </Button>
+            </Link>
+          </Box>
       </Box>
       {/* New Trends Section */}
       <Box className={classes.newTrendsContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -305,10 +349,12 @@ export default function Home() {
           </Card>
         </Box>
         <Box className={classes.newTrendAbs}>
+        <Link href="NewTrends">
           <Typography variant='h5'>New Trends</Typography>
           <Box className={classes.newTrendAbsBtnContainer}>
             <Button className={classes.newTrendButton}>Shop Now</Button>
           </Box>
+          </Link>
         </Box>
       </Box>
       {/* Mobile view */}
@@ -322,7 +368,7 @@ export default function Home() {
         </Box>
         <Box className={classes.newTrendCardBtnContainer}>
           <Typography variant='h6'>New Trends</Typography>
-          <Button className={classes.newTrendBtn}>Shop Now</Button>
+          <Button className={classes.newTrendBtn}> <Link href="/NewTrends"> Shop Now</Link> </Button>
         </Box>
         <Box className={classes.newTrendCardMobile}>
           <Card>
@@ -335,19 +381,37 @@ export default function Home() {
 
       {/* vote & win section */}
       <Box sx={{display:{xs:'none',md:'block'}}}>
-      <Box className={classes.voteContainer} >
+      <Box className={classes.voteContainer}  id="VoteWin">
         <Typography variant='h6'>Vote & Win</Typography>
         <Typography>Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.</Typography>
       </Box>
       <Box className={classes.voteCardsContainer}>
         {votes.map(vote => {
           return (
-            <Box key={vote.id}  className={classes.voteBox}>
+            <Box key={vote.id}  className={classes.voteBox} onClick={handleClickOpen}>
               <Image width={200} height={300} src={vote.image} alt='vote & win first design' onMouseOver={e => handleMouseOverVote(vote.id)} onMouseOut={e => handleMouseOutVote(vote.id)} />
               {vote.isMouseOver && <Heading />}
             </Box>
           )
         })}
+         <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Vote & Win"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+          Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Log In</Button>
+          <Button onClick={handleClose}>Sign Up</Button>
+        </DialogActions>
+      </Dialog>
       </Box>
       </Box>
 

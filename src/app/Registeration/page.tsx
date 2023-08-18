@@ -19,6 +19,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 
+// google oauth
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
+
 // styles
 import useStyles from './SignUp.Styles';
 import Link from 'next/link';
@@ -79,14 +83,15 @@ const validationSchema = yup.object({
 });
 
 const validationsData = [
-  { id: 1, content: "Upper case later", isValid: false },
-  { id: 2, content: "Lower case later", isValid: false },
-  { id: 3, content: "Number", isValid: false },
-  { id: 4, content: "Special Characters", isValid: false },
-  { id: 5, content: "Length between 8 ~ 20", isValid: false },
+    { id: 1, content: "Upper case later", isValid: false },
+    { id: 2, content: "Lower case later", isValid: false },
+    { id: 3, content: "Number", isValid: false },
+    { id: 4, content: "Special Characters", isValid: false },
+    { id: 5, content: "Length between 8 ~ 20", isValid: false },
 ]
 
 export default function SignUp() {
+
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
     const [showPassword, setShowPassword] = React.useState(false);
@@ -116,10 +121,10 @@ export default function SignUp() {
 
     function updateValidation(id: number, isValid: boolean) {
         setValidation(
-        validations.map(x => {
-            if (x.id == id) x.isValid = isValid;
-            return x;
-        })
+            validations.map(x => {
+                if (x.id == id) x.isValid = isValid;
+                return x;
+            })
         )
     }
 
@@ -145,11 +150,11 @@ export default function SignUp() {
         else updateValidation(5, false)
     }
 
-    function handlePasswordFoucs(e: any){
+    function handlePasswordFoucs(e: any) {
         setShowPasswordValidation(true);
     }
 
-    function handleGenderSelect(e: any){
+    function handleGenderSelect(e: any) {
         const value = e.target.value;
         setGender(value);
         console.log(value);
@@ -174,211 +179,228 @@ export default function SignUp() {
     });
 
 
+
+
+
     return (
-        <React.Fragment>
-            <Box>
-                <Header />
-                <Box className="flex min-h-screen flex-col items-center justify-between">
-                    <Box className={classes.container}>
-                        <Box>
-                            <Typography variant='h6'>create your account</Typography>
-                            <Typography>please fill all form fields</Typography>
-                            <form onSubmit={formik.handleSubmit}>
-                                <FormControl fullWidth className={classes.textField}>
-                                    <TextField label="First Name *" size='small' type="text" id="firstName"
-                                        name="firstName"
-                                        value={formik.values.firstName}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-                                        helperText={formik.touched.firstName && formik.errors.firstName}
-                                    ></TextField>
-                                </FormControl>
-                                <FormControl fullWidth className={classes.textField}>
-                                    <TextField label="Last Name *" size='small' id="lastName"
-                                        name="lastName"
-                                        value={formik.values.lastName}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-                                        helperText={formik.touched.lastName && formik.errors.lastName} ></TextField>
-                                </FormControl>
-                                <FormControl fullWidth className={classes.textField}>
-                                    <TextField label="Email *" size='small' id="email"
-                                        name="email"
-                                        value={formik.values.email}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        error={formik.touched.email && Boolean(formik.errors.email)}
-                                        helperText={formik.touched.email && formik.errors.email}
-                                    ></TextField>
-                                </FormControl>
-                                <FormControl fullWidth size='small' className={classes.textField} variant="outlined">
-                                    <InputLabel htmlFor="outlined-adornment-password" >Password *</InputLabel>
-                                    <OutlinedInput
-                                        name="password"
-                                        value={formik.values.password}
-                                        onChange={handleValidation}
-                                        onBlur={formik.handleBlur}
-                                        onFocus={handlePasswordFoucs}
-                                        error={formik.touched.password && Boolean(formik.errors.password)}
-                                        id="password"
-                                        type={showPassword ? 'text' : 'password'}
-                                        endAdornment={
-                                            <InputAdornment position="end" >
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
+        <GoogleOAuthProvider clientId="793088760090-5cjgp4ghjpl879fjor9uf6bd77i5jr0a.apps.googleusercontent.com">
+            <React.Fragment>
+                <Box>
+                    <Header />
+                    <Box className="flex min-h-screen flex-col items-center justify-between">
+                        <Box className={classes.container}>
+                            <Box>
+                                <Typography variant='h6'>create your account</Typography>
+                                <Typography>please fill all form fields</Typography>
+                                <form onSubmit={formik.handleSubmit}>
+                                    <FormControl fullWidth className={classes.textField}>
+                                        <TextField label="First Name *" size='small' type="text" id="firstName"
+                                            name="firstName"
+                                            value={formik.values.firstName}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+                                            helperText={formik.touched.firstName && formik.errors.firstName}
+                                        ></TextField>
+                                    </FormControl>
+                                    <FormControl fullWidth className={classes.textField}>
+                                        <TextField label="Last Name *" size='small' id="lastName"
+                                            name="lastName"
+                                            value={formik.values.lastName}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+                                            helperText={formik.touched.lastName && formik.errors.lastName} ></TextField>
+                                    </FormControl>
+                                    <FormControl fullWidth className={classes.textField}>
+                                        <TextField label="Email *" size='small' id="email"
+                                            name="email"
+                                            value={formik.values.email}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            error={formik.touched.email && Boolean(formik.errors.email)}
+                                            helperText={formik.touched.email && formik.errors.email}
+                                        ></TextField>
+                                    </FormControl>
+                                    <FormControl fullWidth size='small' className={classes.textField} variant="outlined">
+                                        <InputLabel htmlFor="outlined-adornment-password" >Password *</InputLabel>
+                                        <OutlinedInput
+                                            name="password"
+                                            value={formik.values.password}
+                                            onChange={handleValidation}
+                                            onBlur={formik.handleBlur}
+                                            onFocus={handlePasswordFoucs}
+                                            error={formik.touched.password && Boolean(formik.errors.password)}
+                                            id="password"
+                                            type={showPassword ? 'text' : 'password'}
+                                            endAdornment={
+                                                <InputAdornment position="end" >
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end"
 
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                            label="Password"
+                                        />
+                                    </FormControl>
+                                    <ul style={{
+                                        color: "black",
+                                        display: showPassowrdValidation ? "block" : "none",
+                                        margin: "10px 0 0 15px",
+                                        listStyle: "circle"
+                                    }}>
+                                        {validations.map(x => (<li style={{ color: x.isValid ? "green" : "red" }} key={x.id}>{x.content}</li>))}
+                                    </ul>
+                                    <FormControl fullWidth size='small' className={classes.textField} variant="outlined">
+                                        <InputLabel htmlFor="outlined-adornment-password" >Confirm Password *</InputLabel>
+                                        <OutlinedInput
+                                            name="confirmPassword"
+                                            value={formik.values.confirmPassword}
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleBlur}
+                                            error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                                            id="confirmPassword"
+                                            type={showPassword ? 'text' : 'password'}
+                                            endAdornment={
+                                                <InputAdornment position="end" >
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={handleClickShowPassword}
+                                                        onMouseDown={handleMouseDownPassword}
+                                                        edge="end"
+
+                                                    >
+                                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                            label="Password"
+                                        />
+                                    </FormControl>
+                                    <p className={classes.passwordError}>{formik.touched.confirmPassword && formik.errors.confirmPassword}</p>
+
+                                    <Box className={classes.mobile}>
+                                        <Box className={classes.options}>
+                                            <FormControl sx={{ minWidth: 120 }} size="small" >
+                                                <InputLabel id="demo-select-small-label">Country</InputLabel>
+                                                <Select className={classes.options} required
+                                                    labelId="demo-select-small-label"
+                                                    id="demo-select-small"
+                                                    value={mobile}
+                                                    label="Mobile Number"
+                                                    onChange={handleNumberChange}
                                                 >
-                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        label="Password"
-                                    />
-                                </FormControl>
-                                <ul style={{
-                                    color: "black",
-                                    display: showPassowrdValidation ? "block" : "none",
-                                    margin: "10px 0 0 15px",
-                                    listStyle: "circle"
-                                }}>
-                                    {validations.map(x => (<li style={{ color: x.isValid ? "green" : "red" }} key={x.id}>{x.content}</li>))}
-                                </ul>
-                                <FormControl fullWidth size='small' className={classes.textField} variant="outlined">
-                                    <InputLabel htmlFor="outlined-adornment-password" >Confirm Password *</InputLabel>
-                                    <OutlinedInput
-                                        name="confirmPassword"
-                                        value={formik.values.confirmPassword}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                                        id="confirmPassword"
-                                        type={showPassword ? 'text' : 'password'}
-                                        endAdornment={
-                                            <InputAdornment position="end" >
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={handleClickShowPassword}
-                                                    onMouseDown={handleMouseDownPassword}
-                                                    edge="end"
+                                                    <MenuItem value={10}>+20</MenuItem>
+                                                    <MenuItem value={20}>+965</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Box>
+                                        <Box className={classes.mobField}>
+                                            <FormControl variant="standard" >
+                                                <TextField label="Mobile Number *" size='small' type='number' id="phone"
+                                                    name="phone"
+                                                    value={formik.values.phone}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    error={formik.touched.phone && Boolean(formik.errors.phone)}
+                                                    helperText={formik.touched.phone && formik.errors.phone}
+                                                ></TextField>
+                                            </FormControl>
+                                        </Box>
+                                    </Box>
+                                    <FormControl>
+                                        <FormLabel id="demo-radio-buttons-group-label" >Gender</FormLabel>
+                                        <RadioGroup
+                                            aria-labelledby="demo-radio-buttons-group-label"
+                                            defaultValue="female"
+                                            name='gender'
 
-                                                >
-                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        }
-                                        label="Password"
-                                    />
-                                </FormControl>
-                                <p className={classes.passwordError}>{formik.touched.confirmPassword && formik.errors.confirmPassword}</p>
-
-                                <Box className={classes.mobile}>
-                                    <Box className={classes.options}>
-                                        <FormControl sx={{ minWidth: 120 }} size="small" >
-                                            <InputLabel id="demo-select-small-label">Country</InputLabel>
-                                            <Select className={classes.options} required
+                                        >
+                                            <FormControlLabel onChange={handleGenderSelect} value="female" control={<Radio />} label="Female" />
+                                            <FormControlLabel onChange={handleGenderSelect} value="male" control={<Radio />} label="Male" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <Box className={classes.address}>
+                                        <FormControl size="small" className={classes.countryField}>
+                                            <InputLabel id="demo-select-small-label" className={classes.mobileNumber}>Country</InputLabel>
+                                            <Select required
                                                 labelId="demo-select-small-label"
                                                 id="demo-select-small"
-                                                value={mobile}
+                                                value={country}
                                                 label="Mobile Number"
-                                                onChange={handleNumberChange}
+                                                onChange={handleCountryChange}
                                             >
-                                                <MenuItem value={10}>+20</MenuItem>
-                                                <MenuItem value={20}>+965</MenuItem>
+                                                <MenuItem value={10}>Egypt</MenuItem>
+                                                <MenuItem value={20}>Kuwait</MenuItem>
                                             </Select>
                                         </FormControl>
-                                    </Box>
-                                    <Box className={classes.mobField}>
-                                        <FormControl variant="standard" >
-                                            <TextField label="Mobile Number *" size='small' type='number' id="phone"
-                                                name="phone"
-                                                value={formik.values.phone}
+                                        <FormControl size="small" className={classes.cityField}>
+                                            <InputLabel id="demo-select-small-label" className={classes.mobileNumber}>City</InputLabel>
+                                            <Select required
+                                                labelId="demo-select-small-label"
+                                                id="demo-select-small"
+                                                value={city}
+                                                label="Mobile Number"
+                                                onChange={handleCityChange}
+                                            >
+                                                <MenuItem value={20}>Alex</MenuItem>
+                                                <MenuItem value={30}>Cairo</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        <FormControl variant="standard" className={classes.fullAdress} size='small' >
+                                            <TextField label="Full Address" size='small' type="text" id="address"
+                                                name="address" className={classes.mobileDetail}
+                                                value={formik.values.address}
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
-                                                error={formik.touched.phone && Boolean(formik.errors.phone)}
-                                                helperText={formik.touched.phone && formik.errors.phone}
+                                                error={formik.touched.address && Boolean(formik.errors.address)}
+                                                helperText={formik.touched.address && formik.errors.address}
                                             ></TextField>
                                         </FormControl>
                                     </Box>
-                                </Box>
-                                <FormControl>
-                                    <FormLabel id="demo-radio-buttons-group-label" >Gender</FormLabel>
-                                    <RadioGroup
-                                        aria-labelledby="demo-radio-buttons-group-label"
-                                        defaultValue="female"
-                                        name='gender'
+                                    <Box className={classes.terms}>
+                                        <Checkbox {...label} sx={{ pl: 0 }} required />
+                                        <Typography>by signing up you agree to Terms & conditions </Typography>
+                                    </Box>
+                                    <Box className={classes.btn}>
+                                        <Button className={classes.btn1} color="primary" variant="contained" type="submit">Create An Account</Button>
+                                        <Button className={classes.btn2} onClick={() => formik.resetForm()}
+                                            type="reset">Reset</Button>
+                                    </Box>
+                                    <Divider>Or</Divider>
+                                </form>
+                                <Box>
+                                    <Button className={classes.btn3}>
+                                        <Icons.FacebookRounded ></Icons.FacebookRounded> Continue with facebook</Button>
+                                   <Box style={{width:'100%', marginTop:10}}>
+                                    <GoogleLogin  
+                                        onSuccess={credentialResponse => {
+                                            console.log(credentialResponse);
+                                        }}
 
-                                    >
-                                        <FormControlLabel onChange={handleGenderSelect} value="female" control={<Radio />} label="Female" />
-                                        <FormControlLabel onChange={handleGenderSelect} value="male" control={<Radio />} label="Male" />
-                                    </RadioGroup>
-                                </FormControl>
-                                <Box className={classes.address}>
-                                    <FormControl size="small" className={classes.countryField}>
-                                        <InputLabel id="demo-select-small-label" className={classes.mobileNumber}>Country</InputLabel>
-                                        <Select required
-                                            labelId="demo-select-small-label"
-                                            id="demo-select-small"
-                                            value={country}
-                                            label="Mobile Number"
-                                            onChange={handleCountryChange}
-                                        >
-                                            <MenuItem value={10}>Egypt</MenuItem>
-                                            <MenuItem value={20}>Kuwait</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <FormControl size="small" className={classes.cityField}>
-                                        <InputLabel id="demo-select-small-label" className={classes.mobileNumber}>City</InputLabel>
-                                        <Select required
-                                            labelId="demo-select-small-label"
-                                            id="demo-select-small"
-                                            value={city}
-                                            label="Mobile Number"
-                                            onChange={handleCityChange}
-                                        >
-                                            <MenuItem value={20}>Alex</MenuItem>
-                                            <MenuItem value={30}>Cairo</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <FormControl variant="standard" className={classes.fullAdress} size='small' >
-                                        <TextField label="Full Address" size='small' type="text" id="address"
-                                            name="address" className={classes.mobileDetail}
-                                            value={formik.values.address}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            error={formik.touched.address && Boolean(formik.errors.address)}
-                                            helperText={formik.touched.address && formik.errors.address}
-                                        ></TextField>
-                                    </FormControl>
+                                        onError={() => {
+                                            console.log('Login Failed');
+                                        }}
+
+                                    />
+                                    </Box>
                                 </Box>
-                                <Box className={classes.terms}>
-                                    <Checkbox {...label} sx={{ pl: 0 }} required />
-                                    <Typography>by signing up you agree to Terms & conditions </Typography>
+                                <Box className={classes.logIn}>
+                                    <Typography>Already have an account?<Link href='/LogIn'> LogIn</Link></Typography>
                                 </Box>
-                                <Box className={classes.btn}>
-                                    <Button className={classes.btn1} color="primary" variant="contained" type="submit">Create An Account</Button>
-                                    <Button className={classes.btn2} onClick={() => formik.resetForm()}
-                                        type="reset">Reset</Button>
-                                </Box>
-                                <Divider>Or</Divider>
-                            </form>
-                            <Box>
-                                <Button className={classes.btn3}>
-                                    <Icons.FacebookRounded ></Icons.FacebookRounded> Continue with facebook</Button>
-                                <Button className={classes.btn4}> <Icons.Google ></Icons.Google>Continue with Google</Button>
-                            </Box>
-                            <Box className={classes.logIn}>
-                                <Typography>Already have an account?<Link href='/LogIn'> LogIn</Link></Typography>
                             </Box>
                         </Box>
                     </Box>
+                    <Footer />
                 </Box>
-                <Footer />
-            </Box>
-        </React.Fragment>
+            </React.Fragment>
+        </GoogleOAuthProvider>
     )
+
 }

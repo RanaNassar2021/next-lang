@@ -2,8 +2,10 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme:any)=>{
     return {
-        container:{
-            backgroundColor:'orange'
+        cards:{
+            width:'100%',
+            paddingLeft:'2ch',
+            paddingRight:'2ch'
         },
         cardContent:{
             alignItems:'center',
