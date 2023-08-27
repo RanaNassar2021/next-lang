@@ -1,13 +1,25 @@
 'use client'
 import React, { useState } from "react";
-import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, CardMedia, Button } from "@mui/material";
+import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, Button } from "@mui/material";
 import Header from "../Header";
 import Footer from "../Footer";
 import Filter from "../Filter/Filter";
 import cardsData from '../Assets/StaticData/PicturaWomen.json';
+import ImagesCard from "../Card/page";
+import Image from "next/image";
 
 // styles
 import useStyles from "./PicturaWomen.Styles";
+
+// images for slider
+const images = [
+    "/Assets/Images/best2.jpg",
+   "/Assets/Images/best4.jpg",
+   "/Assets/Images/best5.jpg"
+ ]
+
+ import newTrend1 from '../Assets/Images/best2.jpg';
+
 
 // Material ui
 import * as MuiIcons from '@mui/icons-material';
@@ -22,42 +34,26 @@ export default function PicturaWomen() {
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
 
-
     const [cards, setCards] = useState(cardsData)
-    let sliderIntervals: NodeJS.Timeout[] = [];
 
     const handleMouseOver = (id: number) => {
         setCards(prev => prev.map(card => {
-            if (card.id == id){
+            if (card.id == id) {
                 card.isMouseOver = true;
-                setInterval(() => {
-                    if (card.currentImageIndex <= card.images.length) card.currentImageIndex += 1;
-                    else  card.currentImageIndex;
-                }, 1000)
+                card.hoverImage = true;
             }
             return card
         }))
     }
 
- /*   const handleMouseEnter = (id: number) => {
-        for (const card of cards) {
-            if (card.id == id){
-                sliderIntervals.push(setInterval(() => {
-                    console.log(card.currentImageIndex)
-                    if (card.images.length <= card.currentImageIndex) card.currentImageIndex = 0;
-                    else card.currentImageIndex += 1;
-                    setCards(prev => [...cards])
-                }, 2000))
-            }
-        }
-  }   */
+
 
     const handleMouseOut = (id: number) => {
         
-        sliderIntervals.forEach(x => clearInterval(x));
         setCards(prev => prev.map(card => {
-            if(card.id == id) {
+            if (card.id == id) {
                 card.isMouseOver = false;
+                card.hoverImage = false;
                 card.currentImageIndex = 0;
             }
             return card
@@ -184,17 +180,19 @@ export default function PicturaWomen() {
                                 <Grid item xs={2} sm={3} md={3} key={card.id}>
                                     <Card sx={{ maxWidth: 345 }}  onMouseOver={e => handleMouseOver(card.id)} onMouseOut={e => handleMouseOut(card.id)}
                                         className={classes.card}>
-                                        <CardMedia
-                                            sx={{ height: 220, }}
-                                            image={card.images[0]}
-                                            title="product image"
-                                        />
+                                        {card.hoverImage ? ( 
+                                              <ImagesCard images={images}></ImagesCard>
+                                        ): (
+                                            <Box className={classes.cardImage}>
+                                                <Image src={newTrend1} alt="product picture" height={250} width={270} />
+                                            </Box>
+                                       )}
+
                                         {card.isMouseOver ? (<Box className={classes.hoverBox}> <Box>
                                             <FavoriteBorderIcon></FavoriteBorderIcon>
                                         </Box>
                                             <Box>
-                                                {
-                                                    card.isClicked ? (<Box className={classes.sizes}>
+                                                {card.isClicked ? (<Box className={classes.sizes}>
                                                                         <Box className={classes.sizeBox}>
                                                                             XS
                                                                         </Box>
@@ -213,7 +211,7 @@ export default function PicturaWomen() {
                                                                         <Box className={classes.sizeBox}>
                                                                              XXL
                                                                         </Box>
-                                                                       </Box>) :(<Box><LocalMallIcon></LocalMallIcon> <Button onClick={e =>{handleAddToCart(card.id)}} sx={{color:'white'}}>Add to Cart</Button></Box>)
+                                                                       </Box>) :(<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e =>{handleAddToCart(card.id)}} sx={{color:'white'}}>Add to Cart</Button></Box>)
                                             }
                                                
                                             </Box>

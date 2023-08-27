@@ -1,0 +1,27 @@
+[
+    {
+        "id": 1,
+        "title": "Shipping Information",
+        "description": "At PICTURA, we strive to deliver your custom-designed clothes to you as quickly and efficiently as possible. Here's some important information about our shipping process: We offer both domestic and international shipping to many countries worldwide. The shipping cost will be calculated based on the shipping destination and the weight of your package. You can view the shipping cost during the checkout process. Once your order is confirmed and your design is ready for production, we will provide an estimated shipping date. Please note that the production time may vary depending on the complexity of your design. We partner with reliable shipping carriers to ensure the safe and timely delivery of your order. You will receive a shipping confirmation email with a tracking number once your package is on its way."
+    },
+    {
+        "id": 2,
+        "title": "International Shipping",
+        "description": "For our international customers, please be aware of the following: International shipments may be subject to customs duties, taxes, and fees levied by the destination country. These additional charges are the responsibility of the recipient. Customs policies and import regulations vary by country. We recommend contacting your local customs office for more information on any applicable charges or restrictions."
+    },
+    {
+        "id": 3,
+        "title": "Returns and Exchanges",
+        "description": "We want you to be completely satisfied with your custom-designed clothes from PICTURA. If you have any concerns or need to initiate a return or exchange, please review the following guidelines: Quality Issues: If you receive a product with manufacturing defects or quality issues, please contact our customer support team within [X] days of receiving your order. We may require photos or detailed descriptions of the issue to assess the situation and determine the appropriate resolution. Size and Fit: As each garment is custom-made based on your design specifications, we cannot accept returns or exchanges due to size or fit issues. We strongly recommend reviewing our size guide and double-checking your measurements before placing your order. Design Issues: Since each garment is uniquely created based on your design, we are unable to accept returns or exchanges for design-related reasons. We encourage you to carefully review your design before submitting your order to ensure it meets your expectations."
+    },
+    {
+        "id": 4,
+        "title": "How to Initiate a Return or Exchange",
+        "description": "To initiate a return or exchange, please follow these steps: 1. Contact our customer support team within [X] days of receiving your order and provide the necessary details. 2. Our customer support team will guide you through the return or exchange process and provide you with the appropriate instructions. 3. In the case of a return, please ensure that the item is unused, in its original condition, and properly packaged. 4. Once we receive the returned item, we will inspect it to ensure it meets the return criteria. If approved, we will process the refund or initiate the exchange accordingly."
+    },
+    {
+        "id": 5,
+        "title": "",
+        "description": "Please note that shipping fees, customs duties, taxes, and fees associated with returns or exchanges are the responsibility of the customer unless the return is due to a quality issue. If you have any further questions or require assistance regarding shipping or returns, please don't hesitate to contact our customer support team. We are here to help and ensure your satisfaction with every aspect of your PICTURA experience."
+    }
+]

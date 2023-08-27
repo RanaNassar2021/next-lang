@@ -16,53 +16,43 @@ import Image from "next/image";
 // Static Data
 import cardsData from '../Assets/StaticData/NewTrends.json';
 
-const images = [
-    "../Assets/Images/best3.jpg",
-    "../Assets/Images/newTrendM.jpg",
-    "../Assets/Images/best6.jpg"
-]
 
-const slider = [
-  {
-    "images": [
-      "/Assets/Images/best3.jpg",
-      "/Assets/Images/newTrendM.jpg",
-      "/Assets/Images/best6.jpg"
-    ],
-    "currentImageIndex": 0
-  }
-]
 
-const [sliders,setSliders] = useState(slider)
 
-export default function ImagesCard () {
+export default function ImagesCard (images:any) {
   const { classes } = useStyles();
 
   const [imageIndex, setImageIndex] = useState(0);
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setImageIndex((prevImageIndex) => {
-        if (prevImageIndex <= images.length) {
-          return prevImageIndex +=1;
-        } else {
-          return prevImageIndex =0;
-        }
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  var timing: any
 
+  useEffect(() => {
+    timing = setInterval(() => {
+      if (imageIndex <= images['images'].length) {
+        setImageIndex(imageIndex+1);
+      }
+    }, 1500);
+    return () => clearInterval(timing);
+}, [imageIndex]);
  
+  const handleImageSlider = ()=> {
+      setTimeout(() => {
+      if (imageIndex <= images['images'].length) {
+        setImageIndex(imageIndex+1);
+      }
+   },1500)
+  }
+
+  const handleImageOut = () =>{
+    clearInterval(timing)
+    setImageIndex(0)
+  }
+
   return (
     <React.Fragment>
-         <Box style={{width:'30ch'}}>
-          {slider.map(slid =>{
-            return(
-              <Image src={slid.images[0]} alt="product picture" height={220} width={250}/>
-            )
-          })}
-       </Box>
-
+      {images['images'] && images['images'].length &&
+         <Box   className={classes.cardImage}  onMouseOver={handleImageSlider} onMouseOut={handleImageOut} >
+             <Image src={images['images'][imageIndex] === undefined? images['images'][0]: images['images'][imageIndex] } alt="product picture" height={250} width={270}/>
+       </Box> }
     </React.Fragment>
   )
 }

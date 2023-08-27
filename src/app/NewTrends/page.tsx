@@ -8,20 +8,23 @@ import ImagesCard from "../Card/page";
 
 // Static Data
 import cardsData from '../Assets/StaticData/NewTrends.json';
-import SliderData from '../Assets/StaticData/SliderData.json'
 
 // styles
 import useStyles from "./NewTrends.Styles";
 
 // Images
-import newTrend1 from '../Assets/Images/best3.jpg';
-import newTrend2 from '../Assets/Images/newTrendM.jpg';
-import newTrend3 from '../Assets/Images/best6.jpg';
+import newTrend1 from '../Assets/Images/best6.jpg';
 import Image from "next/image";
+
+// images for slider
+const images = [
+    "/Assets/Images/best6.jpg",
+   "/Assets/Images/newTrendM.jpg",
+   "/Assets/Images/best3.jpg"
+ ]
 
 
 // slider
-import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 
 // Material ui
@@ -45,31 +48,17 @@ export default function PicturaWomen() {
             if (card.id == id) {
                 card.isMouseOver = true;
                 card.hoverImage = true;
-                console.log(card.hoverImage);
             }
             return card
         }))
     }
 
-    /*   const handleMouseEnter = (id: number) => {
-           for (const card of cards) {
-               if (card.id == id){
-                   sliderIntervals.push(setInterval(() => {
-                       console.log(card.currentImageIndex)
-                       if (card.images.length <= card.currentImageIndex) card.currentImageIndex = 0;
-                       else card.currentImageIndex += 1;
-                       setCards(prev => [...cards])
-                   }, 2000))
-               }
-           }
-     }   */
 
     const handleMouseOut = (id: number) => {
         setCards(prev => prev.map(card => {
             if (card.id == id) {
                 card.isMouseOver = false;
                 card.hoverImage = false;
-                console.log(card.hoverImage);
                 card.currentImageIndex = 0;
             }
             return card
@@ -78,25 +67,6 @@ export default function PicturaWomen() {
 
 
     const [cart, setCart] = useState(false);
-
-    const [imageHover, setImageHover] = useState(false);
-    
-    function handleMouseEnter (id: number) {
-        setImageHover(true);
-       setCards(prev => prev.map(x =>{
-        if (x.id == id) x.hoverImage = true;
-        return x
-       }))
-    };
-    function handleMouseLeave (id: number) {
-        setImageHover(false);
-        setCards(prev => prev.map(x =>{
-            if(x.id == id) x.hoverImage = false;
-            return x
-        }))
-    }
-
-
 
     function handleAddToCart(id: number) {
         setCart(true);
@@ -212,20 +182,10 @@ export default function PicturaWomen() {
                                     <Card sx={{ maxWidth: 345 }}  onMouseOver={e => handleMouseOver(card.id)} onMouseOut={e => handleMouseOut(card.id)}
                                         className={classes.card}>
                                       {card.hoverImage ? ( 
-                                              <ImagesCard ></ImagesCard>
+                                              <ImagesCard images={images}></ImagesCard>
                                         ): (
-                                            <Box>
-                                                   <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 1000, pagination: false, arrows: false }}>
-                                                        <SplideSlide>
-                                                            <Image src={newTrend1} alt="product picture" height={300} />
-                                                        </SplideSlide>
-                                                        <SplideSlide>
-                                                            <Image src={newTrend1} alt="product picture" height={300} />
-                                                        </SplideSlide>
-                                                        <SplideSlide>
-                                                            <Image src={newTrend1} alt="product picture" height={300} />
-                                                        </SplideSlide>
-                                                    </Splide>
+                                            <Box className={classes.cardImage}>
+                                                <Image src={newTrend1} alt="product picture" height={250} width={270} />
                                             </Box>
                                        )}
 
@@ -252,7 +212,7 @@ export default function PicturaWomen() {
                                                                         <Box className={classes.sizeBox}>
                                                                              XXL
                                                                         </Box>
-                                                                       </Box>) :(<Box><LocalMallIcon></LocalMallIcon> <Button onClick={e =>{handleAddToCart(card.id)}} sx={{color:'white'}}>Add to Cart</Button></Box>)
+                                                                       </Box>) :(<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e =>{handleAddToCart(card.id)}} sx={{color:'white'}}>Add to Cart</Button></Box>)
                                             }
                                                
                                             </Box>

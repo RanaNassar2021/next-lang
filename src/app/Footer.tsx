@@ -8,7 +8,6 @@ import tiktok from './Assets/Images/tiktokw.png';
 import Image from 'next/image';
 import flashSale from './Assets/Images/flashSale.png';
 import Link from 'next/link';
-import PrivacyPolicy from './PrivacyPolicy/page';
 
 // material UI icons
 import * as MuiIcons from '@mui/icons-material';
@@ -98,7 +97,9 @@ export default function Footer() {
                         <Typography>FAQ</Typography>
                     </Box>
                     <Box>
-                        <Typography>Terms & Conditions</Typography>
+                        <Link href="/TermsAndConditons">
+                             <Typography>Terms & Conditions</Typography>
+                        </Link>
                     </Box>
                 </Box>
                 <Box className={classes.footerContent}>
@@ -109,7 +110,10 @@ export default function Footer() {
                         <Typography>Contact Us</Typography>
                     </Box>
                     <Box>
+                        <Link href="/ShippingAndReturns">
                         <Typography>Shipping & Returns</Typography>
+                        </Link>
+                       
                     </Box>
                     <Box>
                         <Typography><Link href='/PrivacyPolicy'> Privacy Policy & Data Protection</Link></Typography>

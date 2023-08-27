@@ -1,0 +1,61 @@
+[
+    {
+        "id": 1,
+        "title": "1. General",
+        "description": "1.1 PICTURA is a website owned and operated by [Company Name], a registered company under the laws of Egypt. 1.2 These Terms and Conditions constitute a legally binding agreement between you and PICTURA regarding the use of our website and services. 1.3 By using our website and services, you represent that you are of legal age to enter into a binding contract"
+    },
+    {
+        "id": 2,
+        "title": "2. Intellectual Property",
+        "description": "2.1 All content, designs, trademarks, logos, and other intellectual property displayed on the PICTURA website are the property of PICTURA or its licensors and are protected by Egyptian copyright, trademark, and other intellectual property laws. 2.2 You are granted a limited, non-exclusive, non-transferable license to access and use the PICTURA website and services for personal and non-commercial purposes. You may not reproduce, modify, distribute, or display any of the intellectual property without prior written consent from PICTURA."
+    },
+    {
+        "id": 3,
+        "title": "3. Privacy",
+        "description": "3.1 Your privacy is important to us. Please refer to our Privacy Policy [link to privacy policy] to understand how we collect, use, and protect your personal information."
+    },
+    {
+        "id": 4,
+        "title": "4. Ordering and Payment",
+        "description": "4.1 When placing an order for custom-designed clothes through the PICTURA website, you agree to provide accurate and complete information, including design specifications, measurements, and contact details. 4.2 Payment for orders must be made through the available payment methods provided on the PICTURA website. All payments are subject to verification and approval."
+    },
+    {
+        "id": 5,
+        "title": "5. Shipping and Delivery",
+        "description": "5.1 PICTURA will make reasonable efforts to ensure that your custom-designed clothes are produced and delivered within the estimated timeframe provided. However, we cannot guarantee specific delivery dates, as shipping times may vary depending on various factors. 5.2 Any customs duties, taxes, or fees levied by the destination country are the responsibility of the recipient. PICTURA is not responsible for any delays, damages, or issues caused by customs procedures or import regulations."
+    },
+    {
+        "id": 6,
+        "title": "6. Returns and Refunds",
+        "description": "6.1 PICTURA has a return and refund policy in place. Please refer to our Returns and Refunds Policy [link to returns and refunds policy] to understand the conditions and procedures for returning products and requesting refunds."
+    },
+    {
+        "id": 7,
+        "title": "7. Limitation of Liability",
+        "description": "7.1 To the fullest extent permitted by Egyptian law, PICTURA and its directors, employees, agents, or affiliates shall not be liable for any indirect, incidental, consequential, or punitive damages arising out of or in connection with the use of our website or services. 7.2 PICTURA shall not be held responsible for any delays, errors, or interruptions in the operation of the website or services or any losses or damages resulting from such issues."
+    },
+    {
+        
+        "id": 8,
+        "title": "8. Governing Law and Jurisdiction",
+        "description": "8.1 These Terms and Conditions shall be governed by and construed in accordance with the laws of Egypt. 8.2 Any disputes arising out of or in connection with these Terms and Conditions shall be subject to the exclusive jurisdiction of the courts of Egypt."
+    },
+    {
+        
+        "id": 9,
+        "title": "9. Modifications to Terms and Conditions",
+        "description": "9.1 PICTURA reserves the right to modify or amend these Terms and Conditions at any time. Any changes will be effective upon posting the updated Terms and Conditions on our website. It is your responsibility to review the Terms and Conditions periodically for any updates or changes."
+    },
+    {
+        
+        "id": 10,
+        "title": "10. Prohibited Designs and Content",
+        "description": "10.1 PICTURA strictly prohibits the use of inappropriate, offensive, or infringing designs, images, or content when creating custom designs on our platform. 10.2 You agree not to submit or use any designs, images, or content that: Violate any applicable laws, regulations, or third-party rights. Promote discrimination, hatred, violence, or harm towards individuals or groups based on race, ethnicity, religion, gender, sexual orientation, or any other protected characteristic. Contain explicit, obscene, or sexually explicit material Infringe upon the intellectual property rights of others, including copyrights, trademarks, or patents. Misrepresent or falsely imply an association with any person, entity, or brand. 10.3 PICTURA reserves the right to refuse, remove, or cancel any order, design, or content that violates these guidelines. We may also take appropriate legal action in cases of severe violations. 10.4 You are solely responsible for the designs, images, and content you submit or use on the PICTURA platform. By using our services, you represent and warrant that you have the necessary rights and permissions to use, reproduce, and display the designs, images, and content you submit."
+    },
+    {
+        
+        "id": 11,
+        "title": "11. Compliance with Egyptian Law",
+        "description": "11.1 PICTURA operates in compliance with the laws and regulations of Egypt. Users of the PICTURA website and services are required to adhere to the applicable laws of Egypt when using our platform. 11.2 Any use of the PICTURA platform for unlawful purposes or in violation of Egyptian law is strictly prohibited. 11.3 PICTURA reserves the right to cooperate fully with law enforcement authorities and disclose any information necessary to comply with applicable laws or legal processes. By using the PICTURA website and services, you acknowledge and agree to abide by these provisions regarding prohibited designs and compliance with Egyptian law. Failure to comply with these provisions may result in the removal of content, cancellation of orders, or other appropriate actions as deemed necessary by PICTURA. By using the PICTURA website and services, you acknowledge that you have read, understood, and agreed to these Terms and Conditions. If you do not agree with any part of these Terms and Conditions, please refrain from using our website and services."
+    }
+]

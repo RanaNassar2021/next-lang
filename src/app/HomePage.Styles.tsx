@@ -192,12 +192,9 @@ const useStyles = makeStyles()((theme: any) => {
             width: '100%',
             display: 'flex',
             justifyContent: 'center',
-            paddingLeft: 0,
-            [theme.breakpoints.down('md')]: {
-                width: '100%',
-                margin: 0,
-                backgroundColor:'white'
-            },
+            alignItems:'center',
+            backgroundColor:'red',
+         
             '& .splide__arrow': {
                 backgroundColor: 'transparent !important',
                 marginTop: 18,
@@ -206,19 +203,19 @@ const useStyles = makeStyles()((theme: any) => {
                 },
             },
             '& .splide__arrow--prev': {
-                left: '-80px',
+                left: '-60px',
                 fontSize: '25px',
                 [theme.breakpoints.down('md')]: {
-                    left: '10px',
+                    left: '5px',
                     fontSize: '18px'
                 },
             },
             '& .splide__arrow--next': {
                 backgroundColor: 'transparent !important',
-                right: '-80px',
+                right: '-60px',
                 fontSize: '25px',
                 [theme.breakpoints.down('md')]: {
-                    right: '10px',
+                    right: '5px',
                     fontSize: '18px',
                     backgroundColor: 'transparent !important'
                 },
@@ -282,22 +279,47 @@ const useStyles = makeStyles()((theme: any) => {
             flexDirection: 'column',
             backgroundColor:'white',
             justifyContent: 'center',
+            overflow:'hidden',
             paddingLeft: '20ch',
             paddingRight: '20ch',
             marginTop: 0,
             height:'auto',
             marginBottom: 40,
             width: '100%',
+            '& .splide__arrow': {
+                backgroundColor: 'transparent !important',
+                marginTop: 4,
+                [theme.breakpoints.down('md')]: {
+                    marginTop: 0,
+                },
+            },
+            '& .splide__arrow--prev': {
+                left: '-80px',
+                fontSize: '25px',
+                [theme.breakpoints.down('md')]: {
+                    left: '10px',
+                    fontSize: '18px'
+                },
+            },
+            '& .splide__arrow--next': {
+                backgroundColor: 'transparent !important',
+                right: '-80px',
+                fontSize: '25px',
+                [theme.breakpoints.down('md')]: {
+                    right: '10px',
+                    fontSize: '18px',
+                    backgroundColor: 'transparent !important'
+                },
+            },
             [theme.breakpoints.down('md')]: {
                 marginTop: 0,
                 marginBottom: 20,
                 paddingLeft: '1ch',
                 paddingRight: '1ch',
                 paddingBottom:40,
-                backgroundColor:'white'
+                backgroundColor:'white',
             },
         },
-       
         sliderFlashSale: {
             width: '100%',
             display: 'flex',
@@ -334,7 +356,14 @@ const useStyles = makeStyles()((theme: any) => {
                 },
             },
         },
-      
+        flashSaleCard:{
+            width: '31ch',
+            [theme.breakpoints.down('md')]:{
+                width:'25ch',
+                marginRight:'3ch',
+                marginLeft:'4ch'
+            }
+        },
         buyNow:{
             display:'flex',
             justifyContent:'center',

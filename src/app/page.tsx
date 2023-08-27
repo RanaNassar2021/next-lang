@@ -30,7 +30,6 @@ import useStyles from './HomePage.Styles';
 
 
 // static Data
-import flashSaleData from './Assets/StaticData/FlashSale.json';
 import bestSellerData from './Assets/StaticData/BestSeller.json';
 import votesData from './Assets/StaticData/Vote.json'
 
@@ -44,7 +43,6 @@ import '@splidejs/react-splide/css';
 
 //Axios
 import Axios from 'axios';
-
 
 
 // Vote & Win Registeration check
@@ -62,11 +60,11 @@ export default function Home() {
   const Icons: any = MuiIcons;
   const { classes } = useStyles();
 
-  const [flashData, setFlashData] = useState<{ userId: number ;id: number; title: string; body: string }[]>([]);
+  const [data, setData] = useState([]);
 
   useEffect(()=>{
-    Axios.get('https://jsonplaceholder.typicode.com/posts')
-    .then(res => setFlashData(res.data)
+    Axios.get('https://dummyjson.com/carts')
+    .then((res) => {setData(res.data.carts); console.log(res.data.carts)}
     ).catch(err => console.log( 'Error fetching flash Sale data',err))
   },[])
 
@@ -258,33 +256,37 @@ export default function Home() {
         </Box>
 
         {/* flash sale map */}
-        <Box className={classes.flashSaleContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Box className={classes.sliderFlashSale}>
-            <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 3000, pagination: false }} style={{ width: '100%' }}>
-              <SplideSlide>
-                <Box style={{ display: 'flex', gap: 25 }}>
-                  {flashSaleData.map(flashSale => {
-                    return (
-                      <Card key={flashSale.id} style={{ width: '300px' }}>
-                        <CardMedia
-                          sx={{ height: 220 }}
-                          image={flashSale.images[0]}
-                          title="product image"
-                        />
-                        <CardContent className={classes.cardContent}>
-                          <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                            {flashSale.title}
-                          </Typography>
-                          <Box className={classes.cardFooter}>
-                            <Typography color="text.secondary">{flashSale.category}</Typography>
-                            <Typography>{flashSale.price}</Typography>
-                          </Box>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
-                </Box>
-              </SplideSlide>
+        <Box className={classes.flashSaleContainer}  sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box className={''}>
+            <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 3000, pagination: false, gap:'1rem', perPage: 3 }} style={{ width: '100%' }}>
+                  {
+                  data.map((flashSale: any, index: number) => {
+                    if (index <=8) {
+                      return (
+                        <SplideSlide key={index}>
+                            <Box style={{ display: 'flex', gap: 25 }}>
+                        <Card key={index}  className={classes.flashSaleCard}>
+                          <CardMedia
+                            sx={{ height: 220 }}
+                            image={redShirt.src}
+                            title="product image"
+                          />
+                          <CardContent className={classes.cardContent}>
+                            <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                              {flashSale.discountedTotal}
+                            </Typography>
+                            <Box className={classes.cardFooter}>
+                              <Typography color="text.secondary">T-Shirts</Typography>
+                              <Typography>300 EGP</Typography>
+                            </Box>
+                          </CardContent>
+                        </Card>
+                        </Box>
+                        </SplideSlide>
+                      )
+                    }
+                    })
+                    }
             </Splide>
           </Box>
           <Box className={classes.buyNow}>
@@ -293,36 +295,36 @@ export default function Home() {
             </Link>
           </Box>
         </Box>
-
-        {/* flash sale slider */}
       </Box>
 
       {/* Mobile view */}
 
       <Box className={classes.flashSaleContainer} sx={{ display: { xs: 'flex', md: 'none' } }}>
-        <Box className={classes.sliderFlashSaleMobile}>
-          <Splide className={classes.sliderFlashSaleMobile} options={{ type: 'loop', autoWidth: false, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
-            {flashSaleData.map(flashSale => {
+        <Box>
+          <Splide  options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
+            {
+            data.map((flashSale: any , index: number) => {
+              if (index <=8) {
               return (
-                <SplideSlide className={classes.sliderCard}>
-                  <Card sx={{ maxWidth: 345 }} key={flashSale.id} >
+                <SplideSlide style={{marginLeft:'3ch'}}>
+                  <Card sx={{ maxWidth: 345 }} key={index} className={classes.flashSaleCard}>
                     <CardMedia
                       sx={{ height: 220 }}
-                      image={flashSale.images[0]}
+                      image={redShirt.src}
                       title="product image"
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                        {flashSale.title}
+                        {flashSale.discountedTotal}
                       </Typography>
                       <Box className={classes.cardFooter}>
-                        <Typography color="text.secondary">{flashSale.category}</Typography>
-                        <Typography>{flashSale.price}</Typography>
+                        <Typography color="text.secondary">T-Shirts</Typography>
+                        <Typography>300 EGP</Typography>
                       </Box>
                     </CardContent>
                   </Card>
                 </SplideSlide>
-              )
+              ) }
             })}
           </Splide>
         </Box>

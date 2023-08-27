@@ -88,6 +88,22 @@
         "currentImageIndex": 0,
         "isMouseOver" : false,
         "isClicked": false
+    },
+    {
+        
+        "id": 7,
+        "images": [
+            "/Assets/Images/best2.jpg",
+            "/Assets/Images/best2.jpg",
+            "/Assets/Images/best2.jpg",
+            "/Assets/Images/best2.jpg"
+        ],
+        "title": "cool oversize short sleeve t-shirt 7",
+        "category": "T-Shirt",
+        "price":"300 EGP",
+        "currentImageIndex": 0,
+        "isMouseOver" : false,
+        "isClicked": false
     }
 
 ]

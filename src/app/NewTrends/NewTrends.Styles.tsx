@@ -70,15 +70,42 @@ const useStyles = makeStyles()((theme: any) =>{
             justifyContent:'space-between',
             padding: '1ch 2ch',
             [theme.breakpoints.down('md')]:{
-                fontSize:'10px'
+                fontSize:'10px',
+                '& svg':{
+                    fontSize:'12px'
+                }
             }
         },
+        btnCart:{
+            [theme.breakpoints.down('md')]:{
+                fontSize:'10px',
+                height:20,
+                '& svg':{
+                    fontSize:'12px'
+                }
+            }
+    },
+    cartMobile:{
+            [theme.breakpoints.down('md')]:{
+                '& svg':{
+                    fontSize:'12px'
+                }
+            }
+    },
         sizes:{
             display:'flex',
             justifyContent:'space-between',
         },
         sizeBox:{
             margin:'0 5px',
+        },
+        cardImage:{
+            padding:0, 
+            height:'30ch',
+            overflow:'hidden',
+            [theme.breakpoints.down('md')]:{
+                height:'auto'
+            }
         },
         filterMobile:{
             width:'100%',

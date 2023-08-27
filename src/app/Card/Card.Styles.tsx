@@ -27,6 +27,15 @@ const useStyles = makeStyles()((theme:any)=>{
             fontWeight:'bolder',
             alignContent:'center',
          },
+
+         cardImage:{
+            padding:0,
+            height:'30ch',
+            overflow:'hidden',
+            [theme.breakpoints.down('md')]:{
+                height:'auto'
+            }
+        },
     }
 })
 
