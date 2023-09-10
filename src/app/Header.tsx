@@ -4,6 +4,7 @@ import { Box, Typography, Button, Divider, Menu, MenuItem } from '@mui/material'
 import logo from './Assets/Images/logo.png';
 import Image from 'next/image';
 import flashSale from './Assets/Images/flashSale.png';
+import egyptFlag from './Assets/Images/egyptFlag.png';
 import Link from 'next/link';
 import SideBar from './SideBar/SideBar';
 // material UI icons
@@ -33,7 +34,12 @@ export default function Header() {
             <Box className={classes.topHeader}>
               <Link href="/Contact"><Button className={classes.btn}>Contact</Button> </Link>
               <Link href="/AboutUs"> <Button className={classes.btn}>About us</Button> </Link>
-              <Button className={classes.btn}>Egypt (English) EGP <Icons.ArrowDropDown /></Button>
+              <Button className={classes.btn}>
+                <Image src={egyptFlag} width={20} alt='flag' style={{ marginRight: 5 }} /> Egypt (English) EGP <Icons.ArrowDropDown />
+              </Button>
+              <Box sx={{marginTop:'4.5ch',paddingLeft:'1ch'}}>
+              <Icons.Search></Icons.Search>
+              </Box>
             </Box>
             <Link href='/' className={classes.logo}><Box >
               <Image src={logo}
@@ -72,14 +78,14 @@ export default function Header() {
             <Button className={classes.btnB}><Link href="/NewTrends"> New Trends</Link></Button>
             <Button className={classes.btnB}> <Link href="#VoteWin">Vote & Win</Link></Button>
             <Button className={classes.btnB}> <Link href="/FlashSale"> <Image src={flashSale}
-              width={100}
+              layout='responsive'
               alt="Picture of flash sale logo" /> </Link></Button>
           </Box>
         </Box>
       </Box>
       <Box sx={{ display: { xs: 'flex', md: 'none' } }} className={classes.mobile}>
         <Box className={classes.mobileIcons}>
-          <SideBar/>
+          <SideBar />
         </Box>
         <Box className={classes.mobileIcons}>
           <Icons.Search></Icons.Search>

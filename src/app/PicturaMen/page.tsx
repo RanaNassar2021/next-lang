@@ -173,7 +173,7 @@ export default function PicturaMen() {
                         {cards.map(card => {
                             return (
                                 <Grid item xs={2} sm={3} md={3} key={card.id}>
-                                    <Link href="/cardDetails">
+                                    <Link href={'/cardDetails/' + card.id}>
                                     <Card sx={{ maxWidth: 345 }}  onMouseOver={e => handleMouseOver(card.id)} onMouseOut={e => handleMouseOut(card.id)}
                                         className={classes.card}>
                                          {card.hoverImage ? ( 

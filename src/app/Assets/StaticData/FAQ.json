@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "question": "Q: How does the design process work with PICTURA?",
+        "description": "A: Designing your own clothes with PICTURA is a simple and intuitive process. Our user-friendly interface allows you to select from a variety of clothing templates or start from scratch. You can customize every aspect of the design, including colors, patterns, and placements. Once you're satisfied with yourcreation, simply submit your order, and our team will bring your design to life."
+    },
+    {
+        "id": 2,
+        "question": "Q: What materials are used for the clothes designed with PICTURA?",
+        "description": "A: At PICTURA, we believe in providing high-quality products that match your creativity. We use premium fabrics and materials to ensure comfort, durability,and style. Whether it's cotton, polyester, or a blend, rest assured that yourcustom-designed clothes will meet the highest standards."
+    },
+    {
+        "id": 3,
+        "question": "Q: How long does it take to receive my custom-designed clothes?",
+        "description": "A: We strive to deliver your custom-designed clothes as quickly as possible. The production and shipping time depend on various factors, including thecomplexity of the design and the shipping destination. Generally, you can expect your order to be delivered within [X] business days. We provide regular updates on the progress of your order, so you'll always know when to expect your unique creations."
+    },
+    {
+        "id": 4,
+        "question": "Q: Can I make changes to my design after submitting my order?",
+        "description": "A: Once an order has been submitted, our production process begins promptly to ensure timely delivery. Therefore, we recommend reviewing your design carefully before placing your order. However, if you need to make any minor  changes or corrections, please reach out to our customer support team as soon as possible. We'll do our best to accommodate your request, depending on the stage of production."
+    },
+    {
+        "id": 5,
+        "question": "Q: What if I'm not satisfied with the quality of my custom-designed clothes?",
+        "description": "A: Customer satisfaction is our top priority at PICTURA. We take great pride in delivering products of the highest quality. If you encounter any issues or are unsatisfied with the quality of your custom-designed clothes, please contact our customer support team immediately. We'll work with you to address the concern and find a satisfactory solution, which may include a replacement or refund."
+    },
+    {
+        "id": 6,
+        "question":"Q: Do you offer international shipping?",
+        "description":"A: Yes, we offer international shipping to many countries worldwide. During the checkout process, you can select your desired shipping destination, and the shipping cost will be calculated accordingly. Please note that international shipping may have additional customs and import fees, which are the responsibility of the recipient."
+    },
+    {
+        "id": 7,
+        "question":"Q: Can I order multiple pieces of the same design?",
+        "description":"A: Absolutely! If you wish to order multiple pieces of the same design, you can easily specify the desired quantity during the design and ordering process. Whether you're creating matching outfits for a group or stocking up on your favorite design, we're here to fulfill your requirements."
+    },
+    {
+        "id": 8,
+        "question":"Q: How can I contact PICTURA for further assistance or inquiries?",
+        "description":"A: We're always here to help! If you have any further questions, need assistance, or have specific inquiries, please feel free to reach out to our friendly customer support team. You can contact us via email at [support@pictura.com] (mailto:support@pictura.com) or call us at [phone number]. We'll be delighted to provide the information and support you need."
+    }
+]

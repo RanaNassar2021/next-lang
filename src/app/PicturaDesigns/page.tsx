@@ -11,7 +11,7 @@ import useStyles from "./Shop.Styles";
 
 // Images
 import men from '../Assets/Images/men.jpg';
-import flashSale from '../Assets/Images/buyNowShop.png';
+import flashSale from '../Assets/Images/BuyNow.png';
 import women from '../Assets/Images/women.jpg';
 
 export default function Pictura () {
@@ -34,7 +34,7 @@ export default function Pictura () {
 
                 <Box className={classes.contentFlashSale}>
                     <Link href="/FlashSale">
-                <Image src={flashSale} alt='Pictura flash sale section'/>
+                <Image src={flashSale} alt='Pictura flash sale section' layout="responsive"/>
                 </Link>
                 </Box>
 

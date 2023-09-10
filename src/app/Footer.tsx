@@ -94,7 +94,9 @@ export default function Footer() {
                         </Link>
                     </Box>
                     <Box>
+                    <Link href="/FAQ">
                         <Typography>FAQ</Typography>
+                        </Link>
                     </Box>
                     <Box>
                         <Link href="/TermsAndConditons">

@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme: any) => {
             paddingTop: '2ch',
         },
         btn: {
-            fontSize: '10px',
+            fontSize: '8px',
             color:'black'
         },
         logo: {
