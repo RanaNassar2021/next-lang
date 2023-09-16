@@ -51,7 +51,7 @@ export default function Header() {
               <Box className={classes.register}>
                 <Link href="/Registeration"><Button className={classes.btnR}>sign up</Button></Link>
                 <Link href="/LogIn"><Button className={classes.btnR}>log in</Button> </Link>
-                <Icons.FavoriteBorder />
+                <Link href="/Favourites"><Icons.FavoriteBorder /></Link>
                 <Icons.ShoppingCart />
               </Box>
             </Box>

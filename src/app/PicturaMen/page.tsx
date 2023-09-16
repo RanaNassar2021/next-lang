@@ -180,7 +180,7 @@ export default function PicturaMen() {
                                               <ImagesCard images={images}></ImagesCard>
                                         ): (
                                             <Box className={classes.cardImage}>
-                                                <Image src={newTrend1} alt="product picture" height={250} width={270} />
+                                                <Image src={newTrend1} alt="product picture" layout="responsive" />
                                             </Box>
                                        )}
 

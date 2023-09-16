@@ -26,11 +26,13 @@ const useStyles = makeStyles()((theme: any) => {
             marginTop: 0,
             [theme.breakpoints.down('sm')]: {
                 margin: '1ch',
+                marginLeft:'2ch'
             },
 
         },
         footerLogo: {
             height:'130px',
+            marginTop:'-20px'
         },
         socialMedia: {
             marginTop: 5,
@@ -50,7 +52,8 @@ const useStyles = makeStyles()((theme: any) => {
                 textTransform: 'uppercase',
                 marginBottom: '5px',
                 [theme.breakpoints.down('sm')]: {
-                    fontSize:'12px'
+                    fontSize:'16px',
+                    marginLeft:'2ch',
                 },
             },
             '& p': {
@@ -58,7 +61,9 @@ const useStyles = makeStyles()((theme: any) => {
                 fontWeight: 'lighter',
                 lineHeight: '25px',
                 [theme.breakpoints.down('sm')]: {
-                   fontSize:'10px',
+                   fontSize:'12px',
+                   marginLeft:'3ch',
+                   lineHeight:'35px'
                 },
             },
             [theme.breakpoints.down('sm')]: {

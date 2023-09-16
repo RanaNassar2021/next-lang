@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme: any) => {
                 height: '90vh',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 5
+                gap: 0
             },
         },
         theDesigner: {
@@ -29,8 +29,37 @@ const useStyles = makeStyles()((theme: any) => {
                 width: '100%',
                 margin: 0,
                 marginTop: '5ch',
-                transform: "rotate(90deg)"
+                transform: "rotate(90deg)",
+                position:'relative'
             },
+        },
+        theDesignerMob:{
+            width:'95%',
+            height:'45vh',
+            margin:'1ch',
+            clipPath: 'polygon(0 0, 100% 0, 100% 70%, 0% 100%)',
+        },
+        theDesignerContentMob:{
+            backgroundColor:'#03045e',
+            height:'auto',
+            opacity: 0.8,
+            color: 'white',
+            paddingTop:'1ch',
+            '& h6':{
+                display:'flex',
+                justifyContent:'center',
+                alignItems:'center',
+                fontSize:'30px',
+                fontWeight:500,
+                fontFamily:'serif',
+            },
+            '& p':{
+                display:'flex',
+                justifyContent:'center',
+                alignItems:'center',
+                paddingBottom:'1ch',
+                fontFamily:'serif',
+            }
         },
         designerContent: {
             backgroundColor: '#03045e',
@@ -41,8 +70,8 @@ const useStyles = makeStyles()((theme: any) => {
             flexDirection: 'column',
             paddingLeft: '12ch',
             [theme.breakpoints.down('md')]: {
-                height: 60
-
+                height: 60,
+                display:'none'
             },
             '& h6': {
                 fontWeight: 'normal',
@@ -50,6 +79,7 @@ const useStyles = makeStyles()((theme: any) => {
                 textTransform: 'capitalize',
                 display: 'flex',
                 alignItems: 'center',
+                fontFamily:'serif',
                 [theme.breakpoints.down('md')]: {
                     fontSize: '20px'
 
@@ -62,6 +92,7 @@ const useStyles = makeStyles()((theme: any) => {
                 display: 'flex',
                 alignItems: 'center',
                 marginLeft: '1.5ch',
+                fontFamily:'serif',
                 [theme.breakpoints.down('md')]: {
                     fontSize: '12px',
                 },
@@ -73,6 +104,7 @@ const useStyles = makeStyles()((theme: any) => {
             clipPath: 'polygon(0 0, 100% 0, 100% 100%, 12% 100%)',
             marginLeft: -25,
             position: 'relative',
+            
             [theme.breakpoints.down('md')]: {
                 marginLeft: 0,
                 marginRight: 0,
@@ -105,6 +137,7 @@ const useStyles = makeStyles()((theme: any) => {
                 textTransform: 'capitalize',
                 display: 'flex',
                 alignItems: 'center',
+                fontFamily:'serif',
                 [theme.breakpoints.down('md')]: {
                     fontSize: '20px',
                     marginLeft: '-60px'
@@ -118,11 +151,48 @@ const useStyles = makeStyles()((theme: any) => {
                 alignItems: 'center',
                 marginTop: 5,
                 marginLeft: '2ch',
+                fontFamily:'serif',
                 [theme.breakpoints.down('md')]: {
                     fontSize: '12px',
                     marginLeft: '-50px'
                 },
             },
+        },
+        picturaMob:{
+            width:'95%',
+            height:'60vh',
+            marginTop:'-10ch',
+            clipPath: 'polygon(0 23%, 100% 0, 100% 100%, 0% 100%)',
+            position:'relative',
+            '& .splide__arrow':{
+                display:'none'
+            }
+        },
+        picturaContentMob:{
+            width:'100%',
+            position:'absolute',
+            bottom:0,
+            backgroundColor:'#03045e',
+            height:'auto',
+            opacity: 0.8,
+            color: 'white',
+            paddingTop:'1ch',
+          
+            '& h6':{
+                display:'flex',
+                justifyContent:'center',
+                alignItems:'center',
+                fontSize:'30px',
+                fontWeight:500,
+                fontFamily:'serif',
+            },
+            '& p':{
+                display:'flex',
+                justifyContent:'center',
+                alignItems:'center',
+                paddingBottom:'1ch',
+                fontFamily:'serif',
+            }
         },
         bestSellerContainer: {
             display: 'flex',
@@ -139,7 +209,7 @@ const useStyles = makeStyles()((theme: any) => {
                 marginBottom: 20,
                 paddingLeft: '1ch',
                 paddingRight: '1ch',
-                paddingBottom:40
+                paddingBottom:0,
             },
         },
         title: {
@@ -147,9 +217,15 @@ const useStyles = makeStyles()((theme: any) => {
             justifyContent: 'center',
             marginTop:40,
             marginBottom:40,
+            '& h4':{
+                fontFamily:'serif',
+                fontSize:'40px'
+            },
             [theme.breakpoints.down('md')]: {
-                fontSize: '30px',
-                marginBottom: 20
+                fontSize: '50px',
+                marginTop:40,
+                marginBottom: 40,
+                fontFamily:'serif',
             },
 
         },
@@ -252,6 +328,7 @@ const useStyles = makeStyles()((theme: any) => {
             display: 'flex',
             justifyContent: 'center',
             [theme.breakpoints.down('md')]:{
+                display:'none',
                paddingBottom:20
             }
         },
@@ -316,8 +393,8 @@ const useStyles = makeStyles()((theme: any) => {
                 marginBottom: 20,
                 paddingLeft: '1ch',
                 paddingRight: '1ch',
-                paddingBottom:40,
-                backgroundColor:'white',
+                paddingBottom:20,
+                backgroundColor:'transparent'
             },
         },
         sliderFlashSale: {
@@ -371,8 +448,8 @@ const useStyles = makeStyles()((theme: any) => {
             marginTop:20,
             marginBottom: 40,
             [theme.breakpoints.down('md')]:{
-                height:20,
-                marginBottom:20
+                height:80,
+                marginBottom:20,
             }
         },
         buyNowBtn:{
@@ -380,7 +457,8 @@ const useStyles = makeStyles()((theme: any) => {
             borderRadius:'15px',
             height:'80px',
             [theme.breakpoints.down('md')]:{
-                height:'40px'
+                height:'40px',
+                marginTop:'40px'
             }
        
         },
@@ -408,6 +486,7 @@ const useStyles = makeStyles()((theme: any) => {
             '& h5':{
                 color:'white',
                 fontSize:'40px',
+                fontFamily:'serif',
             }
 
         },
@@ -446,9 +525,10 @@ const useStyles = makeStyles()((theme: any) => {
             justifyContent:'space-evenly',
             padding: '1ch',
             '& h6': {
-                fontSize:'18px',
+                fontSize:'30px',
                 display:'flex',
-                alignItems:'center'
+                alignItems:'center',
+                fontFamily:'serif',
             }
         },
         newTrendBtn:{
@@ -462,9 +542,10 @@ const useStyles = makeStyles()((theme: any) => {
             '& h6': {
                 display:'flex',
                 justifyContent:'center',
-                fontSize:'35px',
+                fontSize:'40px',
                 marginTop:40,
                 fontWeight:'bold',
+                fontFamily:'serif',
                 [theme.breakpoints.down('md')]:{
                     marginTop:20,
                     fontSize:'30px'
@@ -475,8 +556,9 @@ const useStyles = makeStyles()((theme: any) => {
                 justifyContent:'center',
                 textAlign:'center',
                 fontWeight:'bold',
-                fontSize:'18px',
+                fontSize:'22px',
                 marginBottom:40,
+                fontFamily:'serif',
             },
             [theme.breakpoints.down('md')]:{
                 paddingLeft:'1ch',
@@ -536,11 +618,14 @@ const useStyles = makeStyles()((theme: any) => {
                 marginTop:40,
                 '& h6':{
                     display:'flex',
-                    justifyContent:'center'
+                    justifyContent:'center',
+                    fontFamily:'serif',
+                    fontSize:'40px'
                 },
                 '& p':{
                     textAlign:'center',
-                    marginBottom:10
+                    marginBottom:10,
+                    fontFamily:'serif',
                 }
         },
         socialMediaContainer:{
@@ -554,11 +639,13 @@ const useStyles = makeStyles()((theme: any) => {
                 paddingTop:30,
                 paddingBottom:30,
                 fontWeight:'bold',
+                fontFamily:'serif',
                 [theme.breakpoints.down('md')]:{
                     marginTop:20,
                     paddingBottom:20,
                     fontSize:'25px',
-                    textAlign:'center'
+                    textAlign:'center',
+                    fontFamily:'serif',
                 }
             },
             [theme.breakpoints.down('md')]:{

@@ -51,7 +51,7 @@ export default function ImagesCard (images:any) {
     <React.Fragment>
       {images['images'] && images['images'].length &&
          <Box   className={classes.cardImage}  onMouseOver={handleImageSlider} onMouseOut={handleImageOut} >
-             <Image src={images['images'][imageIndex] === undefined? images['images'][0]: images['images'][imageIndex] } alt="product picture" height={250} width={270}/>
+             <Image src={images['images'][imageIndex] === undefined? images['images'][0]: images['images'][imageIndex] } alt="product picture" width={300} height={260}/>
        </Box> }
     </React.Fragment>
   )

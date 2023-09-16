@@ -75,11 +75,11 @@ export default function Footer() {
                         <Typography>New Trends</Typography>
                         </Link>
                     </Box>
-                    <Box>
+                    <Box sx={{marginLeft: {xs:0, md:'-30px'}}}>
                     <Link href="/FlashSale">
                     <Image src={flashSale}
-                                width={70}
-                                height={15}
+                                width={100}
+                                height={20} 
                                 alt="Pictura flashsale page" />
                                 </Link>
                     </Box>

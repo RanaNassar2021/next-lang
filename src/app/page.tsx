@@ -10,6 +10,7 @@ import Design1 from './Assets/Images/design1.jpg';
 import Design2 from './Assets/Images/design2.jpg';
 import Design3 from './Assets/Images/design3.jpg';
 import flashSaleBanner from './Assets/Images/flashSaleBanner.png';
+import flashSale from './Assets/Images/flashSale.png';
 import buyNow from './Assets/Images/BuyNow.png';
 import newTrendG from './Assets/Images/newTrendG.jpg';
 import newTrendM from './Assets/Images/newTrendM.jpg';
@@ -119,7 +120,7 @@ export default function Home() {
               <Typography>craft your own outfit</Typography>
             </Box>
           </Box>
-          <Box className={classes.picturaDesigns} >
+          <Box className={classes.picturaDesigns}>
             <Box >
               <Link href='/PicturaDesigns'>
                 <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: true, speed: 1000, pagination: false }}>
@@ -145,14 +146,15 @@ export default function Home() {
         {/* mobile view */}
 
         <Box className={classes.container} sx={{ display: { xs: 'flex', md: 'none' } }}>
-          <Box className={classes.theDesigner} style={{ backgroundImage: `url(${Designer.src})`, backgroundSize: 'cover' }}>
-            <Box className={classes.designerContent}>
-              <Typography variant='h6'>The designer</Typography>
-              <Typography>craft your own outfit</Typography>
+          <Box className={classes.theDesignerMob} style={{ backgroundImage: `url(${Designer.src})`, backgroundSize: 'cover' }}>
+            <Box className={classes.theDesignerContentMob}>
+              <Typography variant='h6'>The Designer</Typography>
+              <Typography>Craft Your Own Outfit</Typography>
             </Box>
           </Box>
-          <Box className={classes.picturaDesigns} >
-            <Box>
+          <Box className={classes.picturaMob}>
+          <Box>
+             <Link href='/PicturaDesigns'>
               <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: true, speed: 1000, pagination: false }}>
                 <SplideSlide>
                   <Image src={Design1} alt='pictura designs' />
@@ -164,8 +166,10 @@ export default function Home() {
                   <Image src={Design3} alt='pictura designs' />
                 </SplideSlide>
               </Splide>
+              </Link>
             </Box>
-            <Box className={classes.picturaContent}>
+
+            <Box className={classes.picturaContentMob}>
               <Typography variant='h6'>PICTURA designs</Typography>
               <Typography>choose from our iconic designs</Typography>
             </Box>
@@ -300,6 +304,9 @@ export default function Home() {
       {/* Mobile view */}
 
       <Box className={classes.flashSaleContainer} sx={{ display: { xs: 'flex', md: 'none' } }}>
+      <Image src={flashSale}
+             layout='resposive'
+             alt="Pictura flashsale page" />
         <Box>
           <Splide  options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
             {
@@ -330,7 +337,7 @@ export default function Home() {
         </Box>
         <Box className={classes.buyNow}>
             <Link href="/FlashSale">
-            <Button className={classes.buyNowBtn}><Image src={buyNow} alt='flash sale button' width={100} height={20} /> </Button>
+            <Button className={classes.buyNowBtn}><Image src={buyNow} alt='flash sale button' width={150} height={20} /> </Button>
             </Link>
           </Box>
       </Box>
