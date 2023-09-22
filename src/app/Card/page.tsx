@@ -24,7 +24,8 @@ export default function ImagesCard (images:any) {
 
   const [imageIndex, setImageIndex] = useState(0);
   var timing: any
-
+ console.log(images)
+ 
   useEffect(() => {
     timing = setInterval(() => {
       if (imageIndex <= images['images'].length) {
@@ -48,11 +49,11 @@ export default function ImagesCard (images:any) {
   }
 
   return (
-    <React.Fragment>
-      {images['images'] && images['images'].length &&
-         <Box   className={classes.cardImage}  onMouseOver={handleImageSlider} onMouseOut={handleImageOut} >
-             <Image src={images['images'][imageIndex] === undefined? images['images'][0]: images['images'][imageIndex] } alt="product picture" width={300} height={260}/>
-       </Box> }
-    </React.Fragment>
+   <React.Fragment>
+     {images['images'] && images['images'].length &&
+        <Box   className={classes.cardImage}  onMouseOver={handleImageSlider} onMouseOut={handleImageOut} >
+            <Image src={images['images'][imageIndex] === undefined? images['images'][0]: images['images'][imageIndex] } alt="product picture" width={300} height={260}/>
+      </Box> }
+   </React.Fragment>
   )
 }

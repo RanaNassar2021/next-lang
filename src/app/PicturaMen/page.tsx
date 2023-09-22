@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, CardMedia, Button } from "@mui/material";
 import Header from "../Header";
 import Footer from "../Footer";
@@ -26,6 +26,9 @@ import * as MuiIcons from '@mui/icons-material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 
+//Axios
+import Axios from 'axios';
+
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -35,40 +38,71 @@ export default function PicturaMen() {
     const Icons: any = MuiIcons;
 
 
-    const [cards, setCards] = useState(cardsData)
+    const [data, setData] = useState<any>([]);
 
-    const handleMouseOver = (id: number) => {
-        setCards(prev => prev.map(card => {
-            if (card.id == id) {
-                card.isMouseOver = true;
-                card.hoverImage = true;
+
+    const fetchData = async () => {
+        // Make a GET request using axios
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=male&pageNumber=${1}&pageSize=10`);
+        // Update the state with the response data
+        setData(response.data);
+        console.log(response.data);
+    };
+
+    // Call the fetchData function after the initial render
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+  {/*  useEffect(()=>{
+        const get = async () => {
+            try {
+                const resp = await Axios.get(`${process.env.apiUrl}`+ `Product/GetAllProduct?gender=male&pageNumber=1&pageSize=5`);
+                setData(resp.data?.forEach((items: any)=>{
+                    items.isMouseOver = false;
+                    items.hoverImage = false;
+                    items.isClicked = false
+                })); console.log(data)
+              
+            } catch (err) {
+                console.error('Error fetching pictura men data', err);
             }
-            return card
+        }
+      },[]) */ }
+
+    const handleMouseOver = (id: any) => {
+        setData((prev: any) => prev.map((item: any) => {
+            if (item.productId == id) {
+                item.isMouseOver = true;
+                item.hoverImage = true;
+            }
+            return item
         }))
     }
 
 
-    const handleMouseOut = (id: number) => {
-        setCards(prev => prev.map(card => {
-            if (card.id == id) {
-                card.isMouseOver = false;
-                card.hoverImage = false;
-                card.currentImageIndex = 0;
+    const handleMouseOut = (id: any) => {
+        setData((prev: any) => prev.map((item: any) => {
+            if (item.productId == id) {
+                item.isMouseOver = false;
+                item.hoverImage = false;
             }
-            return card
+            return item
         }))
     }
 
 
     const [cart, setCart] = useState(false);
 
-   function handleAddToCart (id: number) {
+   function handleAddToCart (id: any) {
     setCart(true) ;
-    setCards(prev => prev.map(x=>{
-        if(x.id == id && cart == true) x.isClicked = true;
+    setData((prev: any) => prev.map((x: any)=>{
+        if(x.productId == id && cart == true) x.isClicked = true;
         return x
     }))
    };
+
+  
 
 
     return (
@@ -170,25 +204,25 @@ export default function PicturaMen() {
                 </Box>
                 <Box className={classes.cards}>
                     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                        {cards.map(card => {
+                        { data.map((data: any, index: number) => {
                             return (
-                                <Grid item xs={2} sm={3} md={3} key={card.id}>
-                                    <Link href={'/cardDetails/' + card.id}>
-                                    <Card sx={{ maxWidth: 345 }}  onMouseOver={e => handleMouseOver(card.id)} onMouseOut={e => handleMouseOut(card.id)}
+                                <Grid item xs={2} sm={3} md={3} key={index}>
+                                    <Link href={'/cardDetails/' + data.productId}>
+                                    <Card sx={{ maxWidth: 345 }} onMouseOver={e => handleMouseOver(data.productId)} onMouseOut={e => handleMouseOut(data.productId)}
                                         className={classes.card}>
-                                         {card.hoverImage ? ( 
-                                              <ImagesCard images={images}></ImagesCard>
+                                         {data.hoverImage ? ( 
+                                              <ImagesCard images={data?.images}></ImagesCard>
                                         ): (
                                             <Box className={classes.cardImage}>
-                                                <Image src={newTrend1} alt="product picture" layout="responsive" />
+                                                <Image src={data.images[1]} alt="product picture" unoptimized height={250} width={270}  />
                                             </Box>
                                        )}
 
-                                        {card.isMouseOver ? (<Box className={classes.hoverBox}> <Box>
+                                        {data.isMouseOver ? (<Box className={classes.hoverBox}> <Box>
                                             <FavoriteBorderIcon></FavoriteBorderIcon>
                                         </Box>
                                             <Box>
-                                                {card.isClicked ? (<Box className={classes.sizes}>
+                                                {data.isClicked ? (<Box className={classes.sizes}>
                                                                         <Box className={classes.sizeBox}>
                                                                             XS
                                                                         </Box>
@@ -207,18 +241,18 @@ export default function PicturaMen() {
                                                                         <Box className={classes.sizeBox}>
                                                                              XXL
                                                                         </Box>
-                                                                       </Box>) :(<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e =>{handleAddToCart(card.id)}} sx={{color:'white'}}>Add to Cart</Button></Box>)
+                                                                       </Box>) :(<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e =>{handleAddToCart(data.productId)}} sx={{color:'white'}}>Add to Cart</Button></Box>)
                                             }
-                                               
+
                                             </Box>
                                         </Box>) : null}
                                         <CardContent className={classes.cardContent}>
                                             <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                                                {card.title}
+                                                {data.title}
                                             </Typography>
                                             <Box className={classes.cardFooter}>
-                                                <Typography color="text.secondary">{card.category}</Typography>
-                                                <Typography>{card.price}</Typography>
+                                                <Typography color="text.secondary">{data.category}</Typography>
+                                                <Typography>{data.currentPrice}</Typography>
                                             </Box>
                                         </CardContent>
                                     </Card>
@@ -226,7 +260,7 @@ export default function PicturaMen() {
                                 </Grid>
                             )
                         })
-                        }
+                       }
 
                     </Grid>
                 </Box>

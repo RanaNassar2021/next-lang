@@ -9,7 +9,7 @@ const useStyles = makeStyles()((theme: any) => {
             display:'flex',
             marginLeft: '20ch',
             marginRight: '20ch',
-            [theme.breakpoints.down('md')]: {
+            [theme.breakpoints.down('lg')]: {
                 marginLeft:'1ch',
                 marginRight:'1ch'
             },
@@ -50,6 +50,10 @@ const useStyles = makeStyles()((theme: any) => {
             marginTop:'1ch',
             display:'flex',
             justifyContent:'space-between',
+            [theme.breakpoints.down('lg')]:{
+                marginLeft:'1ch',
+                marginRight:'1ch'
+            }
         },
         btnB: {
             width:'15%',
