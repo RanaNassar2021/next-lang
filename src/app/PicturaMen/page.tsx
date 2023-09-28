@@ -4,22 +4,12 @@ import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, CardMedia,
 import Header from "../Header";
 import Footer from "../Footer";
 import Filter from "../Filter/Filter";
-import cardsData from '../Assets/StaticData/PicturaMen.json';
 import ImagesCard from "../Card/page";
 import Image from "next/image";
 import Link from "next/link";
 
 // styles
 import useStyles from "./PicturaMen.Styles";
-
-// images for slider
-const images = [
-    "/Assets/Images/best3.jpg",
-   "/Assets/Images/newTrendM.jpg",
-   "/Assets/Images/best6.jpg"
- ]
-
- import newTrend1 from '../Assets/Images/best3.jpg';
 
 // Material ui
 import * as MuiIcons from '@mui/icons-material';
@@ -70,9 +60,9 @@ export default function PicturaMen() {
         }
       },[]) */ }
 
-    const handleMouseOver = (id: any) => {
-        setData((prev: any) => prev.map((item: any) => {
-            if (item.productId == id) {
+    const handleMouseOver = (id: any, index: any) => {
+        setData((prev: any) => prev.map((item: any, indexPrev: any) => {
+            if (item.productId == id && index == indexPrev ) {
                 item.isMouseOver = true;
                 item.hoverImage = true;
             }
@@ -81,9 +71,9 @@ export default function PicturaMen() {
     }
 
 
-    const handleMouseOut = (id: any) => {
-        setData((prev: any) => prev.map((item: any) => {
-            if (item.productId == id) {
+    const handleMouseOut = (id: any, index: any) => {
+        setData((prev: any) => prev.map((item: any,indexPrev: any) => {
+            if (item.productId == id && index == indexPrev) {
                 item.isMouseOver = false;
                 item.hoverImage = false;
             }
@@ -207,11 +197,17 @@ export default function PicturaMen() {
                         { data.map((data: any, index: number) => {
                             return (
                                 <Grid item xs={2} sm={3} md={3} key={index}>
-                                    <Link href={'/cardDetails/' + data.productId}>
-                                    <Card sx={{ maxWidth: 345 }} onMouseOver={e => handleMouseOver(data.productId)} onMouseOut={e => handleMouseOut(data.productId)}
+                                   
+                                    <Card sx={{ maxWidth: 345 }} onMouseOver={e => handleMouseOver(data.productId, index)} onMouseOut={e => handleMouseOut(data.productId, index)}
                                         className={classes.card}>
-                                         {data.hoverImage ? ( 
-                                              <ImagesCard images={data?.images}></ImagesCard>
+                                         {data.hoverImage ? (
+                                            <Box>
+                                                <Link href={'/cardDetails/' + data.productId +"/"+ 1}>
+                                                <Box className={classes.productDetailsLink}></Box>
+                                                </Link>
+                                                   <ImagesCard images={data?.images}></ImagesCard>
+                                            </Box>
+
                                         ): (
                                             <Box className={classes.cardImage}>
                                                 <Image src={data.images[1]} alt="product picture" unoptimized height={250} width={270}  />
@@ -246,17 +242,44 @@ export default function PicturaMen() {
 
                                             </Box>
                                         </Box>) : null}
-                                        <CardContent className={classes.cardContent}>
+
+                                        {data.onlyFewLeft ? (
+                                                <Box className={classes.fewLeftBox}>
+                                                <Typography sx={{fontSize:'10px'}}>only few left</Typography>
+                                                </Box>
+                                            ): null}
+
+                                            {data.isSale ? (
+                                                <Box>
+                                                <Box className={classes.saleBox}>
+                                                    <Typography sx={{fontSize:'14px', color:'white'}}>Sale</Typography>
+                                                </Box>
+                                                 <CardContent className={classes.cardContent}>
+                                                 <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                                                     {data.title}
+                                                 </Typography>
+                                                 <Box className={classes.cardFooter}>
+                                                     <Typography color="text.secondary">{data.category}</Typography>
+                                                     <Box sx={{ display:'flex', gap:'10px'}}>
+                                                     <Typography sx={{opacity:0.8, textDecoration:'line-through'}}>{data.orginalPrice}</Typography>
+                                                     <Typography sx={{color:'#EA4335'}}>{data.currentPrice}</Typography>
+                                                     </Box>
+                                                 </Box>
+                                             </CardContent>
+                                             </Box>
+                                            ): <CardContent className={classes.cardContent}>
                                             <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
                                                 {data.title}
                                             </Typography>
                                             <Box className={classes.cardFooter}>
                                                 <Typography color="text.secondary">{data.category}</Typography>
-                                                <Typography>{data.currentPrice}</Typography>
+                                                <Typography>{data.orginalPrice}</Typography>
                                             </Box>
-                                        </CardContent>
+                                        </CardContent>}
+                                    
+                                       
                                     </Card>
-                                    </Link>
+                                   
                                 </Grid>
                             )
                         })
