@@ -1,7 +1,10 @@
 'use client'
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Drawer, Box, List, ListItem,IconButton,Divider, Typography} from '@mui/material';
+import { useParams } from 'next/navigation';
+
+import  Axios  from "axios";
 
 
 // material UI icons
@@ -11,6 +14,19 @@ export default function ProductDetails () {
 
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const Icons:any = MuiIcons;
+    const params = useParams();
+    const [data, setData] = useState<any>([]);
+
+    const fetchData = async () => {
+        // Make a GET request using axios
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetProductDetials?Id=${params.id.split('/')[0]}&ColorId=${params.id.split('/')[1]}`);
+        setData(response.data);
+    };
+
+    useEffect(()=>{
+        fetchData();
+
+    },[])
 
     return (
         <React.Fragment>
@@ -23,14 +39,20 @@ export default function ProductDetails () {
                     <List>
                         <ListItem sx={{fontWeight:'bold'}}>Product Details</ListItem>
                         <Divider/>
-                        <ListItem>Model Size: M</ListItem>
-                        <ListItem>Main Fabric: Cotton</ListItem>
+                        <ListItem>Main Fabric: {data.mainFabric} </ListItem>
                         <ListItem>Gender : Men</ListItem>
-                        <ListItem>Category: T-Shirt</ListItem>
-                        <ListItem>Arm Length: Short Sleeves</ListItem>
-                        <ListItem>Collar: Round Neck</ListItem>
-                        <ListItem>Color: orange</ListItem>
-                        <ListItem>Availability : In stock</ListItem>
+                        <ListItem>Category: {data.category}</ListItem>
+                        {data.isLongSleve? (
+                            <ListItem>Arm Length: long Sleeves</ListItem>
+                        ): <ListItem>Arm Length: Short Sleeves</ListItem>
+                        }
+                        <ListItem>Collar: {data.collar}</ListItem>
+                        {data.colors?.map((color: any, index: number)=>{
+                            return (
+                                <ListItem key={index}>Color: {color.name}</ListItem>
+                            )
+                        })}
+                        <ListItem>Availability : {data.stockStatus}</ListItem>
                     </List>
                 </Box>
             </Drawer>

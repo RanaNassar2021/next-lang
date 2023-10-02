@@ -191,7 +191,7 @@ export default function PicturaWomen() {
                                         className={classes.card}>
                                          {data.hoverImage ? (
                                             <Box>
-                                                <Link href={'/cardDetails/' + data.productId +"/"+ 1}>
+                                                <Link href={'/cardDetails/' + data.productId +"/"+ data.colorId}>
                                                 <Box className={classes.productDetailsLink}></Box>
                                                 </Link>
                                                    <ImagesCard images={data?.images}></ImagesCard>

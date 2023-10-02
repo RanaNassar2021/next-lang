@@ -76,7 +76,7 @@ export default function Header() {
               <MenuItem onClick={handleClose}> <Link href='/PicturaDesigns'>PICTURA Designs</Link> </MenuItem>
             </Menu>
             <Button className={classes.btnB}><Link href="/NewTrends"> New Trends</Link></Button>
-            <Button className={classes.btnB}> <Link href="#VoteWin">Vote & Win</Link></Button>
+            <Button className={classes.btnB}> <Link href="/#VoteWin">Vote & Win</Link></Button>
             <Button className={classes.btnB}> <Link href="/FlashSale"> <Image src={flashSale}
               layout='responsive'
               alt="Picture of flash sale logo" /> </Link></Button>

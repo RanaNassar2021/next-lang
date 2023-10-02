@@ -30,7 +30,7 @@ import thsirt4 from '../../Assets/Images/back2.png';
 import  Axios  from "axios";
 
 
-const Images = [tshirt1, tshirt2, tshirt3, thsirt4]
+const WImages = [tshirt1, tshirt2, tshirt3, thsirt4]
 
 export default function CardDetails() {
     const { classes } = useStyles();
@@ -38,6 +38,7 @@ export default function CardDetails() {
     const Icons: any = MuiIcons;
     const [data, setData] = useState<any>([]);
     const [Images,setImages] = useState<any>([]);
+    const [colorIdApi,setColorIdApi] =useState<any>('');
 
     const fetchData = async () => {
         // Make a GET request using axios
@@ -55,8 +56,22 @@ export default function CardDetails() {
     useEffect(()=>{
         fetchData();
         fetchImages();
-        console.log(Images);
-    },[fetchData, fetchImages])
+    },[])
+
+    const ChangeColor =(Id:any)=>{
+        setColorIdApi(Id);
+        console.log(Id);
+    }
+
+    useEffect(()=>{
+        console.log(colorIdApi);
+          Axios.get(`${process.env.apiUrl}` + `Image/GetProductImages?ProductId=${params.id.split('/')[0]}&ColorId=${colorIdApi}`).then(
+             (NewImages)=>{
+                console.log(NewImages);
+                setImages(NewImages.data);
+             }
+          );
+    },[colorIdApi])
 
     return (
         <React.Fragment>
@@ -65,7 +80,7 @@ export default function CardDetails() {
                 <Box className={classes.mainContainer}>
                     <Box className={classes.contentLeft}>
                         <Box sx={{ width: '50%' }}>
-                            <Image src={ Images[0] && Images[0].url} alt="t-shirt" width={400} height={600} layout="responsive" />
+                            <Image src={ Images[0] && Images[0].url} alt="t-shirt" width={500} height={650} />
                             <Image src={ Images[1] && Images[1].url} alt="t-shirt" width={400} height={600} layout="responsive" />
                         </Box>
                         <Box sx={{ width: '50%' }}>
@@ -118,7 +133,7 @@ export default function CardDetails() {
                             <Box  style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }} >
                             { data.colors?.map((color: any, index: number) =>{
                                 return (
-                                        <Box style={{width: '20px',height: '20px', borderRadius: '50%'}}  color={color.name} key={index}>
+                                        <Box onClick={()=>ChangeColor(color.colorId)} style={{width: '20px',height: '20px', borderRadius: '50%', backgroundColor:`${color.hexaColor}`}}  color={color.name} key={index}>
                                         {color.name}
                                         </Box>
                                 )
@@ -209,15 +224,15 @@ export default function CardDetails() {
             {/* mobile view */}
 
 
-            <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
+         <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
                 <Box className={classes.imageContainerMob}>
                     <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, gap: '1rem', speed: 3000, pagination: false }}>
-                        {Images.map((image: any, index: number) => {
+                        {Images?.map((image: any, index: number) => {
                             return (
                                 <SplideSlide >
-                                    <Box className={classes.productCard}>
+                                    <Box className={classes.productCard} key={index}>
                                         <Box className={classes.cardBody}>
-                                            <Image src={image} alt="product image" />
+                                            <Image src={image.url} alt="product image" width={250} height={300} />
                                         </Box>
                                     </Box>
                                 </SplideSlide>
@@ -227,16 +242,16 @@ export default function CardDetails() {
                     </Splide>
                     <Box sx={{ display: 'flex', gap: '18px', justifyContent: 'space-between', alignItems: 'center', marginTop: '2ch' }}>
                         <Typography sx={{ fontSize: '18px', fontWeight: 500, textAlign: 'left' }}>
-                            cool BT21 oversize fit short sleeve t-shirt
+                        {data.title}
                         </Typography>
                         <Icons.Share />
                         <Icons.FavoriteBorder />
                     </Box>
                     <Box>
-                        <Typography style={{ marginTop: 15, textAlign: 'left' }}>449.00 EGP</Typography>
+                        <Typography style={{ marginTop: 15, textAlign: 'left' }}> {data.orginalPrice} EGP</Typography>
                     </Box>
                     <Box>
-                        <Typography style={{ marginTop: 8, textAlign: 'left', color: 'red', fontWeight: 'bold' }}>20% discount 359.00 EGP</Typography>
+                        <Typography style={{ marginTop: 8, textAlign: 'left', color: 'red', fontWeight: 'bold' }}>{data.discountPercentage} discount {data.currentPrice} EGP </Typography>
                     </Box>
                     <Box>
                         <Typography style={{ fontWeight: '500', marginTop: 15, marginBottom: 5, textAlign: 'left' }}>Design Rate</Typography>
@@ -246,7 +261,7 @@ export default function CardDetails() {
                             <Icons.StarBorder />
                             <Icons.StarBorder />
                             <Icons.StarBorder />
-                            <Typography>(4.5)</Typography>
+                            <Typography>({data.avgDesignRating})</Typography>
                         </Box>
                     </Box>
                     <Box>
@@ -257,97 +272,32 @@ export default function CardDetails() {
                             <Icons.StarBorder />
                             <Icons.StarBorder />
                             <Icons.StarBorder />
-                            <Typography>(4.8)</Typography>
+                            <Typography>({data.avgQualityRating})</Typography>
                         </Box>
                     </Box>
                     <Box>
                         <Typography style={{ marginTop: 15, textAlign: 'left', fontWeight: 'bold' }}>Color</Typography>
                     </Box>
                     <Box style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
-                        <Box style={{
-                            backgroundColor: 'white',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
-                        <Box style={{
-                            backgroundColor: 'black',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
-                        <Box style={{
-                            backgroundColor: 'red',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
-                        <Box style={{
-                            backgroundColor: 'orange',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
-                        <Box style={{
-                            backgroundColor: 'yellow',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
-                        <Box style={{
-                            backgroundColor: 'green',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
-                        <Box style={{
-                            backgroundColor: 'blue',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
-                        <Box style={{
-                            backgroundColor: 'blue',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
-                        <Box style={{
-                            backgroundColor: 'purple',
-                            width: '20px',
-                            height: '20px',
-                            borderRadius: '50%'
-                        }}>
-
-                        </Box>
+                    { data.colors?.map((color: any, index: number) =>{
+                                return (
+                                        <Box onClick={()=>ChangeColor(color.colorId)} style={{width: '20px',height: '20px', borderRadius: '50%', backgroundColor:`${color.hexaColor}`}}  color={color.name} key={index}>
+                                        {color.name}
+                                        </Box>
+                                )
+                            })}
                     </Box>
                     <Box>
                         <Typography style={{ marginTop: 15, textAlign: 'left', fontWeight: 'bold' }}>Size</Typography>
                     </Box>
                     <Box style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: 10 }}>
-                        <Button style={{ color: 'black', fontWeight: 'bold' }}>XS</Button>
-                        <Button style={{ color: 'black', fontWeight: 'bold' }}>S</Button>
-                        <Button style={{ color: 'black', fontWeight: 'bold' }}>M</Button>
-                        <Button style={{ color: 'black', fontWeight: 'bold' }}>L</Button>
-                        <Button style={{ color: 'black', fontWeight: 'bold' }}>XL</Button>
-                        <Button style={{ color: 'black', fontWeight: 'bold' }}>2XL</Button>
+                    {data.sizes?.map((size: any, index: number)=>{
+                                    return (
+                                        <Button style={{ color: 'black', fontWeight: 'bold' }} key={index}>{size.name}</Button>
+                                    )
+                                })}
                     </Box>
+                    
                     <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
                         <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }}>Add to cart</Button>
                     </Box>
