@@ -2613,10 +2613,10 @@
   "resolved" "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-2.0.4.tgz"
   "version" "2.0.4"
 
-"react-hook-form@^7.0.0", "react-hook-form@^7.45.2":
-  "integrity" "sha512-9s45OdTaKN+4NSTbXVqeDITd/nwIg++nxJGL8+OD5uf1DxvhsXQ641kaYHk5K28cpIOTYm71O/fYk7rFaygb3A=="
-  "resolved" "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.45.2.tgz"
-  "version" "7.45.2"
+"react-hook-form@^7.0.0", "react-hook-form@^7.47.0":
+  "integrity" "sha512-F/TroLjTICipmHeFlMrLtNLceO2xr1jU3CyiNla5zdwsGUGu2UOxxR4UyJgLlhMwLW/Wzp4cpJ7CPfgJIeKdSg=="
+  "resolved" "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.47.0.tgz"
+  "version" "7.47.0"
 
 "react-infinite-scroll-component@^6.1.0":
   "integrity" "sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ=="
@@ -3106,10 +3106,10 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.6.0.tgz"
   "version" "2.6.0"
 
-"tss-react@^4.8.8":
-  "integrity" "sha512-V57AU6J42LLhYhRGSxDVi9VLUaoQtV6y2Kb1e0uqabe3w61G9R8gkUiX4DHZUReboRY9rwExPWz0LVZIgqQ98Q=="
-  "resolved" "https://registry.npmjs.org/tss-react/-/tss-react-4.8.8.tgz"
-  "version" "4.8.8"
+"tss-react@^4.9.2":
+  "integrity" "sha512-0qOuDpar3q3N59Jsl50oDd+Zu3wfXv2rdf4VlPzvuekH6mkAgUVobZV3j69NPH0nm3Vv5xDRACjVUqVWmaNW0g=="
+  "resolved" "https://registry.npmjs.org/tss-react/-/tss-react-4.9.2.tgz"
+  "version" "4.9.2"
   dependencies:
     "@emotion/cache" "*"
     "@emotion/serialize" "*"

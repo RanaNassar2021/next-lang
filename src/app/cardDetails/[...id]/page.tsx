@@ -21,24 +21,18 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 
 import StickyBox from "react-sticky-box";
 
-// Images
-import tshirt1 from '../../Assets/Images/best3.jpg';
-import tshirt2 from '../../Assets/Images/newTrendM.jpg';
-import tshirt3 from '../../Assets/Images/best6.jpg';
-import thsirt4 from '../../Assets/Images/back2.png';
 
-import  Axios  from "axios";
+import Axios from "axios";
+import { number } from "zod";
 
-
-const WImages = [tshirt1, tshirt2, tshirt3, thsirt4]
 
 export default function CardDetails() {
     const { classes } = useStyles();
     const params = useParams();
     const Icons: any = MuiIcons;
     const [data, setData] = useState<any>([]);
-    const [Images,setImages] = useState<any>([]);
-    const [colorIdApi,setColorIdApi] =useState<any>('');
+    const [Images, setImages] = useState<any>([]);
+    const [colorIdApi, setColorIdApi] = useState<any>('');
 
     const fetchData = async () => {
         // Make a GET request using axios
@@ -53,25 +47,57 @@ export default function CardDetails() {
         setImages(response.data);
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchData();
         fetchImages();
-    },[])
+    }, [])
 
-    const ChangeColor =(Id:any)=>{
+    const ChangeColor = (Id: any) => {
         setColorIdApi(Id);
-        console.log(Id);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(colorIdApi);
-          Axios.get(`${process.env.apiUrl}` + `Image/GetProductImages?ProductId=${params.id.split('/')[0]}&ColorId=${colorIdApi}`).then(
-             (NewImages)=>{
+        Axios.get(`${process.env.apiUrl}` + `Image/GetProductImages?ProductId=${params.id.split('/')[0]}&ColorId=${colorIdApi}`).then(
+            (NewImages) => {
                 console.log(NewImages);
                 setImages(NewImages.data);
-             }
-          );
-    },[colorIdApi])
+            }
+        );
+    }, [colorIdApi])
+
+    const [selectedSize, setSelectedSize] = useState<any>(0);
+    const [DisabledButton, setDisabledButton] = useState<any>(true);
+    const [sizeName, setSizeName] = useState("");
+
+    function handleSelectSize(e:any) {
+        setSelectedSize(e);
+        console.log(e);       
+    }
+    console.log(selectedSize, DisabledButton);
+    
+    useEffect(()=>{
+        if(selectedSize != 0){
+            setDisabledButton(false);
+        } 
+    },[selectedSize])
+
+    const AddToCart = ()=> {
+        let body = {
+            productId: params.id.split('/')[0],
+            colorId: colorIdApi == ""?params.id.split('/')[1]:colorIdApi,
+            sizeId: selectedSize
+        }
+       const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        if (body.sizeId != 0 && (body.productId != null || body.productId == undefined ) ) {
+             Axios.post(`${process.env.apiUrl}` +`Product/AddCart`, body,Config).then((res)=>{
+                console.log(res);
+             })
+        }
+    }
+   
 
     return (
         <React.Fragment>
@@ -80,12 +106,12 @@ export default function CardDetails() {
                 <Box className={classes.mainContainer}>
                     <Box className={classes.contentLeft}>
                         <Box sx={{ width: '50%' }}>
-                            <Image src={ Images[0] && Images[0].url} alt="t-shirt" width={500} height={650} />
-                            <Image src={ Images[1] && Images[1].url} alt="t-shirt" width={400} height={600} layout="responsive" />
+                            <Image src={Images[0] && Images[0].url} alt="t-shirt" width={500} height={650} />
+                            <Image src={Images[1] && Images[1].url} alt="t-shirt" width={400} height={600} layout="responsive" />
                         </Box>
                         <Box sx={{ width: '50%' }}>
-                            <Image src={ Images[2] && Images[2].url} alt="t-shirt" width={400} height={600} layout="responsive" />
-                            <Image src={ Images[3] && Images[3].url} alt="t-shirt" width={400} height={600} layout="responsive" />
+                            <Image src={Images[2] && Images[2].url} alt="t-shirt" width={400} height={600} layout="responsive" />
+                            <Image src={Images[3] && Images[3].url} alt="t-shirt" width={400} height={600} layout="responsive" />
                         </Box>
 
                     </Box>
@@ -130,29 +156,29 @@ export default function CardDetails() {
                             <Box>
                                 <Typography style={{ fontWeight: '600', marginTop: 20 }}>Color </Typography>
                             </Box>
-                            <Box  style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }} >
-                            { data.colors?.map((color: any, index: number) =>{
-                                return (
-                                        <Box onClick={()=>ChangeColor(color.colorId)} style={{width: '20px',height: '20px', borderRadius: '50%', backgroundColor:`${color.hexaColor}`}}  color={color.name} key={index}>
-                                        {color.name}
+                            <Box style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: 10 }} >
+                                {data.colors?.map((color: any, index: number) => {
+                                    return (
+                                        <Box onClick={() => ChangeColor(color.colorId)} style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: `${color.hexaColor}` }} color={color.name} key={index}>
+                                            {color.name}
                                         </Box>
-                                )
-                            })}
-                               </Box>
-                           
+                                    )
+                                })}
+                            </Box>
+
                             <Box>
                                 <Typography style={{ fontWeight: '600', marginTop: 20 }}>Size </Typography>
                             </Box>
-                            <Box style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
-                                {data.sizes?.map((size: any, index: number)=>{
+                            <Box style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: 10 }}>
+                                {data.sizes?.map((size: any, index: number) => {
                                     return (
-                                        <Button style={{ color: 'black', fontWeight: 'bold' }} key={index}>{size.name}</Button>
+                                        <Button style={{ color: 'black', fontWeight: 'bold' }} key={index} onClick={(e)=>handleSelectSize(size.sizeId)}>{size.name}</Button>
                                     )
                                 })}
-                             
+
                             </Box>
                             <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
-                                <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }}>Add to cart</Button>
+                                <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} onClick={AddToCart} disabled={DisabledButton}>Add to cart</Button>
                             </Box>
                             <Box style={{ display: 'flex', marginTop: 50 }}>
                                 <ProductDetails />
@@ -191,7 +217,7 @@ export default function CardDetails() {
                         </Box>
                     </Box>
 
-                    <Box className={classes.ratingSection}sx={{marginTop:'20px'}}>
+                    <Box className={classes.ratingSection} sx={{ marginTop: '20px' }}>
                         <Box className={classes.commentContent} sx={{ borderRight: 'groove 1px' }}>
                             <Typography sx={{ fontWeight: 500, fontSize: '18px' }}>UserName</Typography>
                             <Divider sx={{ margin: '10px 40px', }}></Divider>
@@ -214,7 +240,7 @@ export default function CardDetails() {
                             <Typography sx={{ marginTop: '10px' }}>Aug 5, 2023</Typography>
                         </Box>
                         <Box className={classes.commentContent} sx={{ borderLeft: 'groove 1px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                          
+
                         </Box>
                     </Box>
                 </Box>
@@ -224,7 +250,7 @@ export default function CardDetails() {
             {/* mobile view */}
 
 
-         <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
+            <Box sx={{ display: { xs: 'block', lg: 'none' } }}>
                 <Box className={classes.imageContainerMob}>
                     <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, gap: '1rem', speed: 3000, pagination: false }}>
                         {Images?.map((image: any, index: number) => {
@@ -242,7 +268,7 @@ export default function CardDetails() {
                     </Splide>
                     <Box sx={{ display: 'flex', gap: '18px', justifyContent: 'space-between', alignItems: 'center', marginTop: '2ch' }}>
                         <Typography sx={{ fontSize: '18px', fontWeight: 500, textAlign: 'left' }}>
-                        {data.title}
+                            {data.title}
                         </Typography>
                         <Icons.Share />
                         <Icons.FavoriteBorder />
@@ -279,27 +305,27 @@ export default function CardDetails() {
                         <Typography style={{ marginTop: 15, textAlign: 'left', fontWeight: 'bold' }}>Color</Typography>
                     </Box>
                     <Box style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
-                    { data.colors?.map((color: any, index: number) =>{
-                                return (
-                                        <Box onClick={()=>ChangeColor(color.colorId)} style={{width: '20px',height: '20px', borderRadius: '50%', backgroundColor:`${color.hexaColor}`}}  color={color.name} key={index}>
-                                        {color.name}
-                                        </Box>
-                                )
-                            })}
+                        {data.colors?.map((color: any, index: number) => {
+                            return (
+                                <Box onClick={() => ChangeColor(color.colorId)} style={{ width: '20px', height: '20px', borderRadius: '50%', backgroundColor: `${color.hexaColor}` }} color={color.name} key={index}>
+                                    {color.name}
+                                </Box>
+                            )
+                        })}
                     </Box>
                     <Box>
                         <Typography style={{ marginTop: 15, textAlign: 'left', fontWeight: 'bold' }}>Size</Typography>
                     </Box>
                     <Box style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: 10 }}>
-                    {data.sizes?.map((size: any, index: number)=>{
-                                    return (
-                                        <Button style={{ color: 'black', fontWeight: 'bold' }} key={index}>{size.name}</Button>
-                                    )
-                                })}
+                        {data.sizes?.map((size: any, index: number) => {
+                            return (
+                                <Button style={{ color: 'black', fontWeight: 'bold' }} key={index}>{size.name}</Button>
+                            )
+                        })}
                     </Box>
-                    
+
                     <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-                        <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }}>Add to cart</Button>
+                        <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} disabled={selectedSize} >Add to cart</Button>
                     </Box>
                     <Box style={{ display: 'flex', marginTop: 30 }}>
                         <ProductDetailsMob />
@@ -325,7 +351,7 @@ export default function CardDetails() {
                     <Typography>fluffy, good material. i really recommed it</Typography>
                     <Typography>sep 9, 2023</Typography>
                     <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-                       <Divider></Divider>
+                        <Divider></Divider>
                     </Box>
 
                 </Box>

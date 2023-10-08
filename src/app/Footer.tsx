@@ -71,6 +71,11 @@ export default function Footer() {
                         </Link>
                     </Box>
                     <Box> 
+                        <Link href="/BestSeller">
+                        <Typography>Best Seller</Typography>
+                        </Link>
+                    </Box>
+                    <Box> 
                         <Link href="/NewTrends">
                         <Typography>New Trends</Typography>
                         </Link>

@@ -52,7 +52,7 @@ export default function PicturaWomen() {
 
     const handleMouseOver = (id: any, index: any) => {
         setData((prev: any) => prev.map((item: any, indexPrev: any) => {
-            if (item.productId == id && index == indexPrev ) {
+            if (item.productId == id && index == indexPrev) {
                 item.isMouseOver = true;
                 item.hoverImage = true;
             }
@@ -61,7 +61,7 @@ export default function PicturaWomen() {
     }
 
     const handleMouseOut = (id: any, index: any) => {
-        setData((prev: any) => prev.map((item: any,indexPrev: any) => {
+        setData((prev: any) => prev.map((item: any, indexPrev: any) => {
             if (item.productId == id && index == indexPrev) {
                 item.isMouseOver = false;
                 item.hoverImage = false;
@@ -74,15 +74,15 @@ export default function PicturaWomen() {
 
     const [cart, setCart] = useState(false);
 
-   function handleAddToCart (id: any) {
-    setCart(true) ;
-    setData((prev: any) => prev.map((x: any)=>{
-        if(x.productId == id && cart == true) x.isClicked = true;
-        return x
-    }))
-   };
+    function handleAddToCart(id: any) {
+        setCart(true);
+        setData((prev: any) => prev.map((x: any) => {
+            if (x.productId == id && cart == true) x.isClicked = true;
+            return x
+        }))
+    };
 
-  
+
 
     return (
         <React.Fragment>
@@ -183,80 +183,80 @@ export default function PicturaWomen() {
                 </Box>
                 <Box className={classes.cards}>
                     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                        { data.map((data: any, index: number) => {
+                        {data.map((data: any, index: number) => {
                             return (
                                 <Grid item xs={2} sm={3} md={3} key={index}>
-                                   
+
                                     <Card sx={{ maxWidth: 345 }} onMouseOver={e => handleMouseOver(data.productId, index)} onMouseOut={e => handleMouseOut(data.productId, index)}
                                         className={classes.card}>
-                                         {data.hoverImage ? (
+                                        {data.hoverImage ? (
                                             <Box>
-                                                <Link href={'/cardDetails/' + data.productId +"/"+ data.colorId}>
-                                                <Box className={classes.productDetailsLink}></Box>
+                                                <Link href={'/cardDetails/' + data.productId + "/" + data.colorId}>
+                                                    <Box className={classes.productDetailsLink}></Box>
                                                 </Link>
-                                                   <ImagesCard images={data?.images}></ImagesCard>
+                                                <ImagesCard images={data?.images}></ImagesCard>
                                             </Box>
 
-                                        ): (
+                                        ) : (
                                             <Box className={classes.cardImage}>
-                                                <Image src={data.images[1]} alt="product picture" unoptimized height={250} width={270}  />
+                                                <Image src={data.images[1]} alt="product picture" unoptimized height={250} width={270} />
                                             </Box>
-                                       )}
+                                        )}
 
                                         {data.isMouseOver ? (<Box className={classes.hoverBox}> <Box>
                                             <FavoriteBorderIcon></FavoriteBorderIcon>
                                         </Box>
                                             <Box>
                                                 {data.isClicked ? (<Box className={classes.sizes}>
-                                                                        <Box className={classes.sizeBox}>
-                                                                            XS
-                                                                        </Box>
-                                                                        <Box className={classes.sizeBox}>
-                                                                             S
-                                                                        </Box>
-                                                                        <Box className={classes.sizeBox}>
-                                                                             M
-                                                                        </Box>
-                                                                        <Box className={classes.sizeBox}>
-                                                                             L
-                                                                        </Box>
-                                                                        <Box className={classes.sizeBox}>
-                                                                             Xl
-                                                                        </Box>
-                                                                        <Box className={classes.sizeBox}>
-                                                                             XXL
-                                                                        </Box>
-                                                                       </Box>) :(<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e =>{handleAddToCart(data.productId)}} sx={{color:'white'}}>Add to Cart</Button></Box>)
-                                            }
+                                                    <Box className={classes.sizeBox}>
+                                                        XS
+                                                    </Box>
+                                                    <Box className={classes.sizeBox}>
+                                                        S
+                                                    </Box>
+                                                    <Box className={classes.sizeBox}>
+                                                        M
+                                                    </Box>
+                                                    <Box className={classes.sizeBox}>
+                                                        L
+                                                    </Box>
+                                                    <Box className={classes.sizeBox}>
+                                                        Xl
+                                                    </Box>
+                                                    <Box className={classes.sizeBox}>
+                                                        XXL
+                                                    </Box>
+                                                </Box>) : (<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e => { handleAddToCart(data.productId) }} sx={{ color: 'white' }}>Add to Cart</Button></Box>)
+                                                }
 
                                             </Box>
                                         </Box>) : null}
 
                                         {data.onlyFewLeft ? (
-                                                <Box className={classes.fewLeftBox}>
-                                                <Typography sx={{fontSize:'10px'}}>only few left</Typography>
-                                                </Box>
-                                            ): null}
+                                            <Box className={classes.fewLeftBox}>
+                                                <Typography sx={{ fontSize: '10px' }}>only few left</Typography>
+                                            </Box>
+                                        ) : null}
 
-                                            {data.isSale ? (
-                                                <Box>
+                                        {data.isSale ? (
+                                            <Box>
                                                 <Box className={classes.saleBox}>
-                                                    <Typography sx={{fontSize:'14px', color:'white'}}>Sale</Typography>
+                                                    <Typography sx={{ fontSize: '14px', color: 'white' }}>Sale</Typography>
                                                 </Box>
-                                                 <CardContent className={classes.cardContent}>
-                                                 <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                                                     {data.title}
-                                                 </Typography>
-                                                 <Box className={classes.cardFooter}>
-                                                     <Typography color="text.secondary">{data.category}</Typography>
-                                                     <Box sx={{ display:'flex', gap:'10px'}}>
-                                                     <Typography sx={{opacity:0.8, textDecoration:'line-through'}}>{data.orginalPrice}</Typography>
-                                                     <Typography sx={{color:'#EA4335'}}>{data.currentPrice}</Typography>
-                                                     </Box>
-                                                 </Box>
-                                             </CardContent>
-                                             </Box>
-                                            ): <CardContent className={classes.cardContent}>
+                                                <CardContent className={classes.cardContent}>
+                                                    <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                                                        {data.title}
+                                                    </Typography>
+                                                    <Box className={classes.cardFooter}>
+                                                        <Typography color="text.secondary">{data.category}</Typography>
+                                                        <Box sx={{ display: 'flex', gap: '10px' }}>
+                                                            <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{data.orginalPrice}</Typography>
+                                                            <Typography sx={{ color: '#EA4335' }}>{data.currentPrice}</Typography>
+                                                        </Box>
+                                                    </Box>
+                                                </CardContent>
+                                            </Box>
+                                        ) : <CardContent className={classes.cardContent}>
                                             <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
                                                 {data.title}
                                             </Typography>
@@ -265,14 +265,11 @@ export default function PicturaWomen() {
                                                 <Typography>{data.orginalPrice}</Typography>
                                             </Box>
                                         </CardContent>}
-                                    
-                                       
                                     </Card>
-                                   
                                 </Grid>
                             )
                         })
-                       }
+                        }
 
                     </Grid>
                 </Box>

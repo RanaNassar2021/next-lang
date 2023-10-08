@@ -19,6 +19,12 @@ import Link from 'next/link';
 // material UI icons
 import * as MuiIcons from '@mui/icons-material';
 
+//Axios
+import Axios from 'axios';
+
+import { useRouter } from 'next/navigation';
+
+
 // Form validation
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -31,26 +37,24 @@ const validationSchema = yup.object({
     email: yup
         .string()
         .email('Enter a valid email')
-        .required('Email is required'),
-    password: yup
-        .string()
-        .matches(/\w*[a-z]\w*/, "Password must have a small letter")
-        .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
-        .matches(/\d/, "Password must have a number")
-        .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
-        .min(8, ({ min }) => `Password must be at least ${min} characters`)
-        .required('Please enter valid password. between 8 to 20 character, One uppercase, one lowercase, one special character and no spaces')
+        .required('Email is required')
 
 });
 
 export default function SignUp() {
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
+    const router = useRouter();
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
+
+    function handleLogin() {
+        // Perform login logic here
+        router.push('/');
+      }
 
     const formik = useFormik({
         initialValues: {
@@ -59,7 +63,14 @@ export default function SignUp() {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
+            Axios.post(`${process.env.apiUrl}` + `Auth/login`, values).then((result:any)=>{
+                if(result != null){
+                    console.log(result.token, result)
+                    localStorage.setItem("Token",result?.data?.token);
+                }else{
+                    console.log("Error");
+                }
+            })
         },
     });
 
@@ -90,7 +101,6 @@ export default function SignUp() {
                                         value={formik.values.password}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
-                                        error={formik.touched.password && Boolean(formik.errors.password)}
                                         id="password"
                                         type={showPassword ? 'text' : 'password'}
                                         endAdornment={
@@ -110,7 +120,7 @@ export default function SignUp() {
                                     />
                                 </FormControl>
                                 <p className={classes.passwordError}>{formik.touched.password && formik.errors.password}</p>
-                                <Button className={classes.logInBtn} sx={{ mt: 2 }} color="primary" variant="contained" fullWidth type="submit">
+                                <Button className={classes.logInBtn} sx={{ mt: 2 }} onClick={handleLogin} color="primary" variant="contained" fullWidth type="submit">
                                     Log In
                                 </Button>
                             </form>

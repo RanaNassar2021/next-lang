@@ -32,6 +32,9 @@ export default function PicturaMen() {
 
 
     const fetchData = async () => {
+        // const Config = {
+        //     headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        // }
         // Make a GET request using axios
         const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=male&pageNumber=${1}&pageSize=10`);
         // Update the state with the response data
@@ -92,7 +95,7 @@ export default function PicturaMen() {
     }))
    };
 
-  
+   
 
 
     return (

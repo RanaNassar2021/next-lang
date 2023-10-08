@@ -4,6 +4,12 @@ import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Divider, D
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 
+// SSR and TSS
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { createTss } from 'tss-react';
+
+
 // Images
 import Designer from './Assets/Images/theDesigner.jpg';
 import Design1 from './Assets/Images/design1.jpg';

@@ -1,8 +1,7 @@
-
 import { makeStyles } from "tss-react/mui";
 
-const useStyles = makeStyles()((theme: any) =>{
-    return {
+const useStyles = makeStyles()((theme: any)=>{
+    return{
         container:{
             display:'flex',
             marginTop:20

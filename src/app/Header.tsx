@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { Box, Typography, Button, Divider, Menu, MenuItem } from '@mui/material';
 import logo from './Assets/Images/logo.png';
 import Image from 'next/image';
@@ -16,7 +16,8 @@ import useStyles from './Header.Styles';
 export default function Header() {
   const { classes } = useStyles();
   const Icons: any = MuiIcons;
-
+  const [token, SetToken] = useState<any>(localStorage.getItem("Token"));
+  const [show,SetShow] = useState<boolean>(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -26,6 +27,19 @@ export default function Header() {
     setAnchorEl(null);
   };
 
+  useEffect(()=>{
+    SetToken(localStorage.getItem("Token"));
+  },[localStorage.getItem("Token")])
+
+  useEffect(()=>{
+    if(token != null && token != undefined){
+      SetShow(false);
+    }
+  },[token])
+
+  const LogOut = () => {
+    localStorage.clear();
+  }
   return (
     <React.Fragment>
       <Box sx={{ display: { xs: 'none', md: 'block' } }}>
@@ -49,10 +63,12 @@ export default function Header() {
             </Box> </Link>
             <Box className={classes.endHeader}>
               <Box className={classes.register}>
-                <Link href="/Registeration"><Button className={classes.btnR}>sign up</Button></Link>
-                <Link href="/LogIn"><Button className={classes.btnR}>log in</Button> </Link>
+               {show && <Link href="/Registeration"><Button className={classes.btnR}>sign up</Button></Link>}
+               {show && <Link href="/LogIn"><Button className={classes.btnR}>log in</Button> </Link>}
+               {!show && <Icons.AccountCircle /> }
+               {!show && <Button className={classes.btnR} onClick={LogOut}>log out</Button>}
                 <Link href="/Favourites"><Icons.FavoriteBorder /></Link>
-                <Icons.ShoppingCart />
+               <Link href="/Cart"> <Icons.ShoppingCart /></Link>
               </Box>
             </Box>
           </Box>
@@ -72,9 +88,10 @@ export default function Header() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleClose}> <Link href="/Card"> The Designer</Link> </MenuItem>
+              <MenuItem onClick={handleClose}> <Link href="/"> The Designer</Link> </MenuItem>
               <MenuItem onClick={handleClose}> <Link href='/PicturaDesigns'>PICTURA Designs</Link> </MenuItem>
             </Menu>
+            <Button className={classes.btnB}><Link href="/BestSeller"> Best Seller</Link></Button>
             <Button className={classes.btnB}><Link href="/NewTrends"> New Trends</Link></Button>
             <Button className={classes.btnB}> <Link href="/#VoteWin">Vote & Win</Link></Button>
             <Button className={classes.btnB}> <Link href="/FlashSale"> <Image src={flashSale}
