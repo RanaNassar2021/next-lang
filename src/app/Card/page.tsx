@@ -24,7 +24,6 @@ export default function ImagesCard (images:any) {
 
   const [imageIndex, setImageIndex] = useState(0);
   var timing: any
- console.log(images)
  
   useEffect(() => {
     timing = setInterval(() => {

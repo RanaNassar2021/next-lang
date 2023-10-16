@@ -31,6 +31,7 @@ const useStyles = makeStyles() ((theme: any ) =>{
         },
         cards:{
             width:'100%',
+            marginBottom:'2ch'
         },
         cardContent: {
             alignItems: 'center',
@@ -71,6 +72,33 @@ const useStyles = makeStyles() ((theme: any ) =>{
                 }
             }
         },
+        productDetailsLink:{
+            position:'absolute',
+            top:0,
+            right:0,
+            bottom:120,
+            left:0,
+        },
+        fewLeftBox:{
+            border:'solid white 1px',
+            position:'absolute',
+            top:5,
+            right:5,
+            padding:'2px 5px',
+            color:'#EA4335'
+        },
+        saleBox:{
+            position:'absolute',
+            width:'70px',
+            height:'70px',
+            top:0,
+            backgroundColor:'#EA4335',
+            clipPath: 'polygon(45% 0, 80% 0, 0 80%, 0 45%)',
+            '& p':{
+                rotate:'-45deg',
+                fontWeight:'bold'
+            }
+        },
         btnCart:{
                 [theme.breakpoints.down('md')]:{
                     fontSize:'10px',
@@ -99,7 +127,7 @@ const useStyles = makeStyles() ((theme: any ) =>{
             height:'30ch',
             overflow:'hidden',
             [theme.breakpoints.down('md')]:{
-                height:'auto'
+                height:'auto',
             }
         },
     }

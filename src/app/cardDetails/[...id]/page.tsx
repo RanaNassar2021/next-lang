@@ -24,6 +24,7 @@ import StickyBox from "react-sticky-box";
 
 import Axios from "axios";
 import { number } from "zod";
+import { headers } from "next/dist/client/components/headers";
 
 
 export default function CardDetails() {
@@ -33,6 +34,7 @@ export default function CardDetails() {
     const [data, setData] = useState<any>([]);
     const [Images, setImages] = useState<any>([]);
     const [colorIdApi, setColorIdApi] = useState<any>('');
+   
 
     const fetchData = async () => {
         // Make a GET request using axios
@@ -68,7 +70,7 @@ export default function CardDetails() {
 
     const [selectedSize, setSelectedSize] = useState<any>(0);
     const [DisabledButton, setDisabledButton] = useState<any>(true);
-    const [sizeName, setSizeName] = useState("");
+
 
     function handleSelectSize(e:any) {
         setSelectedSize(e);
@@ -91,12 +93,37 @@ export default function CardDetails() {
        const Config = {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
+
         if (body.sizeId != 0 && (body.productId != null || body.productId == undefined ) ) {
              Axios.post(`${process.env.apiUrl}` +`Product/AddCart`, body,Config).then((res)=>{
                 console.log(res);
              })
         }
+
     }
+    
+    const [isFavourite, setIsFavourite] = useState<any>(false);
+
+
+    const AddToFavourite = () =>{
+        let body ={
+            productId: params.id.split('/')[0],
+            colorId: colorIdApi == ""?params.id.split('/')[1]:colorIdApi,
+        }
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        Axios.post(`${process.env.apiUrl}` +`Product/ChangeFaviorate`, body,Config).then((res)=>{
+            console.log(res);
+            if(res.data=="Saved Successfully"){
+                setIsFavourite(true);
+            }else {
+                console.log("removed")
+            }
+         })
+    }
+
+    console.log(isFavourite);
    
 
     return (
@@ -122,7 +149,7 @@ export default function CardDetails() {
                                 <Typography variant="h6">
                                     {data.title}
                                 </Typography>
-                                <Icons.FavoriteBorder />
+                                {isFavourite || data?.isFavorite ? <Icons.Favorite onClick={AddToFavourite}></Icons.Favorite>  :  <Icons.FavoriteBorder onClick={AddToFavourite} />}
                             </Box>
                             <Box>
                                 <Typography style={{ marginTop: 20 }}>{data.orginalPrice} EGP</Typography>

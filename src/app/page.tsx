@@ -5,9 +5,7 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 
 // SSR and TSS
-import { CacheProvider } from '@emotion/react';
-import createCache from '@emotion/cache';
-import { createTss } from 'tss-react';
+
 
 
 // Images
@@ -64,6 +62,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 export default function Home() {
+
   const Icons: any = MuiIcons;
   const { classes } = useStyles();
 
@@ -114,6 +113,7 @@ export default function Home() {
 
 
   return (
+
     <React.Fragment>
       <Header></Header>
       <Box className="flex  flex-col items-center justify-between">
@@ -486,5 +486,6 @@ export default function Home() {
 
       <Footer />
     </React.Fragment>
+    
   )
 }

@@ -200,7 +200,9 @@ export default function PicturaWomen() {
                                             <FavoriteBorderIcon></FavoriteBorderIcon>
                                         </Box>
                                             <Box>
-                                                {data.isClicked ? (<Box className={classes.sizes}>
+                                                {data.isClicked ? (
+                                                    
+                                                    <Box className={classes.sizes}>
                                                     <Box className={classes.sizeBox}>
                                                         XS
                                                     </Box>

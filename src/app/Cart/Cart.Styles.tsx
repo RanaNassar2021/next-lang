@@ -18,10 +18,16 @@ const useStyles = makeStyles()((theme: any) =>{
         leftContent:{
             width:'50%',
             padding:'2ch',
+            [theme.breakpoints.down('md')]:{
+                width:'100%',
+            }
         },
         rightContent:{
             width:'50%',
             padding:'2ch',
+            [theme.breakpoints.down('md')]:{
+                width:'100%',
+            },
             "& h6":{
                 fontSize:'20px'
             }
@@ -31,7 +37,7 @@ const useStyles = makeStyles()((theme: any) =>{
             marginTop:'2ch',
             display:'flex',
             overflow:'clip',
-            height:'15ch',
+            height:'20ch',
             gap:'2ch',
             "& h6":{
                 fontSize:'16px',
@@ -42,6 +48,29 @@ const useStyles = makeStyles()((theme: any) =>{
                 fontSize:'12px',
                 opacity:0.8,
                 margin:'2ch 0'
+            }
+        },
+        promoText:{
+            backgroundColor: 'white',
+            width: '40ch',
+            [theme.breakpoints.down('md')]:{
+                width:'25ch'
+            }
+        },
+        doneBtn:{
+            backgroundColor: '#cad2c5',
+             width: '15ch',
+             [theme.breakpoints.down('md')]:{
+                width:'10ch'
+             }
+        },
+        quantity:{
+            display:'flex',
+            marginRight:'2ch',
+            gap:'15px',
+            '& p':{
+                fontSize:'16px',
+                fontWeight:'bold'
             }
         }
     }

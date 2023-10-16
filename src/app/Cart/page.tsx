@@ -25,6 +25,7 @@ export default function Cart() {
     const steps = ['Cart', 'Sign In', 'Delivery', 'Payment', 'Confirmation'];
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
+    const [TotlalPrice, setTotlalPRice] = useState();
 
     const isStepOptional = (step: number) => {
         return step === 1;
@@ -74,12 +75,71 @@ export default function Cart() {
         const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetUserCart?PageNumber=1&PageSize=10`, Config);
         // Update the state with the response data
         setData(response.data);
+        let x:any=0;
+       response.data.map((item:any)=>{
+           x= x + item.price;
+        })
+        setTotlalPRice(x);
+        console.log(response.data)
     };
+console.log(TotlalPrice);
+console.log(data.length)
 
+  
     // Call the fetchData function after the initial render
     useEffect(() => {
         fetchData();
     }, []);
+
+    interface AddToFavouriteInrerface {
+        ProductId:string;
+        ColorId:number;
+    }
+
+    const AddToFavourite = (AddToFavourite: AddToFavouriteInrerface) =>{
+        let body ={
+            productId: AddToFavourite.ProductId,
+            colorId: AddToFavourite.ColorId,
+        }
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        Axios.post(`${process.env.apiUrl}` +`Product/ChangeFaviorate`, body,Config).then((res)=>{
+            console.log(res);
+            setData(data.filter((item: any) => {
+                return item.productId != AddToFavourite.ProductId
+            }))
+            if(res.data=="Saved Successfully"){
+                console.log("saved")
+            }else {
+                console.log("removed")
+            }
+           
+         })
+
+    }
+
+    interface RemoveFromCartInterface {
+        ProductId: string;
+        ColorId: number;
+        SizeId: number;
+    }
+
+    const RemoveFromCart = (RemoveFromCart: RemoveFromCartInterface) => {
+        let body = {
+            productId: RemoveFromCart.ProductId,
+            colorId: RemoveFromCart.ColorId,
+            sizeId: RemoveFromCart.SizeId
+        }
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        Axios.post(`${process.env.apiUrl}` + `Product/RemoveFromCart`, body, Config).then((res) => {
+            setData(data.filter((item: any) => {
+                return item.productId != RemoveFromCart.ProductId
+            }))
+        })
+    }
 
 
     return (
@@ -121,7 +181,7 @@ export default function Cart() {
                     <React.Fragment>
                         <Box className={classes.container}>
                             <Box className={classes.leftContent}>
-                                <Typography variant="h5">My Shopping Cart (2 items)</Typography>
+                                <Typography variant="h5">My Shopping Cart ({data?data.length:0} items)</Typography>
                                 {data.map((data: any, index: number) => {
                                     return (
                                         <Box className={classes.card} key={index}>
@@ -131,11 +191,21 @@ export default function Cart() {
                                             <Box sx={{ width: '60%' }}>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <Typography variant="h6">{data.productTitle}</Typography>
-                                                    <DeleteIcon sx={{ marginTop: '10px', marginRight:'10px' }}></DeleteIcon>
+                                                    <DeleteIcon sx={{ marginTop: '10px', marginRight:'10px' }} onClick={() => RemoveFromCart({ ProductId: data.productId, ColorId: data.colorId, SizeId: data.sizeId })}></DeleteIcon>
                                                 </Box>
+                                                 <Typography>Price: {data.price}</Typography>
                                                 <Typography>Color: {data.colorName}</Typography>
                                                 <Typography>Size: {data.sizeName}</Typography>
-                                                <Typography sx={{ textDecoration: "underline" }}>Move to favourites</Typography>
+                                                <Box sx={{display:"flex", justifyContent:'space-between'}}>
+                                                    <Box>
+                                                <Typography sx={{ textDecoration: "underline" }} onClick={()=>AddToFavourite({ProductId:data.productId, ColorId:data.colorId})}>Move to favourites</Typography>
+                                                </Box>
+                                                <Box className={classes.quantity}>
+                                                <Typography>-</Typography>
+                                                <Typography>1</Typography>
+                                                <Typography>+</Typography>
+                                                </Box>
+                                                </Box>
                                             </Box>
                                         </Box>
                                     )
@@ -146,22 +216,26 @@ export default function Cart() {
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: '2ch', paddingBottom: '2ch' }}>
                                     <form>
                                         <FormControl>
-                                            <TextField label="Promo Code" size='small' id="email"
-                                                name="PromoCode" sx={{ backgroundColor: 'white', width: '40ch' }}></TextField>
+                                            <TextField label="Promo Code" size='small' id="email" className={classes.promoText}
+                                                name="PromoCode"></TextField>
                                         </FormControl>
                                     </form>
-                                    <Button sx={{ backgroundColor: '#cad2c5', width: '15ch' }}>Done</Button>
+                                    <Button className={classes.doneBtn}>Done</Button>
                                 </Box>
                                 <Typography variant="h6">Order Summary</Typography>
                                         <Box sx={{ backgroundColor: 'white' }}>
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1ch' }}>
                                                 <Typography>Subtotal</Typography>
-                                                <Typography>800 EGP</Typography>
+                                                <Typography>{TotlalPrice??0} EGP</Typography>
                                             </Box>
                                             <Divider></Divider>
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1ch' }}>
                                                 <Typography>VAT</Typography>
-                                                <Typography>112 EGP</Typography>
+                                                <Typography>{TotlalPrice &&  ((14/100)*TotlalPrice).toFixed(2)} EGP</Typography>
+                                            </Box>
+
+                                            <Box sx={{padding:'1ch'}}>
+                                            <Button sx={{width:'100%', backgroundColor:'#FF6F61',color:'black',fontWeight:600}}>Continue to Checkout</Button>
                                             </Box>
                                         </Box>
                             </Box>

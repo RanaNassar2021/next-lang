@@ -7,6 +7,12 @@ import flashSale from './Assets/Images/flashSale.png';
 import egyptFlag from './Assets/Images/egyptFlag.png';
 import Link from 'next/link';
 import SideBar from './SideBar/SideBar';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
+//Axios
+import Axios from 'axios';
+
+
 // material UI icons
 import * as MuiIcons from '@mui/icons-material';
 
@@ -19,6 +25,9 @@ export default function Header() {
   const [token, SetToken] = useState<any>(localStorage.getItem("Token"));
   const [show,SetShow] = useState<boolean>(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [totalNumber,SetTotalNumber]  = useState<number>();
+  const [totalNumberFavourite,SetTotalNumberFavourite]  = useState<number>();
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,10 +35,25 @@ export default function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const fetchData = async () => {
+    const Config = {
+        headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+    }
+    // Make a GET request using axios
+    const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetUserCart?PageNumber=1&PageSize=10`, Config);
+    const responseFavourite = await Axios.get(`${process.env.apiUrl}` + `Product/FavoriteList?PageNumber=1&PageSize=10&Location=egypt`, Config);
+
+    SetTotalNumber(response.data.length);
+    SetTotalNumberFavourite(responseFavourite.data.length)
+};
 
   useEffect(()=>{
     SetToken(localStorage.getItem("Token"));
   },[localStorage.getItem("Token")])
+
+  useEffect(()=>{
+    token && fetchData();
+  },[token])
 
   useEffect(()=>{
     if(token != null && token != undefined){
@@ -67,8 +91,22 @@ export default function Header() {
                {show && <Link href="/LogIn"><Button className={classes.btnR}>log in</Button> </Link>}
                {!show && <Icons.AccountCircle /> }
                {!show && <Button className={classes.btnR} onClick={LogOut}>log out</Button>}
-                <Link href="/Favourites"><Icons.FavoriteBorder /></Link>
-               <Link href="/Cart"> <Icons.ShoppingCart /></Link>
+                <Link href="/Favourites">
+               { totalNumberFavourite? <IconButton size="large" color="inherit">
+                  <Badge badgeContent={totalNumberFavourite} color="error">
+                  <Icons.FavoriteBorder />
+                  </Badge>
+                </IconButton>:<Icons.FavoriteBorder/>}
+                  </Link>
+
+                <Link href="/Cart">
+                 {totalNumber ? <IconButton size="large" color="inherit">
+                <Badge badgeContent={totalNumber} color="error" >
+                    <Icons.ShoppingCart  />
+                    </Badge>
+                </IconButton>:<Icons.ShoppingCart />}
+                 </Link>
+              
               </Box>
             </Box>
           </Box>
@@ -102,7 +140,7 @@ export default function Header() {
       </Box>
       <Box sx={{ display: { xs: 'flex', md: 'none' } }} className={classes.mobile}>
         <Box className={classes.mobileIcons}>
-          <SideBar />
+          <SideBar show/>
         </Box>
         <Box className={classes.mobileIcons}>
           <Icons.Search></Icons.Search>
@@ -114,10 +152,22 @@ export default function Header() {
             alt="Picture of pictura logo" />
         </Box>
         <Box className={classes.mobileIcons}>
-          <Icons.FavoriteBorder />
+        <Link href="/Favourites">
+               { totalNumberFavourite? <IconButton size="large" color="inherit">
+                  <Badge badgeContent={totalNumberFavourite} color="error">
+                  <Icons.FavoriteBorder />
+                  </Badge>
+                </IconButton>:<Icons.FavoriteBorder/>}
+                  </Link>
         </Box>
         <Box className={classes.mobileIcons}>
-          <Icons.ShoppingCart />
+        <Link href="/Cart">
+                 {totalNumber ? <IconButton size="large" color="inherit">
+                <Badge badgeContent={totalNumber} color="error" >
+                    <Icons.ShoppingCart  />
+                    </Badge>
+                </IconButton>:<Icons.ShoppingCart />}
+                 </Link>
         </Box>
       </Box>
     </React.Fragment>

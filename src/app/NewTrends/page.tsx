@@ -82,6 +82,51 @@ export default function PicturaWomen() {
         }))
     };
 
+    interface AddToCartInrerface {
+        ProductId:string;
+        ColorId:number;
+        SizeId:number;
+    }
+    
+    const addToCart = (addToCart:AddToCartInrerface) =>{
+        let body ={
+            productId: addToCart.ProductId,
+            colorId: addToCart.ColorId,
+            sizeId:addToCart.SizeId
+        }
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        Axios.post(`${process.env.apiUrl}` +`Product/AddCart`, body,Config).then((res)=>{
+          console.log(res);
+        })
+        }
+
+        interface AddToFavouriteInrerface {
+            ProductId:string;
+            ColorId:number;
+        }
+    
+        const AddToFavourite = (AddToFavourite: AddToFavouriteInrerface) =>{
+            let body ={
+                productId: AddToFavourite.ProductId,
+                colorId: AddToFavourite.ColorId,
+            }
+            const Config = {
+                headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+            }
+            Axios.post(`${process.env.apiUrl}` +`Product/ChangeFaviorate`, body,Config).then((res)=>{
+                console.log(res);
+                if(res.data=="Saved Successfully"){
+                    console.log("saved")
+                }else {
+                    console.log("removed")
+                }
+               
+             })
+    
+        }
+
 
 
     return (
@@ -204,33 +249,25 @@ export default function PicturaWomen() {
                                         )}
 
                                         {data.isMouseOver ? (<Box className={classes.hoverBox}> <Box>
-                                            <FavoriteBorderIcon></FavoriteBorderIcon>
+                                            <FavoriteBorderIcon onClick={()=>AddToFavourite({ProductId:data.productId, ColorId:data.colorId})}></FavoriteBorderIcon>
                                         </Box>
                                             <Box>
-                                                {data.isClicked ? (<Box className={classes.sizes}>
-                                                    <Box className={classes.sizeBox}>
-                                                        XS
-                                                    </Box>
-                                                    <Box className={classes.sizeBox}>
-                                                        S
-                                                    </Box>
-                                                    <Box className={classes.sizeBox}>
-                                                        M
-                                                    </Box>
-                                                    <Box className={classes.sizeBox}>
-                                                        L
-                                                    </Box>
-                                                    <Box className={classes.sizeBox}>
-                                                        Xl
-                                                    </Box>
-                                                    <Box className={classes.sizeBox}>
-                                                        XXL
-                                                    </Box>
-                                                </Box>) : (<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e => { handleAddToCart(data.productId) }} sx={{ color: 'white' }}>Add to Cart</Button></Box>)
-                                                }
+                                                {data.isClicked ? (
+                                                 <Box className={classes.sizes}>
+                                                 {data.sizes.map((siz:any, index:any)=>{
+                                                       return (
+                                                         <Box className={classes.sizeBox} key={siz.sizeId} onClick={()=>addToCart({ProductId:data.productId, ColorId:data.colorId, SizeId:siz.sizeId})}>
+                                                         {siz.name}
+                                                         </Box>
+                                                        )
+                                                 })}
+                                             </Box>
+                                            )
+                                         : (<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e => { handleAddToCart(data.productId) }} sx={{ color: 'white' }}>Add to Cart</Button></Box>)
+                                         }
 
-                                            </Box>
-                                        </Box>) : null}
+                                     </Box>
+                                 </Box>) : null}
 
                                         {data.onlyFewLeft ? (
                                             <Box className={classes.fewLeftBox}>
