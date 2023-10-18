@@ -7,6 +7,10 @@ import ProductDetails from "../../ProductDetails/page";
 import ProductDetailsMob from "../../ProductDetailsMob/page";
 import Image from "next/image";
 import { useParams } from 'next/navigation';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import AlertAddToFav from "@/app/AlertAddToFav/page";
+import AlertRemovedFromFav from "@/app/AlertRemovedFromFav/page";
 
 
 // styles
@@ -23,9 +27,6 @@ import StickyBox from "react-sticky-box";
 
 
 import Axios from "axios";
-import { number } from "zod";
-import { headers } from "next/dist/client/components/headers";
-
 
 export default function CardDetails() {
     const { classes } = useStyles();
@@ -34,7 +35,7 @@ export default function CardDetails() {
     const [data, setData] = useState<any>([]);
     const [Images, setImages] = useState<any>([]);
     const [colorIdApi, setColorIdApi] = useState<any>('');
-   
+
 
     const fetchData = async () => {
         // Make a GET request using axios
@@ -72,59 +73,122 @@ export default function CardDetails() {
     const [DisabledButton, setDisabledButton] = useState<any>(true);
 
 
-    function handleSelectSize(e:any) {
+    function handleSelectSize(e: any) {
         setSelectedSize(e);
-        console.log(e);       
+        console.log(e);
     }
     console.log(selectedSize, DisabledButton);
-    
-    useEffect(()=>{
-        if(selectedSize != 0){
-            setDisabledButton(false);
-        } 
-    },[selectedSize])
 
-    const AddToCart = ()=> {
+    useEffect(() => {
+        if (selectedSize != 0) {
+            setDisabledButton(false);
+        }
+    }, [selectedSize])
+
+    {/* Alerts */ }
+    const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+        props,
+        ref,
+    ) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+
+    interface State extends SnackbarOrigin {
+        openTop: boolean;
+    }
+    const [open, setOpen] = React.useState(false);
+    const [state, setState] = React.useState<State>({
+        openTop: false,
+        vertical: 'top',
+        horizontal: 'center',
+    });
+    const { vertical, horizontal, openTop } = state;
+
+    interface StateFavs extends SnackbarOrigin{
+        openTopFav: boolean;
+    }
+    const [openFav, setOpenFav] = React.useState(false);
+    const[stateFav, setStateFav] = React.useState<StateFavs>({
+        openTopFav:false,
+        vertical: 'top',
+        horizontal: 'right',
+    })
+
+
+    const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setState({ ...state, openTop: false });
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const handleCloseAlertFav = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setStateFav({ ...stateFav, openTopFav: false });
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenFav(false);
+    };
+
+    const AddToCart = (newState: SnackbarOrigin) => {
         let body = {
             productId: params.id.split('/')[0],
-            colorId: colorIdApi == ""?params.id.split('/')[1]:colorIdApi,
+            colorId: colorIdApi == "" ? params.id.split('/')[1] : colorIdApi,
             sizeId: selectedSize
-        }
-       const Config = {
-            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
-        }
-
-        if (body.sizeId != 0 && (body.productId != null || body.productId == undefined ) ) {
-             Axios.post(`${process.env.apiUrl}` +`Product/AddCart`, body,Config).then((res)=>{
-                console.log(res);
-             })
-        }
-
-    }
-    
-    const [isFavourite, setIsFavourite] = useState<any>(false);
-
-
-    const AddToFavourite = () =>{
-        let body ={
-            productId: params.id.split('/')[0],
-            colorId: colorIdApi == ""?params.id.split('/')[1]:colorIdApi,
         }
         const Config = {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
-        Axios.post(`${process.env.apiUrl}` +`Product/ChangeFaviorate`, body,Config).then((res)=>{
+
+        if (body.sizeId != 0 && (body.productId != null || body.productId == undefined)) {
+            Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
+                console.log(res);
+                setState({ ...newState, openTop: true });
+                setOpen(true)
+
+            })
+        }
+
+    }
+
+
+    const [isFavourite, setIsFavourite] = useState<any>(false);
+
+    {/* Alerts add to favourite */}
+   
+
+
+    const AddToFavourite = (newState: SnackbarOrigin) => {
+        let body = {
+            productId: params.id.split('/')[0],
+            colorId: colorIdApi == "" ? params.id.split('/')[1] : colorIdApi,
+        }
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body, Config).then((res) => {
+
             console.log(res);
-            if(res.data=="Saved Successfully"){
+            if (res.data == "Saved Successfully") {
                 setIsFavourite(true);
-            }else {
+                setStateFav({ ...newState, openTopFav: true });
+                setOpenFav(true)
+
+            } else {
                 console.log("removed")
+                setIsFavourite(false);
+                setStateFav({ ...newState, openTopFav: false });
+                setOpenFav(true)
             }
-         })
+        })
     }
 
     console.log(isFavourite);
-   
+
 
     return (
         <React.Fragment>
@@ -149,7 +213,23 @@ export default function CardDetails() {
                                 <Typography variant="h6">
                                     {data.title}
                                 </Typography>
-                                {isFavourite || data?.isFavorite ? <Icons.Favorite onClick={AddToFavourite}></Icons.Favorite>  :  <Icons.FavoriteBorder onClick={AddToFavourite} />}
+                                {isFavourite || data?.isFavorite ?
+                                <Box>
+                                 <Icons.Favorite  sx={{color:'red'}} onClick={()=>AddToFavourite({vertical: 'top', horizontal: 'right'})}></Icons.Favorite>
+                                    <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                        <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                             <AlertAddToFav/>
+                                        </Alert>
+                                    </Snackbar>
+                                </Box>:
+                                <Box>
+                                 <Icons.FavoriteBorder onClick={()=>AddToFavourite({vertical: 'top', horizontal: 'right'})}/>
+                                 <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                        <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                            <AlertRemovedFromFav/>
+                                        </Alert>
+                                    </Snackbar>
+                                 </Box>}
                             </Box>
                             <Box>
                                 <Typography style={{ marginTop: 20 }}>{data.orginalPrice} EGP</Typography>
@@ -199,13 +279,21 @@ export default function CardDetails() {
                             <Box style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: 10 }}>
                                 {data.sizes?.map((size: any, index: number) => {
                                     return (
-                                        <Button style={{ color: 'black', fontWeight: 'bold' }} key={index} onClick={(e)=>handleSelectSize(size.sizeId)}>{size.name}</Button>
+                                        <Button style={{ color: 'black', fontWeight: 'bold' }} key={index} onClick={(e) => handleSelectSize(size.sizeId)}>{size.name}</Button>
                                     )
                                 })}
 
                             </Box>
                             <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
-                                <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} onClick={AddToCart} disabled={DisabledButton}>Add to cart</Button>
+                                <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} onClick={()=> AddToCart({ vertical: 'top', horizontal: 'right' })} disabled={DisabledButton}>Add to cart</Button>
+                                <Box>
+                                <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                                            <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                                                               product added succussfully to Cart
+                                                                            </Alert>
+                                                                    </Snackbar>
+                                </Box>
+                                
                             </Box>
                             <Box style={{ display: 'flex', marginTop: 50 }}>
                                 <ProductDetails />
@@ -298,7 +386,23 @@ export default function CardDetails() {
                             {data.title}
                         </Typography>
                         <Icons.Share />
-                        <Icons.FavoriteBorder />
+                        {isFavourite || data?.isFavorite ?
+                                <Box>
+                                 <Icons.Favorite  sx={{color:'red'}} onClick={()=>AddToFavourite({vertical: 'top', horizontal: 'right'})}></Icons.Favorite>
+                                    <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                        <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                             <AlertAddToFav/>
+                                        </Alert>
+                                    </Snackbar>
+                                </Box>:
+                                <Box>
+                                 <Icons.FavoriteBorder onClick={()=>AddToFavourite({vertical: 'top', horizontal: 'right'})}/>
+                                 <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                        <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                            <AlertRemovedFromFav/>
+                                        </Alert>
+                                    </Snackbar>
+                                 </Box>}
                     </Box>
                     <Box>
                         <Typography style={{ marginTop: 15, textAlign: 'left' }}> {data.orginalPrice} EGP</Typography>
@@ -346,19 +450,30 @@ export default function CardDetails() {
                     <Box style={{ display: 'flex', justifyContent: 'space-evenly', marginTop: 10 }}>
                         {data.sizes?.map((size: any, index: number) => {
                             return (
-                                <Button style={{ color: 'black', fontWeight: 'bold' }} key={index}>{size.name}</Button>
+                                <Button style={{ color: 'black', fontWeight: 'bold' }} key={index} onClick={(e) => handleSelectSize(size.sizeId)}>{size.name}</Button>
                             )
                         })}
                     </Box>
 
                     <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-                        <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} disabled={selectedSize} >Add to cart</Button>
+                        <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} onClick={()=> AddToCart({ vertical: 'top', horizontal: 'right' })}  disabled={DisabledButton} >Add to cart</Button>
+                            <Box>
+                                <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                    <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                        product added succussfully to Cart
+                                    </Alert>
+                                </Snackbar>
+                            </Box>
                     </Box>
                     <Box style={{ display: 'flex', marginTop: 30 }}>
                         <ProductDetailsMob />
                     </Box>
                     <Divider></Divider>
                 </Box>
+
+
+                {/* Commments sections */}
+
                 <Box className={classes.commentSection}>
                     <Typography variant="h6">Ratings & Reviews</Typography>
                     <Typography variant="h5">userName</Typography>

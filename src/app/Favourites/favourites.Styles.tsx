@@ -117,7 +117,7 @@ const useStyles = makeStyles() ((theme: any ) =>{
     },
         sizes:{
             display:'flex',
-            justifyContent:'space-between',
+            justifyContent:'space-evenly',
         },
         sizeBox:{
             margin:'0 5px',

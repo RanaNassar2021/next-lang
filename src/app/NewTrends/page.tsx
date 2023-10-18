@@ -6,6 +6,10 @@ import Footer from "../Footer";
 import Filter from "../Filter/Filter";
 import ImagesCard from "../Card/page";
 import Link from "next/link";
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import AlertAddToFav from "@/app/AlertAddToFav/page";
+import AlertRemovedFromFav from "@/app/AlertRemovedFromFav/page";
 
 
 // styles
@@ -71,7 +75,6 @@ export default function PicturaWomen() {
     }
 
 
-
     const [cart, setCart] = useState(false);
 
     function handleAddToCart(id: any) {
@@ -82,13 +85,64 @@ export default function PicturaWomen() {
         }))
     };
 
+
+     {/* Alerts */ }
+     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+        props,
+        ref,
+    ) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+
+    interface State extends SnackbarOrigin {
+        openTop: boolean;
+    }
+    const [open, setOpen] = React.useState(false);
+    const [state, setState] = React.useState<State>({
+        openTop: false,
+        vertical: 'top',
+        horizontal: 'center',
+    });
+    const { vertical, horizontal, openTop } = state;
+
+    interface StateFavs extends SnackbarOrigin{
+        openTopFav: boolean;
+    }
+    const [isFavourite, setIsFavourite] = useState<any>(false);
+    const [openFav, setOpenFav] = React.useState(false);
+    const[stateFav, setStateFav] = React.useState<StateFavs>({
+        openTopFav:false,
+        vertical: 'top',
+        horizontal: 'right',
+    })
+
+
+    const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setState({ ...state, openTop: false });
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const handleCloseAlertFav = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setStateFav({ ...stateFav, openTopFav: false });
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenFav(false);
+    };
+
     interface AddToCartInrerface {
         ProductId:string;
         ColorId:number;
         SizeId:number;
     }
     
-    const addToCart = (addToCart:AddToCartInrerface) =>{
+    const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin ) =>{
         let body ={
             productId: addToCart.ProductId,
             colorId: addToCart.ColorId,
@@ -99,6 +153,8 @@ export default function PicturaWomen() {
         }
         Axios.post(`${process.env.apiUrl}` +`Product/AddCart`, body,Config).then((res)=>{
           console.log(res);
+          setState({ ...newState, openTop: true });
+          setOpen(true)
         })
         }
 
@@ -107,7 +163,7 @@ export default function PicturaWomen() {
             ColorId:number;
         }
     
-        const AddToFavourite = (AddToFavourite: AddToFavouriteInrerface) =>{
+        const AddToFavourite = (AddToFavourite: AddToFavouriteInrerface, newState: SnackbarOrigin) =>{
             let body ={
                 productId: AddToFavourite.ProductId,
                 colorId: AddToFavourite.ColorId,
@@ -117,10 +173,15 @@ export default function PicturaWomen() {
             }
             Axios.post(`${process.env.apiUrl}` +`Product/ChangeFaviorate`, body,Config).then((res)=>{
                 console.log(res);
-                if(res.data=="Saved Successfully"){
-                    console.log("saved")
+                if(res.data == "Saved Successfully"){
+                    setIsFavourite(true);
+                    setStateFav({ ...newState, openTopFav: true });
+                    setOpenFav(true)
                 }else {
                     console.log("removed")
+                    setIsFavourite(false);
+                    setStateFav({ ...newState, openTopFav: false });
+                    setOpenFav(true)
                 }
                
              })
@@ -248,16 +309,40 @@ export default function PicturaWomen() {
                                             </Box>
                                         )}
 
-                                        {data.isMouseOver ? (<Box className={classes.hoverBox}> <Box>
-                                            <FavoriteBorderIcon onClick={()=>AddToFavourite({ProductId:data.productId, ColorId:data.colorId})}></FavoriteBorderIcon>
+                                        {data.isMouseOver ? (<Box className={classes.hoverBox}>
+                                             <Box sx={{display:'flex', alignItems:'center'}}>
+                                             {isFavourite || data?.isFavorite ?
+                                <Box>
+                                 <Icons.Favorite  sx={{color:'red'}} onClick={()=>AddToFavourite({ProductId:data.productId, ColorId:data.colorId},{vertical: 'top', horizontal: 'right'})}></Icons.Favorite>
+                                    <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                        <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                             <AlertAddToFav/>
+                                        </Alert>
+                                    </Snackbar>
+                                </Box>:
+                                <Box>
+                                 <Icons.FavoriteBorder onClick={()=>AddToFavourite({ProductId:data.productId, ColorId:data.colorId},{vertical: 'top', horizontal: 'right'})}/>
+                                 <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                        <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                            <AlertRemovedFromFav/>
+                                        </Alert>
+                                    </Snackbar>
+                                 </Box>}
                                         </Box>
                                             <Box>
                                                 {data.isClicked ? (
                                                  <Box className={classes.sizes}>
                                                  {data.sizes.map((siz:any, index:any)=>{
                                                        return (
-                                                         <Box className={classes.sizeBox} key={siz.sizeId} onClick={()=>addToCart({ProductId:data.productId, ColorId:data.colorId, SizeId:siz.sizeId})}>
+                                                        <Box>
+                                                         <Box className={classes.sizeBox} key={siz.sizeId} onClick={()=>addToCart({ProductId:data.productId, ColorId:data.colorId, SizeId:siz.sizeId},{vertical: 'top', horizontal: 'right'})}>
                                                          {siz.name}
+                                                         </Box>
+                                                         <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                            <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                                                 product added succussfully to Cart
+                                                            </Alert>
+                                                        </Snackbar>
                                                          </Box>
                                                         )
                                                  })}

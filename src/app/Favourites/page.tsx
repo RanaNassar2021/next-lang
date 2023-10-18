@@ -7,7 +7,6 @@ import Footer from "../Footer";
 import ImagesCard from "../Card/page";
 import Image from "next/image";
 import Link from "next/link";
-import CustomizedSnackbars from "../SnakeBar/page";
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 
@@ -82,13 +81,66 @@ export default function Favourites() {
         setAnchorEl(null);
     };
 
+    
+     {/* Alerts */ }
+     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+        props,
+        ref,
+    ) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+
+    interface State extends SnackbarOrigin {
+        openTop: boolean;
+    }
+    const [open, setOpen] = React.useState(false);
+    const [state, setState] = React.useState<State>({
+        openTop: false,
+        vertical: 'top',
+        horizontal: 'center',
+    });
+    const { vertical, horizontal, openTop } = state;
+
+    interface StateFavs extends SnackbarOrigin{
+        openTopFav: boolean;
+    }
+    const [isFavourite, setIsFavourite] = useState<any>(false);
+    const [openFav, setOpenFav] = React.useState(false);
+    const[stateFav, setStateFav] = React.useState<StateFavs>({
+        openTopFav:false,
+        vertical: 'top',
+        horizontal: 'right',
+    })
+
+
+    const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setState({ ...state, openTop: false });
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const handleCloseAlertFav = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setStateFav({ ...stateFav, openTopFav: false });
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenFav(false);
+    };
+
     interface RemoveFavouteOrAddCart {
         ProductId: string;
         ColorId: number;
         SizeId?: number;
     }
 
-    const RemoveFromFavourite = (removeFavoute: RemoveFavouteOrAddCart) => {
+
+
+    const RemoveFromFavourite = (removeFavoute: RemoveFavouteOrAddCart, newState: SnackbarOrigin) => {
         let body = {
             productId: removeFavoute.ProductId,
             colorId: removeFavoute.ColorId
@@ -97,14 +149,18 @@ export default function Favourites() {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
         Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body, Config).then((res) => {
+            setIsFavourite(true);
+            setStateFav({ ...newState, openTopFav: true });
+            setOpenFav(true)
             setData(data.filter((item: any) => {
                 return item.productId != removeFavoute.ProductId
             }));
-           
+
+
         })
     }
 
-    const addToCart = (addToCart: RemoveFavouteOrAddCart) => {
+    const addToCart = (addToCart: RemoveFavouteOrAddCart, newState:SnackbarOrigin) => {
         let body = {
             productId: addToCart.ProductId,
             colorId: addToCart.ColorId,
@@ -114,10 +170,18 @@ export default function Favourites() {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
         Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
+            setState({ ...newState, openTop: true });
+            setOpen(true)
             setData(data.filter((item: any) => {
                 return item.productId != addToCart.ProductId
             }))
         })
+    }
+
+    const[selectedSize, setSelectedSize] = useState(false);
+
+    const handleSelectedSize = ()=> {
+        setSelectedSize(true)
     }
 
 
@@ -211,9 +275,30 @@ export default function Favourites() {
                                                 </Box>
                                             </CardContent>}
                                         </Card>
+                                            {selectedSize?(
+                                            <Box  className={classes.sizes}>
+                                                {data.sizes.map((siz:any, index:any)=>{
+                                                       return (
+                                                        <Box>
+                                                         <Box className={classes.sizeBox} key={siz.sizeId} onClick={()=>addToCart({ProductId:data.productId, ColorId:data.colorId, SizeId:siz.sizeId},{vertical: 'top', horizontal: 'right'})}>
+                                                         {siz.name}
+                                                         </Box>
+                                                         <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                            <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                                                 product added succussfully to Cart
+                                                            </Alert>
+                                                        </Snackbar>
+                                                         </Box>
+                                                        )
+                                                 })}
+                                            </Box> ):(  <Button sx={{ display: 'block', width: '100%', backgroundColor: '#FF6F61', color: 'black', marginTop: '2ch', fontWeight: 500 }} onClick={handleSelectedSize}>Add to cart</Button>)}
 
-                                        <Button sx={{ display: 'block', width: '100%', backgroundColor: '#FF6F61', color: 'black', marginTop: '2ch', fontWeight: 500 }} onClick={() => addToCart({ ProductId: data.productId, ColorId: data.colorId, SizeId: data.sizeId })}>Add to cart</Button>
-                                        <Button sx={{ display: 'block', width: '100%', backgroundColor: 'white', color: '#FF6F61', marginTop: '2ch', fontWeight: 600 }} onClick={() => RemoveFromFavourite({ ProductId: data.productId, ColorId: data.colorId })}>Remove</Button>
+                                        <Button sx={{ display: 'block', width: '100%', backgroundColor: 'white', color: '#FF6F61', marginTop: '2ch', fontWeight: 600 }} onClick={() => RemoveFromFavourite({ ProductId: data.productId, ColorId: data.colorId },{vertical: 'top', horizontal: 'right'})}>Remove</Button>
+                                        <Snackbar open={openFav} autoHideDuration={5000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                            <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                                product removed succussfully from favourites
+                                            </Alert>
+                                        </Snackbar>
                                     </Grid>
                                 )
                             })

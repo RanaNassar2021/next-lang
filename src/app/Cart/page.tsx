@@ -5,6 +5,10 @@ import Header from "../Header";
 import Footer from "../Footer";
 import Image from "next/image";
 import Link from "next/link";
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import AlertAddToFav from "@/app/AlertAddToFav/page";
+import AlertRemovedFromFav from "@/app/AlertRemovedFromFav/page";
 
 // styles
 import useStyles from "./Cart.Styles";
@@ -64,7 +68,8 @@ export default function Cart() {
         });
     };
 
-
+       
+    // Get user Cart
 
     const [data, setData] = useState<any>([]);
     const fetchData = async () => {
@@ -77,7 +82,7 @@ export default function Cart() {
         setData(response.data);
         let x:any=0;
        response.data.map((item:any)=>{
-           x= x + item.price;
+           x= x + (item.price * item.quantity) ;
         })
         setTotlalPRice(x);
         console.log(response.data)
@@ -91,12 +96,120 @@ console.log(data.length)
         fetchData();
     }, []);
 
-    interface AddToFavouriteInrerface {
-        ProductId:string;
-        ColorId:number;
+
+     {/* Alerts */ }
+     const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+        props,
+        ref,
+    ) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+
+    interface State extends SnackbarOrigin {
+        openTop: boolean;
+    }
+    const [open, setOpen] = React.useState(false);
+    const [state, setState] = React.useState<State>({
+        openTop: false,
+        vertical: 'top',
+        horizontal: 'center',
+    });
+    const { vertical, horizontal, openTop } = state;
+
+    interface StateFavs extends SnackbarOrigin{
+        openTopFav: boolean;
+    }
+    const [isFavourite, setIsFavourite] = useState<any>(false);
+    const [openFav, setOpenFav] = React.useState(false);
+    const[stateFav, setStateFav] = React.useState<StateFavs>({
+        openTopFav:false,
+        vertical: 'top',
+        horizontal: 'right',
+    })
+
+
+    const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setState({ ...state, openTop: false });
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpen(false);
+    };
+
+    const handleCloseAlertFav = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setStateFav({ ...stateFav, openTopFav: false });
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenFav(false);
+    };
+
+
+    // Remove from user Cart
+
+    interface RemoveFromCartInterface {
+        ProductId: string;
+        ColorId: number;
+        SizeId: number;
     }
 
-    const AddToFavourite = (AddToFavourite: AddToFavouriteInrerface) =>{
+
+    const RemoveFromCart = (remove:RemoveFromCartInterface, newState:SnackbarOrigin) => {
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        Axios.delete(`${process.env.apiUrl}` + `Product/RemoveFromCart?ProductId=${remove.ProductId}&ColorId=${remove.ColorId}&SizeId=${remove.SizeId}`,Config).then((res) => {
+            setState({ ...newState, openTop: true });
+            setOpen(true)
+            setData(data.filter((item: any) => {
+                return item.productId != remove.ProductId
+            }))
+            
+        })
+    }
+
+     // Increase Quantity
+     interface AddToFavouriteInrerface {
+        ProductId:string;
+        ColorId:number;
+        SizeId?: number;
+    }
+    const IncreaseQunatity = (increase: AddToFavouriteInrerface) =>{
+        let body ={
+            productId: increase.ProductId,
+            colorId: increase.ColorId,
+            sizeId: increase.SizeId
+        }
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        Axios.put(`${process.env.apiUrl}` +`Product/IncreaseOrderQuantity?Increase=${true}`, body,Config).then((res)=>{
+            fetchData();
+    })
+    }
+
+    const DecreaseQunatity = (increase: AddToFavouriteInrerface) =>{
+        let body ={
+            productId: increase.ProductId,
+            colorId: increase.ColorId,
+            sizeId: increase.SizeId
+        }
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+        Axios.put(`${process.env.apiUrl}` +`Product/IncreaseOrderQuantity?Increase=${false}`, body,Config).then((res)=>{
+            fetchData();
+    })
+    }
+
+
+    // Add to Favourite
+
+
+    const AddToFavourite = (AddToFavourite: AddToFavouriteInrerface, newState: SnackbarOrigin) =>{
         let body ={
             productId: AddToFavourite.ProductId,
             colorId: AddToFavourite.ColorId,
@@ -110,36 +223,23 @@ console.log(data.length)
                 return item.productId != AddToFavourite.ProductId
             }))
             if(res.data=="Saved Successfully"){
-                console.log("saved")
+                setIsFavourite(true);
+                    setStateFav({ ...newState, openTopFav: true });
+                    setOpenFav(true)
             }else {
                 console.log("removed")
+                setIsFavourite(false);
+                setStateFav({ ...newState, openTopFav: false });
+                setOpenFav(true)
             }
            
          })
 
     }
 
-    interface RemoveFromCartInterface {
-        ProductId: string;
-        ColorId: number;
-        SizeId: number;
-    }
+       
 
-    const RemoveFromCart = (RemoveFromCart: RemoveFromCartInterface) => {
-        let body = {
-            productId: RemoveFromCart.ProductId,
-            colorId: RemoveFromCart.ColorId,
-            sizeId: RemoveFromCart.SizeId
-        }
-        const Config = {
-            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
-        }
-        Axios.post(`${process.env.apiUrl}` + `Product/RemoveFromCart`, body, Config).then((res) => {
-            setData(data.filter((item: any) => {
-                return item.productId != RemoveFromCart.ProductId
-            }))
-        })
-    }
+  
 
 
     return (
@@ -191,19 +291,32 @@ console.log(data.length)
                                             <Box sx={{ width: '60%' }}>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <Typography variant="h6">{data.productTitle}</Typography>
-                                                    <DeleteIcon sx={{ marginTop: '10px', marginRight:'10px' }} onClick={() => RemoveFromCart({ ProductId: data.productId, ColorId: data.colorId, SizeId: data.sizeId })}></DeleteIcon>
+                                                    <DeleteIcon sx={{ marginTop: '10px', marginRight:'10px' }} onClick={()=>RemoveFromCart({ProductId:data.productId, ColorId:data.colorId, SizeId:data.sizeId},{vertical: 'top', horizontal: 'right'})}></DeleteIcon>
                                                 </Box>
+                                                <Box>
+                                                    <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                            <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
+                                                                 product Removed succussfully from Cart
+                                                            </Alert>
+                                                     </Snackbar>
+                                                    </Box>
                                                  <Typography>Price: {data.price}</Typography>
                                                 <Typography>Color: {data.colorName}</Typography>
                                                 <Typography>Size: {data.sizeName}</Typography>
                                                 <Box sx={{display:"flex", justifyContent:'space-between'}}>
                                                     <Box>
-                                                <Typography sx={{ textDecoration: "underline" }} onClick={()=>AddToFavourite({ProductId:data.productId, ColorId:data.colorId})}>Move to favourites</Typography>
+                                                <Typography sx={{ textDecoration: "underline" }} onClick={()=>AddToFavourite({ProductId:data.productId, ColorId:data.colorId },{vertical: 'top', horizontal: 'right'})}>Move to favourites</Typography>
+                                                   
                                                 </Box>
+                                                <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                        <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                                            <AlertAddToFav/>
+                                                        </Alert>
+                                                    </Snackbar>
                                                 <Box className={classes.quantity}>
-                                                <Typography>-</Typography>
-                                                <Typography>1</Typography>
-                                                <Typography>+</Typography>
+                                                <Typography onClick={()=>DecreaseQunatity({ProductId:data.productId, ColorId:data.colorId, SizeId:data.sizeId})} >-</Typography>
+                                                <Typography>{data.quantity}</Typography>
+                                                <Typography onClick={()=>IncreaseQunatity({ProductId:data.productId, ColorId:data.colorId, SizeId:data.sizeId})} >+</Typography>
                                                 </Box>
                                                 </Box>
                                             </Box>
