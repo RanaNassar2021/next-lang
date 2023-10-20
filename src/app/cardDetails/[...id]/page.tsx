@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, Divider, Toolbar } from "@mui/material";
+import Rating from '@mui/material/Rating';
 import Header from "../../Header";
 import Footer from "../../Footer";
 import ProductDetails from "../../ProductDetails/page";
@@ -35,6 +36,8 @@ export default function CardDetails() {
     const [data, setData] = useState<any>([]);
     const [Images, setImages] = useState<any>([]);
     const [colorIdApi, setColorIdApi] = useState<any>('');
+
+    const [value, setValue] = React.useState<number | null>(2);
 
 
     const fetchData = async () => {
@@ -105,12 +108,12 @@ export default function CardDetails() {
     });
     const { vertical, horizontal, openTop } = state;
 
-    interface StateFavs extends SnackbarOrigin{
+    interface StateFavs extends SnackbarOrigin {
         openTopFav: boolean;
     }
     const [openFav, setOpenFav] = React.useState(false);
-    const[stateFav, setStateFav] = React.useState<StateFavs>({
-        openTopFav:false,
+    const [stateFav, setStateFav] = React.useState<StateFavs>({
+        openTopFav: false,
         vertical: 'top',
         horizontal: 'right',
     })
@@ -158,8 +161,8 @@ export default function CardDetails() {
 
     const [isFavourite, setIsFavourite] = useState<any>(false);
 
-    {/* Alerts add to favourite */}
-   
+    {/* Alerts add to favourite */ }
+
 
 
     const AddToFavourite = (newState: SnackbarOrigin) => {
@@ -214,22 +217,22 @@ export default function CardDetails() {
                                     {data.title}
                                 </Typography>
                                 {isFavourite || data?.isFavorite ?
-                                <Box>
-                                 <Icons.Favorite  sx={{color:'red'}} onClick={()=>AddToFavourite({vertical: 'top', horizontal: 'right'})}></Icons.Favorite>
-                                    <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                        <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
-                                             <AlertAddToFav/>
-                                        </Alert>
-                                    </Snackbar>
-                                </Box>:
-                                <Box>
-                                 <Icons.FavoriteBorder onClick={()=>AddToFavourite({vertical: 'top', horizontal: 'right'})}/>
-                                 <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                        <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
-                                            <AlertRemovedFromFav/>
-                                        </Alert>
-                                    </Snackbar>
-                                 </Box>}
+                                    <Box>
+                                        <Icons.Favorite sx={{ color: 'red' }} onClick={() => AddToFavourite({ vertical: 'top', horizontal: 'right' })}></Icons.Favorite>
+                                        <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                            <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                                <AlertAddToFav />
+                                            </Alert>
+                                        </Snackbar>
+                                    </Box> :
+                                    <Box>
+                                        <Icons.FavoriteBorder onClick={() => AddToFavourite({ vertical: 'top', horizontal: 'right' })} />
+                                        <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                            <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                                <AlertRemovedFromFav />
+                                            </Alert>
+                                        </Snackbar>
+                                    </Box>}
                             </Box>
                             <Box>
                                 <Typography style={{ marginTop: 20 }}>{data.orginalPrice} EGP</Typography>
@@ -241,25 +244,30 @@ export default function CardDetails() {
                             <Box>
                                 <Typography style={{ fontWeight: '500', marginTop: 20 }}>Design Rate</Typography>
                             </Box>
-                            <Box style={{ opacity: 0.7, display: 'flex', gap: '5px' }}>
-                                <Icons.StarBorder />
-                                <Icons.StarBorder />
-                                <Icons.StarBorder />
-                                <Icons.StarBorder />
-                                <Icons.StarBorder />
-                                <Typography>({data.avgDesignRating})</Typography>
-                            </Box>
-                            <Box>
-                                <Typography style={{ fontWeight: '500', marginTop: 20 }}>Quality Rate</Typography>
-                            </Box>
-                            <Box style={{ opacity: 0.7, display: 'flex', gap: '5px' }}>
-                                <Icons.StarBorder />
-                                <Icons.StarBorder />
-                                <Icons.StarBorder />
-                                <Icons.StarBorder />
-                                <Icons.StarBorder />
+
+
+                            <Box
+                                sx={{
+                                    '& > legend': { mt: 2 },
+                                }}
+                            >
+                                <Box sx={{display:'flex',gap: '5px'}}>
+                                <Rating
+                                    name="simple-controlled"
+                                    value={value}
+                                    onChange={(event, newValue) => {
+                                        setValue(newValue);
+                                    }}
+                                />  <Typography>({data.avgDesignRating})</Typography>
+                                </Box>
+                                
+                                <Typography component="legend">Quality Rate</Typography>
+                                <Box  sx={{display:'flex',gap: '5px'}}>
+                                <Rating name="read-only" value={data.avgQualityRating} readOnly />
                                 <Typography>({data.avgQualityRating})</Typography>
+                                </Box>
                             </Box>
+
                             <Box>
                                 <Typography style={{ fontWeight: '600', marginTop: 20 }}>Color </Typography>
                             </Box>
@@ -285,15 +293,15 @@ export default function CardDetails() {
 
                             </Box>
                             <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
-                                <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} onClick={()=> AddToCart({ vertical: 'top', horizontal: 'right' })} disabled={DisabledButton}>Add to cart</Button>
+                                <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} onClick={() => AddToCart({ vertical: 'top', horizontal: 'right' })} disabled={DisabledButton}>Add to cart</Button>
                                 <Box>
-                                <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                                                            <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
-                                                                               product added succussfully to Cart
-                                                                            </Alert>
-                                                                    </Snackbar>
+                                    <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                        <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                            product added succussfully to Cart
+                                        </Alert>
+                                    </Snackbar>
                                 </Box>
-                                
+
                             </Box>
                             <Box style={{ display: 'flex', marginTop: 50 }}>
                                 <ProductDetails />
@@ -387,22 +395,22 @@ export default function CardDetails() {
                         </Typography>
                         <Icons.Share />
                         {isFavourite || data?.isFavorite ?
-                                <Box>
-                                 <Icons.Favorite  sx={{color:'red'}} onClick={()=>AddToFavourite({vertical: 'top', horizontal: 'right'})}></Icons.Favorite>
-                                    <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                        <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
-                                             <AlertAddToFav/>
-                                        </Alert>
-                                    </Snackbar>
-                                </Box>:
-                                <Box>
-                                 <Icons.FavoriteBorder onClick={()=>AddToFavourite({vertical: 'top', horizontal: 'right'})}/>
-                                 <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                        <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
-                                            <AlertRemovedFromFav/>
-                                        </Alert>
-                                    </Snackbar>
-                                 </Box>}
+                            <Box>
+                                <Icons.Favorite sx={{ color: 'red' }} onClick={() => AddToFavourite({ vertical: 'top', horizontal: 'right' })}></Icons.Favorite>
+                                <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                    <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                        <AlertAddToFav />
+                                    </Alert>
+                                </Snackbar>
+                            </Box> :
+                            <Box>
+                                <Icons.FavoriteBorder onClick={() => AddToFavourite({ vertical: 'top', horizontal: 'right' })} />
+                                <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                    <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                        <AlertRemovedFromFav />
+                                    </Alert>
+                                </Snackbar>
+                            </Box>}
                     </Box>
                     <Box>
                         <Typography style={{ marginTop: 15, textAlign: 'left' }}> {data.orginalPrice} EGP</Typography>
@@ -456,14 +464,14 @@ export default function CardDetails() {
                     </Box>
 
                     <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
-                        <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} onClick={()=> AddToCart({ vertical: 'top', horizontal: 'right' })}  disabled={DisabledButton} >Add to cart</Button>
-                            <Box>
-                                <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                    <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
-                                        product added succussfully to Cart
-                                    </Alert>
-                                </Snackbar>
-                            </Box>
+                        <Button style={{ width: '30ch', backgroundColor: '#EA4335', color: 'white' }} onClick={() => AddToCart({ vertical: 'top', horizontal: 'right' })} disabled={DisabledButton} >Add to cart</Button>
+                        <Box>
+                            <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                    product added succussfully to Cart
+                                </Alert>
+                            </Snackbar>
+                        </Box>
                     </Box>
                     <Box style={{ display: 'flex', marginTop: 30 }}>
                         <ProductDetailsMob />

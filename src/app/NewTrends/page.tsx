@@ -39,20 +39,46 @@ export default function PicturaWomen() {
     const Icons: any = MuiIcons;
 
     const [data, setData] = useState<any>([]);
+    const [filtersData, setFiltersData] = useState<any>([]);
+    const [categoriesId, SetCategoriesId] = useState<any>([]);
+    const [colorId, SetColorId] = useState<string>('');
+
+    const fetchFilter = async () => {
+        // Make a GET request using axios
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/DropDownListsDetials`);
+        // Update the state with the response data
+        setFiltersData(response.data);
+        console.log(response.data);
+    };
 
     const fetchData = async () => {
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetTrendingProducts?PageNumber=1&PageSize=10`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetTrendingProducts?PageNumber=1&PageSize=10&${categoriesId.length!=0?'category='+categoriesId.join(','):''}`);
         // Update the state with the response data
         setData(response.data);
-        console.log(response.data);
     };
 
     // Call the fetchData function after the initial render
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [categoriesId]);
 
+    useEffect(()=>{
+        fetchFilter();
+    },[])
+
+    const concateCategoryId = (Id:number, event:any)=>{
+        // console.log(event);
+        // let lenthOFId = categoriesId.split(',');
+        if(event.target.checked){
+            SetCategoriesId((categoriesId:any) => [...categoriesId, Id]);
+
+        }else{
+            SetCategoriesId((categoriesId:any) =>categoriesId.filter((id:any) => id !== Id));
+        }
+    }
+    console.log(categoriesId);
+    
 
     const handleMouseOver = (id: any, index: any) => {
         setData((prev: any) => prev.map((item: any, indexPrev: any) => {
@@ -203,78 +229,41 @@ export default function PicturaWomen() {
                     <Divider></Divider>
                     <Typography variant="h3"> Catergories </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>T-Shirts</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Polo</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>High-Neck</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>V-Neck</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Shirts</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Hoodies</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Top Rated</Typography>
-                    </Box>
+                    {filtersData?.categories?.map((item: any)=>{
+                        return(
+                        <Box className={classes.options}>
+                            <Checkbox {...label} onClick={(e)=>concateCategoryId(item.categoryId, e)}/>
+                            <Typography>{item.name}</Typography>
+                        </Box>
+                        )
+                    })}
                     <Divider></Divider>
                     <Typography variant="h3"> Color </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Black</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>white</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Gray</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Red</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Blue</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Yellow</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Orange</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Green</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Purple</Typography>
-                    </Box>
+                    {
+                        filtersData?.colors?.map((item: any)=>{
+                            return(
+                                <Box className={classes.options}>
+                                <Checkbox {...label} />
+                                <Typography>{item.name}</Typography>
+                            </Box>
+                            )
+                        })
+                    }
+
                     <Typography variant="h4"> <Icons.Sort></Icons.Sort> sort by</Typography>
                     <Divider></Divider>
                     <Box className={classes.options}>
                         <Checkbox {...label} />
                         <Typography>New In</Typography>
+                    </Box>
+                    <Box className={classes.options}>
+                        <Checkbox {...label} />
+                        <Typography>Sale</Typography>
+                    </Box>
+                    <Box className={classes.options}>
+                        <Checkbox {...label} />
+                        <Typography>Only few left</Typography>
                     </Box>
                     <Typography variant="h3"> Price </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
@@ -286,6 +275,7 @@ export default function PicturaWomen() {
                         <Checkbox {...label} />
                         <Typography>High to low</Typography>
                     </Box>
+                    
                 </Box>
                 <Box className={classes.cards}>
                     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>

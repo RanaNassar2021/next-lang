@@ -33,23 +33,46 @@ export default function PicturaMen() {
 
 
     const [data, setData] = useState<any>([]);
+    const [filtersData, setFiltersData] = useState<any>([]);
+    const [categoriesId, SetCategoriesId] = useState<any>([]);
+    const [colorId, SetColorId] = useState<string>('');
 
+    const fetchFilter = async () => {
+        // Make a GET request using axios
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/DropDownListsDetials`);
+        // Update the state with the response data
+        setFiltersData(response.data);
+        console.log(response.data);
+    };
 
     const fetchData = async () => {
         // const Config = {
         //     headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         // }
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=male&pageNumber=${1}&pageSize=10`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=male&pageNumber=${1}&pageSize=10&${categoriesId.length!=0?'category='+categoriesId.join(','):''}`);
         // Update the state with the response data
         setData(response.data);
         console.log(response.data);
     };
 
-    // Call the fetchData function after the initial render
+   // Call the fetchData function after the initial render
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [categoriesId]);
+
+    useEffect(()=>{
+        fetchFilter();
+    },[])
+
+    const concateCategoryId = (Id:number, event:any)=>{
+        if(event.target.checked){
+            SetCategoriesId((categoriesId:any) => [...categoriesId, Id]);
+        }else{
+            SetCategoriesId((categoriesId:any) =>categoriesId.filter((id:any) => id !== Id));
+        }
+    }
+
 
   {/*  useEffect(()=>{
         const get = async () => {
@@ -215,73 +238,28 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin) =>{
                     <Divider></Divider>
                     <Typography variant="h3"> Catergories </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>T-Shirts</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Polo</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>High-Neck</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>V-Neck</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Shirts</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Hoodies</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Top Rated</Typography>
-                    </Box>
+                    {filtersData?.categories?.map((item: any)=>{
+                        return(
+                        <Box className={classes.options}>
+                            <Checkbox {...label} onClick={(e)=>concateCategoryId(item.categoryId, e)}/>
+                            <Typography>{item.name}</Typography>
+                        </Box>
+                        )
+                    })}
                     <Divider></Divider>
                     <Typography variant="h3"> Color </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Black</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>white</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Gray</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Red</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Blue</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Yellow</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Orange</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Green</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Purple</Typography>
-                    </Box>
+                    {
+                        filtersData?.colors?.map((item: any)=>{
+                            return(
+                                <Box className={classes.options}>
+                                <Checkbox {...label} />
+                                <Typography>{item.name}</Typography>
+                            </Box>
+                            )
+                        })
+                    }
+
                     <Typography variant="h4"> <Icons.Sort></Icons.Sort> sort by</Typography>
                     <Divider></Divider>
                     <Box className={classes.options}>

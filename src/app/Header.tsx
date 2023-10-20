@@ -9,6 +9,8 @@ import Link from 'next/link';
 import SideBar from './SideBar/SideBar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
+import { CookiesProvider, useCookies } from "react-cookie";
+
 //Axios
 import Axios from 'axios';
 
@@ -26,7 +28,9 @@ export default function Header() {
   const [show,SetShow] = useState<boolean>(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [totalNumber,SetTotalNumber]  = useState<number>();
+  const [cookies, setCookie,removeCookie] = useCookies(["Product"]);
   const [totalNumberFavourite,SetTotalNumberFavourite]  = useState<number>();
+
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -64,6 +68,26 @@ export default function Header() {
   const LogOut = () => {
     localStorage.clear();
   }
+
+ {/* useEffect(()=>{
+      if(!!token && cookies.Product.length!=0){
+        cookies.Product.map((product:any)=>{
+          let body = {
+            productId: product.ProductId,
+            colorId: product.ColorId,
+            sizeId: product.SizeId
+        }
+        const Config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        }
+          Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
+              console.log(res);
+          })
+        })
+        removeCookie("Product");
+      }
+  },[token, cookies.Product]) */}
+  
   return (
     <React.Fragment>
       <Box sx={{ display: { xs: 'none', md: 'block' } }}>
@@ -89,7 +113,7 @@ export default function Header() {
               <Box className={classes.register}>
                {show && <Link href="/Registeration"><Button className={classes.btnR}>sign up</Button></Link>}
                {show && <Link href="/LogIn"><Button className={classes.btnR}>log in</Button> </Link>}
-               {!show && <Icons.AccountCircle /> }
+               {!show && <Link href="/UserProfileLayout"><Icons.AccountCircle /></Link>  }
                {!show && <Button className={classes.btnR} onClick={LogOut}>log out</Button>}
                 <Link href="/Favourites">
                { totalNumberFavourite? <IconButton size="large" color="inherit">
@@ -166,8 +190,11 @@ export default function Header() {
                 <Badge badgeContent={totalNumber} color="error" >
                     <Icons.ShoppingCart  />
                     </Badge>
-                </IconButton>:<Icons.ShoppingCart />}
-                 </Link>
+                </IconButton>:
+                <Badge badgeContent={cookies?.Product?.length} color="error" >
+                    <Icons.ShoppingCart  />
+                    </Badge>}
+        </Link>
         </Box>
       </Box>
     </React.Fragment>

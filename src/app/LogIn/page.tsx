@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React,{useState} from 'react'
 import { Box, Typography, Button, Divider } from '@mui/material';
 import Header from '../Header';
 import Footer from '../Footer'
@@ -37,7 +37,7 @@ const validationSchema = yup.object({
     email: yup
         .string()
         .email('Enter a valid email')
-        .required('Email is required')
+        .required('Email is required'),
 
 });
 
@@ -51,10 +51,7 @@ export default function SignUp() {
         event.preventDefault();
     };
 
-    function handleLogin() {
-        // Perform login logic here
-        router.push('/');
-      }
+    const[isPassIncorrect, setIsPassIncorrect] = useState<any>(false);
 
     const formik = useFormik({
         initialValues: {
@@ -67,12 +64,17 @@ export default function SignUp() {
                 if(result != null){
                     console.log(result.token, result)
                     localStorage.setItem("Token",result?.data?.token);
+                    router.push('/');
                 }else{
                     console.log("Error");
                 }
+            }).catch(()=>{
+                setIsPassIncorrect(true)
             })
         },
     });
+
+    console.log(isPassIncorrect)
 
     return (
         <React.Fragment>
@@ -94,9 +96,9 @@ export default function SignUp() {
                                         helperText={formik.touched.email && formik.errors.email}
                                     ></TextField>
                                 </FormControl>
-                                <FormControl fullWidth size='small' className={classes.textField} variant="outlined">
+                                <FormControl  fullWidth size='small' className={classes.textField} variant="outlined">
                                     <InputLabel htmlFor="outlined-adornment-password" >Password *</InputLabel>
-                                    <OutlinedInput
+                                    <OutlinedInput error={!!isPassIncorrect}
                                         name="password"
                                         value={formik.values.password}
                                         onChange={formik.handleChange}
@@ -119,8 +121,8 @@ export default function SignUp() {
                                         label="Password"
                                     />
                                 </FormControl>
-                                <p className={classes.passwordError}>{formik.touched.password && formik.errors.password}</p>
-                                <Button className={classes.logInBtn} sx={{ mt: 2 }} onClick={handleLogin} color="primary" variant="contained" fullWidth type="submit">
+                                {!!isPassIncorrect && <p className={classes.passwordError}>Incorrect Password</p>}
+                                <Button className={classes.logInBtn} sx={{ mt: 2 }} color="primary" variant="contained" fullWidth type="submit">
                                     Log In
                                 </Button>
                             </form>

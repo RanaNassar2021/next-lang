@@ -22,6 +22,28 @@ const useStyles = makeStyles()((theme: any) =>{
                 width:'100%',
             }
         },
+        deliveryAddressContainer: {
+            marginTop:'2ch',
+            width:"90%"
+        },
+        countryField: {
+            width: '12ch',
+            marginLeft: 0,
+        },
+        cityField: {
+            width: '12ch',
+        },
+        fullAdress: {
+            display: 'flex',
+            flexWrap: 'wrap',
+        },
+        mobileNumber: {
+            fontSize: '12px',
+            marginTop: 4
+        },
+        mobileDetail: {
+            fontSize: '14px',
+        },
         rightContent:{
             width:'50%',
             padding:'2ch',
@@ -31,6 +53,14 @@ const useStyles = makeStyles()((theme: any) =>{
             "& h6":{
                 fontSize:'20px'
             }
+        },
+        payment:{
+            padding:'2ch'
+        },
+        paymentOption:{
+            display:'flex',
+            justifyContent:'center',
+            margin:'2ch 1ch',
         },
         card:{
             backgroundColor:'white',
@@ -66,12 +96,14 @@ const useStyles = makeStyles()((theme: any) =>{
         },
         quantity:{
             display:'flex',
-            marginRight:'2ch',
-            gap:'15px',
             '& p':{
                 fontSize:'16px',
                 fontWeight:'bold'
             }
+        },
+        quantitiyBtn:{
+            color:'black',
+            fontSize:'18px'
         }
     }
 })

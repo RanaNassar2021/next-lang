@@ -160,19 +160,16 @@ export default function PicturaWomen() {
                 setOpen(true)
             })
         } else {
-            const cookieValue = cookies.Product ? JSON.parse(cookies.Product) : [];
-            // const updatedArray = [cookieValue, body];
-            const updatedArray = cookieValue.push(body);
-            // console.log(JSON.parse(cookies.Product));
-            console.log(JSON.stringify(updatedArray));
-
-            setCookie('Product', JSON.stringify(updatedArray), { path: '/' });
-            // if(Array.isArray(cookies.Product)){
-            //  setCookie("Product",, { path: '/' })
-            //}
+            const myArray = cookies.Product || [];
+            const updatedArray = [...myArray, addToCart];
+            setCookie('Product', updatedArray, { path: '/' });
+            setState({ ...newState, openTop: true });
+            setOpen(true)
         }
 
     }
+    console.log(cookies.Product || []);
+    
 
     interface AddToFavouriteInrerface {
         ProductId: string;
