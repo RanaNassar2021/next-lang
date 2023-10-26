@@ -134,7 +134,7 @@ const useStyles = makeStyles()((theme: any) =>{
             height:'30ch',
             overflow:'hidden',
             [theme.breakpoints.down('md')]:{
-                height:'auto'
+                height:'260px'
             }
         },
         filterMobile:{

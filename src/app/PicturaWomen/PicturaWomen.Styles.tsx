@@ -131,7 +131,7 @@ const useStyles = makeStyles()((theme: any) =>{
             height:'30ch',
             overflow:'hidden',
             [theme.breakpoints.down('md')]:{
-                height:'auto'
+                height:'260px'
             }
         },
         filterMobile:{
@@ -144,6 +144,9 @@ const useStyles = makeStyles()((theme: any) =>{
                 fontSize:'20px',
                 paddingRight:10
             }
+        },
+        radio:{
+            marginLeft:'5px',
         }
     }
 })

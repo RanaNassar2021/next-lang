@@ -9,6 +9,9 @@ import Image from "next/image";
 import Link from "next/link";
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import AlertAddToFav from "@/app/AlertAddToFav/page";
 import AlertRemovedFromFav from "@/app/AlertRemovedFromFav/page";
 
@@ -34,11 +37,27 @@ export default function PicturaMen() {
 
 
     const [data, setData] = useState<any>([]);
+    const [filtersData, setFiltersData] = useState<any>([]);
+    const [categoriesId, SetCategoriesId] = useState<any>([]);
+    const [colorId, SetColorId] = useState<any>([]);
+    const [isSale, setIsSale] = useState<boolean>(false);
+    const [onlyFewLeft, setOnlyFewLeft] = useState<boolean>(false);
+    const [prices, setPrices] = useState<boolean>(false);
+    const [isDecending, setIsDecending] = useState<boolean>(false);
+   const [date, setDate]= useState<boolean>(false);
 
+
+   const fetchFilter = async () => {
+    // Make a GET request using axios
+    const response = await Axios.get(`${process.env.apiUrl}` + `Product/DropDownListsDetials`);
+    // Update the state with the response data
+    setFiltersData(response.data);
+    console.log(response.data);
+};
 
     const fetchData = async () => {
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=female&pageNumber=${1}&pageSize=10`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=female&pageNumber=${1}&pageSize=10&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}&FlashSale=${isSale}`);
         // Update the state with the response data
         setData(response.data);
         console.log(response.data);
@@ -47,23 +66,62 @@ export default function PicturaMen() {
     // Call the fetchData function after the initial render
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [categoriesId, colorId, isSale, onlyFewLeft, date, prices, isDecending]);
 
-    {/*  useEffect(()=>{
-        const get = async () => {
-            try {
-                const resp = await Axios.get(`${process.env.apiUrl}`+ `Product/GetAllProduct?gender=male&pageNumber=1&pageSize=5`);
-                setData(resp.data?.forEach((items: any)=>{
-                    items.isMouseOver = false;
-                    items.hoverImage = false;
-                    items.isClicked = false
-                })); console.log(data)
-              
-            } catch (err) {
-                console.error('Error fetching pictura men data', err);
-            }
+    useEffect(() => {
+        fetchFilter();
+    }, [categoriesId, colorId])
+
+    const concateCategoryId = (Id: number, event: any) => {
+        if (event.target.checked) {
+            SetCategoriesId((categoriesId: any) => [...categoriesId, Id]);
+        } else {
+            SetCategoriesId((categoriesId: any) => categoriesId.filter((id: any) => id !== Id));
         }
-      },[]) */ }
+    }
+
+    const concateColorId = (Id: number, event: any) => {
+        if (event.target.checked) {
+            SetColorId((colorId: any) => [...colorId, Id]);
+        } else {
+            SetColorId((colorId: any) => colorId.filter((id: any) => id !== Id));
+        }
+    }
+
+    const concateIsSale = (event: any) => {
+        if (event.target.checked) {
+            setIsSale(true);
+        } else {
+            setIsSale(false)
+        }
+    }
+    const concateOnlyFewLeft = (event: any) => {
+        if (event.target.checked) {
+            setOnlyFewLeft(true);
+        } else {
+            setOnlyFewLeft(false)
+        }
+    }
+
+    const concateNewIn = (event: any) => {
+        if (event.target.checked) {
+            setDate(true)
+        } else {
+            setDate(false)
+        }
+    }
+
+    const IsDecending = () => {
+        setIsDecending(true);
+        setPrices(true)
+    }
+
+    const IsAscending = () => {
+        setIsDecending(false);
+        setPrices(true)
+    }
+
+
 
     const handleMouseOver = (id: any, index: any) => {
         setData((prev: any) => prev.map((item: any, indexPrev: any) => {
@@ -213,89 +271,55 @@ export default function PicturaMen() {
                     <Divider></Divider>
                     <Typography variant="h3"> Catergories </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>T-Shirts</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Polo</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>High-Neck</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>V-Neck</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Shirts</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Hoodies</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Top Rated</Typography>
-                    </Box>
+                    {filtersData?.categories?.map((item: any, index: number) => {
+                        return (
+                            <Box className={classes.options} key={index}>
+                                <Checkbox {...label} onClick={(e) => concateCategoryId(item.categoryId, e)} />
+                                <Typography>{item.name}</Typography>
+                            </Box>
+                        )
+                    })}
                     <Divider></Divider>
                     <Typography variant="h3"> Color </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Black</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>white</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Gray</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Red</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Blue</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Yellow</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Orange</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Green</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Purple</Typography>
-                    </Box>
+                    {
+                        filtersData?.colors?.map((item: any, index: number) => {
+                            return (
+                                <Box className={classes.options} key={index}>
+                                    <Checkbox {...label} onClick={(e) => concateColorId(item.colorId, e)} />
+                                    <Typography>{item.name}</Typography>
+                                </Box>
+                            )
+                        })
+                    }
                     <Typography variant="h4"> <Icons.Sort></Icons.Sort> sort by</Typography>
                     <Divider></Divider>
                     <Box className={classes.options}>
-                        <Checkbox {...label} />
+                        <Checkbox {...label}  onClick={(e) => concateNewIn(e)} />
                         <Typography>New In</Typography>
                     </Box>
+                    <Box className={classes.options}>
+                        <Checkbox {...label} onClick={(e) => concateIsSale(e)} />
+                        <Typography>Sale</Typography>
+                    </Box>
+                    <Box className={classes.options}>
+                        <Checkbox {...label} onClick={(e) => concateOnlyFewLeft(e)} />
+                        <Typography>Only Few Left</Typography>
+                    </Box>
+
                     <Typography variant="h3"> Price </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Low to High</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>High to low</Typography>
-                    </Box>
+                    <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        name="radio-buttons-group">
+                        <Box className={classes.options}>
+                            <FormControlLabel value="low" control={<Radio />} label="Low to High" onClick={IsAscending} className={classes.radio} sx={{ '& .MuiFormControlLabel-label': { fontSize: '12px' } }} />
+                        </Box>
+                        <Box className={classes.options}>
+                            <FormControlLabel value="High" control={<Radio />} label="High to Low" onClick={IsDecending} className={classes.radio} sx={{ '& .MuiFormControlLabel-label': { fontSize: '12px' } }} />
+
+                        </Box>
+                    </RadioGroup>
                 </Box>
                 <Box className={classes.cards}>
                     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -405,6 +429,8 @@ export default function PicturaMen() {
                        }
 
                     </Grid>
+                    <Box sx={{ marginTop: '20px' }}>
+                    </Box>
                 </Box>
             </Box>
 

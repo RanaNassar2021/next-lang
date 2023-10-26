@@ -409,6 +409,8 @@ export default function PicturaWomen() {
                         }
 
                     </Grid>
+                    <Box sx={{ marginTop: '20px' }}>
+                    </Box>
                 </Box>
             </Box>
 

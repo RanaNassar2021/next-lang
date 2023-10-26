@@ -384,6 +384,8 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin ) =>{
                         }
 
                     </Grid>
+                    <Box sx={{ marginTop: '20px' }}>
+                    </Box>
                 </Box>
             </Box>
 
