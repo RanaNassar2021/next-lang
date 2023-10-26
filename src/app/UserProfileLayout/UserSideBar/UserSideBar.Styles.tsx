@@ -4,20 +4,46 @@ const useStyles = makeStyles()((theme) => {
     return {
         sideBar: {
             width: '265px',
-            color: '#ffffff',
-            backgroundColor: '#1e1e2d',
+            backgroundColor: '#BDCAD3',
             height: 'calc(100vh - 70px)',
+            overflow:'auto',
             transition: 'width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms'
         },
         closeSideBar: {
             width: '70px !important',
         },
+        logo:{
+            marginTop:'-20px',
+            display:'flex',
+            flexDirection:'column',
+            alignItems:'center',
+            borderBottom:'1px solid white',
+            color:'#1E2832',
+            '& img':{
+                width:'150px',
+                height:'150px',
+            },
+            '& p':{
+                fontWeight:500
+            }
+         
+        },
+        closeLogo:{
+            marginTop:0,
+            '& img':{
+                width:'50px',
+                height:'50px',
+                overflow: 'hidden',
+                objectFit: 'cover',
+            }
+        },
         profile: {
             gap: 15,
             display: 'flex',
+            flexDirection:'column',
             padding: '16px 25px',
             alignItems: 'center',
-            borderBottom: '1px solid #2d2d43',
+            borderBottom: '1px solid #ffffff',
             '& img': {
                 width: '50px',
                 height: '50px',
@@ -37,11 +63,16 @@ const useStyles = makeStyles()((theme) => {
                 marginBottom: 0,
                 fontSize: '12px',
                 lineHeight: '14px',
-                color: theme.palette.secondary.dark
             }
         },
         closeProfile: {
             padding: '16px 10px',
+        },
+        followers:{
+            display:'flex',
+            justifyContent:'space-evenly',
+            gap:'5px',
+            textAlign:'center'
         },
         listMenu: {
             gap: '5px',
@@ -63,7 +94,7 @@ const useStyles = makeStyles()((theme) => {
         accordionTitle: {
             padding: '9px 13px',
             borderRadius: '4px',
-            color: '#9D9DA6 !important',
+            color: '#1E2832 !important',
             minHeight: 'auto !important',
             '& .MuiAccordionSummary-content': {
                 gap: 7,
@@ -81,19 +112,19 @@ const useStyles = makeStyles()((theme) => {
                 '& svg': {
                     width: '18px !important',
                     height: '18px !important',
-                    color: '#9D9DA6 !important'
+                    color: '#1E2832 !important'
                 }
             },
             '&:hover, &:hover svg': {
-                color: theme.palette.primary.light + '!important'
+                color: 'blue !important'
             }
         },
         accordionBody: {
             color: '#9D9DA6',
             padding: '0 0 0 19px !important',
             '& p': {
-                fontSize: '14px',
-                lineHeight: '14px'
+                fontSize: '10px',
+                lineHeight: '12px'
             }
         },
         closeBody: {
@@ -122,24 +153,24 @@ const useStyles = makeStyles()((theme) => {
                         marginRight: '10px'
                     },
                     '&:hover': {
-                        color: theme.palette.primary.light + '!important'
+                        color:  'blue !important'
                     }
                 }
             }
         },
         activeList: {
-            backgroundColor: '#2A2A3C !important',
+            backgroundColor: 'transparent !important',
             '& svg, & p': {
-                color: theme.palette.primary.light + '!important'
+                color:  '#0A183D !important'
             }
         },
         activeLink: {
             '& svg': {
-                color: theme.palette.primary.light + '!important'
+                color:  '#0A183D !important'
             },
             '& a': {
                 position: 'relative',
-                color: theme.palette.primary.light + '!important'
+                color: '#0A183D !important'
             }
         },
         activeLinkBefore: {
@@ -179,7 +210,16 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             height: '1px',
             margin: '10px 0',
-            backgroundColor: '#2d2d43'
+            backgroundColor: '#ffffff',
+            color:'#ffffff'
+        },
+        tabs:{
+            color: "#1E2832",
+            padding:'7px 35px',
+            '& p':{
+                fontWeight:500,
+                fontSize:'16px',
+            }
         }
     }
 })

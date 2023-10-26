@@ -710,7 +710,69 @@ const useStyles = makeStyles()((theme: any) => {
                 backgroundColor:'#edede9',
                 opacity:0.4
             }
-        }
+        },
+
+        productDetailsLink:{
+            position:'absolute',
+            top:0,
+            right:0,
+            bottom:120,
+            left:0,
+        },
+  cardImage:{
+            padding:0, 
+            height:'30ch',
+            overflow:'hidden',
+            [theme.breakpoints.down('md')]:{
+                height:'auto'
+            }
+        },
+        sizes:{
+            display:'flex',
+            justifyContent:'space-between',
+        },
+        sizeBox:{
+            margin:'0 5px',
+        },
+        btnCart:{
+            [theme.breakpoints.down('md')]:{
+                fontSize:'10px',
+                height:20,
+                '& svg':{
+                    fontSize:'12px'
+                }
+            }
+    },
+
+        cartMobile:{
+            [theme.breakpoints.down('md')]:{
+                '& svg':{
+                    fontSize:'12px'
+                }
+            }
+    },
+
+        fewLeftBox:{
+            border:'solid white 1px',
+            position:'absolute',
+            top:5,
+            right:5,
+            padding:'2px 5px',
+            color:'#EA4335'
+        },
+
+        saleBox:{
+            position:'absolute',
+            width:'70px',
+            height:'70px',
+            top:0,
+            backgroundColor:'#EA4335',
+            clipPath: 'polygon(45% 0, 80% 0, 0 80%, 0 45%)',
+            '& p':{
+                rotate:'-45deg',
+                fontWeight:'bold'
+            }
+        },
 
     }
 })

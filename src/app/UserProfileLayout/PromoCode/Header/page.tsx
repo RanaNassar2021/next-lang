@@ -1,6 +1,7 @@
 'use client';
 import React, { FC } from 'react';
-import pp from '../../Assets/Images/pp.jpg';
+import pp from '../../../Assets/Images/pp.jpg';
+import Link from 'next/link';
 
 // Material UI
 import { Box, IconButton, List, ListItem, Typography } from '@mui/material';
@@ -11,7 +12,7 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import BrushIcon from '@mui/icons-material/Brush';
 
 // Style
-import useStyles from './UserHeader.Styles';
+import useStyles from './Header.Styles';
 
 // Interface
 interface IHeader {
@@ -34,19 +35,19 @@ const Header: FC<IHeader> = ({ SideMenu, setSideMenu }) => {
                     </IconButton>
                 </Box>
                 <Box className={`${classes.menu} ${!SideMenu ? classes.closeMenu : ''}`} sx={{ display: { xs: 'none', md: 'flex' } }}>
-                    <Typography variant='h5'>Designers Hub</Typography>
+                    <Typography variant='h5'>Promo Codes</Typography>
                     <List className={`${classes.menuList} ${classes.menuIcons}`}>
                         <ListItem className={classes.menuIcons}>
-                        <HubIcon></HubIcon>
+                       <Link href="/UserProfileLayout"><HubIcon></HubIcon> </Link>
                         </ListItem>
                         <ListItem className={classes.menuIcons}>
-                        <BrushIcon></BrushIcon>
+                       <Link href="/UserProfileLayout/DesignLibrary"> <BrushIcon></BrushIcon> </Link>
                         </ListItem>
                         <ListItem className={classes.menuIcons}>
-                         <BorderColorIcon></BorderColorIcon>
+                         <Link href="/UserProfileLayout/PersonalInfo"><BorderColorIcon></BorderColorIcon></Link>
                         </ListItem>
                         <ListItem className={classes.menuIcons}>
-                        <NotificationsIcon></NotificationsIcon>
+                        <Link href="/UserProfileLayout/Notifications"><NotificationsIcon></NotificationsIcon></Link>
                         </ListItem>
                         <ListItem className={classes.menuProfile}>
                            <Image src={pp} alt="profile picture" />

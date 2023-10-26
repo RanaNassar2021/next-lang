@@ -6,6 +6,7 @@ const useStyles = makeStyles()((theme: any) => {
             margin: 0,
             backgroundColor: '#0A183D',
             display: 'flex',
+            width:'100%',
             flexDirection: 'row',
             justifyContent: 'center',
             [theme.breakpoints.down('sm')]: {

@@ -295,7 +295,7 @@ export default function PicturaWomen() {
 
                                         ) : (
                                             <Box className={classes.cardImage}>
-                                                <Image src={data.images[1]} alt="product picture" unoptimized height={250} width={270} />
+                                                <Image src={data.images[0]} alt="product picture" unoptimized height={250} width={270} />
                                             </Box>
                                         )}
 

@@ -35,7 +35,7 @@ export default function PicturaMen() {
     const [data, setData] = useState<any>([]);
     const [filtersData, setFiltersData] = useState<any>([]);
     const [categoriesId, SetCategoriesId] = useState<any>([]);
-    const [colorId, SetColorId] = useState<string>('');
+    const [colorId, SetColorId] = useState<any>([]);
 
     const fetchFilter = async () => {
         // Make a GET request using axios
@@ -50,7 +50,7 @@ export default function PicturaMen() {
         //     headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         // }
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=male&pageNumber=${1}&pageSize=10&${categoriesId.length!=0?'category='+categoriesId.join(','):''}`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=male&pageNumber=${1}&pageSize=10&${categoriesId.length!=0?'category='+categoriesId.join(','):''}&${colorId.length!=0?'color='+colorId.join(','):''}`);
         // Update the state with the response data
         setData(response.data);
         console.log(response.data);
@@ -59,11 +59,11 @@ export default function PicturaMen() {
    // Call the fetchData function after the initial render
     useEffect(() => {
         fetchData();
-    }, [categoriesId]);
+    }, [categoriesId,colorId]);
 
     useEffect(()=>{
         fetchFilter();
-    },[])
+    },[categoriesId,colorId])
 
     const concateCategoryId = (Id:number, event:any)=>{
         if(event.target.checked){
@@ -72,6 +72,17 @@ export default function PicturaMen() {
             SetCategoriesId((categoriesId:any) =>categoriesId.filter((id:any) => id !== Id));
         }
     }
+
+    const concateColorId = (Id:number, event:any)=>{
+        if(event.target.checked){
+            SetColorId((colorId:any) => [...colorId, Id]);
+        }else{
+            SetColorId((colorId:any) =>colorId.filter((id:any) => id !== Id));
+        }
+    }
+
+   
+
 
 
   {/*  useEffect(()=>{
@@ -238,9 +249,9 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin) =>{
                     <Divider></Divider>
                     <Typography variant="h3"> Catergories </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    {filtersData?.categories?.map((item: any)=>{
+                    {filtersData?.categories?.map((item: any, index: number)=>{
                         return(
-                        <Box className={classes.options}>
+                        <Box className={classes.options} key={index}>
                             <Checkbox {...label} onClick={(e)=>concateCategoryId(item.categoryId, e)}/>
                             <Typography>{item.name}</Typography>
                         </Box>
@@ -250,10 +261,10 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin) =>{
                     <Typography variant="h3"> Color </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
                     {
-                        filtersData?.colors?.map((item: any)=>{
+                        filtersData?.colors?.map((item: any, index: number)=>{
                             return(
-                                <Box className={classes.options}>
-                                <Checkbox {...label} />
+                                <Box className={classes.options} key={index}>
+                                <Checkbox {...label}  onClick={(e)=>concateColorId(item.colorId, e)} />
                                 <Typography>{item.name}</Typography>
                             </Box>
                             )
@@ -295,7 +306,7 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin) =>{
 
                                         ): (
                                             <Box className={classes.cardImage}>
-                                                <Image src={data.images[1]} alt="product picture" unoptimized height={250} width={270}  />
+                                                <Image src={data.images[0]} alt="product picture" unoptimized height={250} width={270}  />
                                             </Box>
                                        )}
 
@@ -324,7 +335,7 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin) =>{
                                                <Box className={classes.sizes}>
                                                {data.sizes.map((siz:any, index:any)=>{
                                                      return (
-                                                        <Box>
+                                                        <Box key={index}>
                                                        <Box className={classes.sizeBox} key={siz.sizeId} onClick={()=>addToCart({ProductId:data.productId, ColorId:data.colorId, SizeId:siz.sizeId},{vertical: 'top', horizontal: 'right'})}>
                                                        {siz.name}
                                                        </Box>
@@ -377,10 +388,7 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin) =>{
                                                 <Typography>{data.orginalPrice}</Typography>
                                             </Box>
                                         </CardContent>}
-                                    
-                                       
                                     </Card>
-                                   
                                 </Grid>
                             )
                         })

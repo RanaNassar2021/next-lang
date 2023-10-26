@@ -43,7 +43,7 @@ export default function Header() {
     const Config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
     }
-    // Make a GET request using axios
+    // Make a GET Total number of cart and favourite in case of login
     const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetUserCart?PageNumber=1&PageSize=10`, Config);
     const responseFavourite = await Axios.get(`${process.env.apiUrl}` + `Product/FavoriteList?PageNumber=1&PageSize=10&Location=egypt`, Config);
 
@@ -69,24 +69,24 @@ export default function Header() {
     localStorage.clear();
   }
 
- {/* useEffect(()=>{
-      if(!!token && cookies.Product.length!=0){
-        cookies.Product.map((product:any)=>{
-          let body = {
-            productId: product.ProductId,
-            colorId: product.ColorId,
-            sizeId: product.SizeId
-        }
-        const Config = {
-            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
-        }
-          Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
-              console.log(res);
-          })
-        })
-        removeCookie("Product");
-      }
-  },[token, cookies.Product]) */}
+// {  useEffect(()=>{
+//       if(!!token && cookies.Product.length!=0){
+//         cookies.Product.map((product:any)=>{
+//           let body = {
+//             productId: product.ProductId,
+//             colorId: product.ColorId,
+//             sizeId: product.SizeId
+//         }
+//         const Config = {
+//             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+//         }
+//           Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
+//               console.log(res);
+//           })
+//         })
+//         removeCookie("Product");
+//       }
+//   },[token, cookies.Product]) }
   
   return (
     <React.Fragment>

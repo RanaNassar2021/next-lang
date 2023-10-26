@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, Button } from "@mui/material";
 import Header from "../Header";
 import Footer from "../Footer";
-import Filter from "../Filter/Filter";
 import Link from "next/link";
 import ImagesCard from "../Card/page";
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -160,11 +159,16 @@ export default function PicturaWomen() {
                 setOpen(true)
             })
         } else {
-            const myArray = cookies.Product || [];
-            const updatedArray = [...myArray, addToCart];
-            setCookie('Product', updatedArray, { path: '/' });
-            setState({ ...newState, openTop: true });
-            setOpen(true)
+            if(cookies.Product?.filter((item:any)=>item.ProductId === addToCart.ProductId).length == 0 || cookies.Product?.filter((item:any)=>item.ProductId === addToCart.ProductId).length == undefined ){
+                const myArray = cookies.Product || [];
+                let updatedArray = [...myArray, addToCart]
+                setState({ ...newState, openTop: true });
+                setOpen(true)
+                setCookie('Product', updatedArray, { path: '/' });
+
+            }else{
+                return null;
+            }
         }
 
     }
@@ -205,7 +209,7 @@ export default function PicturaWomen() {
             <Header></Header>
             <Box className={classes.filterMobile} sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <Typography variant="h3">filter</Typography>
-                <Filter />
+               
             </Box>
             <Box className={classes.container}>
                 <Box className={classes.filterContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -315,7 +319,7 @@ export default function PicturaWomen() {
 
                                         ) : (
                                             <Box className={classes.cardImage}>
-                                                <Image src={data.images[1]} alt="product picture" unoptimized height={250} width={270} />
+                                                <Image src={data.images[0]} alt="product picture" unoptimized height={250} width={270} />
                                             </Box>
                                         )}
 
@@ -345,8 +349,8 @@ export default function PicturaWomen() {
                                                         <Box className={classes.sizes}>
                                                             {data.sizes.map((siz: any, index: any) => {
                                                                 return (
-                                                                    <Box>
-                                                                        <Box className={classes.sizeBox} key={siz.sizeId} onClick={() => addToCart({ ProductId: data.productId, ColorId: data.colorId, SizeId: siz.sizeId }, { vertical: 'top', horizontal: 'right' })}>
+                                                                    <Box key={index}>
+                                                                        <Box className={classes.sizeBox} key={siz.sizeId} onClick={() => addToCart({ ProductId: data.productId, ColorId: data.colorId, SizeId: siz.sizeId }, { vertical: 'top', horizontal: 'right' })} >
                                                                             {siz.name}
                                                                         </Box>
                                                                         <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>

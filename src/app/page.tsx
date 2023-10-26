@@ -3,6 +3,13 @@ import React, { useState, useEffect } from 'react'
 import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Divider, Dialog , DialogActions, DialogContent, DialogContentText , DialogTitle, } from '@mui/material';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import AlertAddToFav from "@/app/AlertAddToFav/page";
+import AlertRemovedFromFav from "@/app/AlertRemovedFromFav/page";
+import ImagesCard from "./Card/page";
+import { CookiesProvider, useCookies } from "react-cookie";
+import LocalMallIcon from '@mui/icons-material/LocalMall';
 
 // SSR and TSS
 
@@ -50,6 +57,9 @@ import '@splidejs/react-splide/css';
 import Axios from 'axios';
 
 
+
+
+
 // Vote & Win Registeration check
 
 const Transition = React.forwardRef(function Transition(
@@ -67,17 +77,187 @@ export default function Home() {
   const { classes } = useStyles();
 
   const [data, setData] = useState([]);
+  const [cookies, setCookie] = useCookies(["Product"]);
+  const [token, SetToken] = useState(localStorage.getItem("Token"));
+  const [flashSale, setFlashSale] = useState<any>([]);
+
+  useEffect(() => {
+    SetToken(localStorage.getItem("Token"));
+}, [localStorage.getItem("Token")])
+
+  const handleMouseOver = (id: any, index: any) => {
+    setFlashSale((prev: any) => prev.map((item: any, indexPrev: any) => {
+        if (item.productId == id && index == indexPrev) {
+            item.isMouseOver = true;
+            item.hoverImage = true;
+        }
+        return item
+    }))
+}
+const handleMouseOut = (id: any, index: any) => {
+    setFlashSale((prev: any) => prev.map((item: any, indexPrev: any) => {
+        if (item.productId == id && index == indexPrev) {
+            item.isMouseOver = false;
+            item.hoverImage = false;
+        }
+        return item
+    }))
+}
+
+
+const [cart, setCart] = useState(false);
+
+
+
+function handleAddToCart(id: any) {
+    setCart(true);
+    setFlashSale((prev: any) => prev.map((x: any) => {
+        if (x.productId == id && cart == true) x.isClicked = true;
+        return x
+    }))
+};
+
+
+{/* Alerts */ }
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+    props,
+    ref,
+) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+
+interface State extends SnackbarOrigin {
+    openTop: boolean;
+}
+const [open, setOpen] = React.useState(false);
+const [state, setState] = React.useState<State>({
+    openTop: false,
+    vertical: 'top',
+    horizontal: 'center',
+});
+const { vertical, horizontal, openTop } = state;
+
+interface StateFavs extends SnackbarOrigin {
+    openTopFav: boolean;
+}
+const [isFavourite, setIsFavourite] = useState<any>(false);
+const [openFav, setOpenFav] = React.useState(false);
+const [stateFav, setStateFav] = React.useState<StateFavs>({
+    openTopFav: false,
+    vertical: 'top',
+    horizontal: 'right',
+})
+
+
+const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    setState({ ...state, openTop: false });
+    if (reason === 'clickaway') {
+        return;
+    }
+
+    setOpen(false);
+};
+
+const handleCloseAlertFav = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    setStateFav({ ...stateFav, openTopFav: false });
+    if (reason === 'clickaway') {
+        return;
+    }
+
+    setOpenFav(false);
+};
+
+interface AddToCartInrerface {
+    ProductId: string;
+    ColorId: number;
+    SizeId: number;
+}
+
+const addToCart = (addToCart: AddToCartInrerface, newState: SnackbarOrigin) => {
+  let body = {
+      productId: addToCart.ProductId,
+      colorId: addToCart.ColorId,
+      sizeId: addToCart.SizeId
+  }
+  const Config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+  }
+  if (!!token) {
+      Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
+          console.log(res);
+          setState({ ...newState, openTop: true });
+          setOpen(true)
+      })
+  } else {
+      if(cookies.Product?.filter((item:any)=>item.ProductId === addToCart.ProductId).length == 0 || cookies.Product?.filter((item:any)=>item.ProductId === addToCart.ProductId).length == undefined ){
+          const myArray = cookies.Product || [];
+          let updatedArray = [...myArray, addToCart]
+          setState({ ...newState, openTop: true });
+          setOpen(true)
+          setCookie('Product', updatedArray, { path: '/' });
+
+      }else{
+          return null;
+      }
+  }
+
+}
+console.log(cookies.Product || []);
+
+
+interface AddToFavouriteInrerface {
+  ProductId: string;
+  ColorId: number;
+}
+
+const AddToFavourite = (AddToFavourite: AddToFavouriteInrerface, newState: SnackbarOrigin) => {
+  let body = {
+      productId: AddToFavourite.ProductId,
+      colorId: AddToFavourite.ColorId,
+  }
+  const Config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+  }
+  Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body,Config).then((res) => {
+      console.log(res);
+      if (res.data == "Saved Successfully") {
+          setIsFavourite(true);
+          setStateFav({ ...newState, openTopFav: true });
+          setOpenFav(true)
+      } else {
+          console.log("removed")
+          setIsFavourite(false);
+          setStateFav({ ...newState, openTopFav: false });
+          setOpenFav(true)
+      }
+  })
+}
+
+  // useEffect(()=>{
+  //   Axios.get(`${process.env.apiUrl}` + `Tag/GetFalshSaleProducts?PageNumber=1&PageSize=10`)
+  //   .then((res) => {setFlashSale(res.flashSale)}
+  //   ).catch(err => console.log( 'Error fetching flash Sale data',err))
+  // },[])
+
+  const fetchFlashSale = async () =>{
+    const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetFalshSaleProducts?PageNumber=1&PageSize=10`);
+    const data = response.data
+        setFlashSale(data);
+        console.log(data);
+  }
 
   useEffect(()=>{
-    Axios.get('https://dummyjson.com/carts')
-    .then((res) => {setData(res.data.carts); console.log(res.data.carts)}
-    ).catch(err => console.log( 'Error fetching flash Sale data',err))
+    fetchFlashSale();
   },[])
 
 
-  const [open, setOpen] = React.useState(false);
+
+
+
+  const [openVote, setOpenVote] = React.useState(false);
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpenVote(true);
   };
 
   const handleClose = () => {
@@ -270,26 +450,105 @@ export default function Home() {
           <Box className={''}>
             <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 3000, pagination: false, gap:'1rem', perPage: 3 }} style={{ width: '100%' }}>
                   {
-                  data.map((flashSale: any, index: number) => {
+                  flashSale?.map((flashSale: any, index: number) => {
                     if (index <=8) {
                       return (
                         <SplideSlide key={index}>
                             <Box style={{ display: 'flex', gap: 25 }}>
-                        <Card key={index}  className={classes.flashSaleCard}>
-                          <CardMedia
-                            sx={{ height: 220 }}
-                            image={redShirt.src}
-                            title="product image"
-                          />
-                          <CardContent className={classes.cardContent}>
-                            <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                              {flashSale.discountedTotal}
-                            </Typography>
-                            <Box className={classes.cardFooter}>
-                              <Typography color="text.secondary">T-Shirts</Typography>
-                              <Typography>300 EGP</Typography>
-                            </Box>
-                          </CardContent>
+                        <Card key={index}  className={classes.flashSaleCard} onMouseOver={e => handleMouseOver(flashSale.productId, index)} onMouseOut={e => handleMouseOut(flashSale.productId, index)}>
+                        {flashSale.hoverImage ? (
+                                            <Box>
+                                                <Link href={'/cardDetails/' + flashSale.productId + "/" + flashSale.colorId}>
+                                                    <Box className={classes.productDetailsLink}></Box>
+                                                </Link>
+                                                <ImagesCard images={flashSale?.images}></ImagesCard>
+                                            </Box>
+
+                                        ) : (
+                                            <Box className={classes.cardImage}>
+                                                <Image src={flashSale.images[0]} alt="product picture" unoptimized height={250} width={270} />
+                                            </Box>
+                                        )}
+
+                                        {flashSale.isMouseOver ? (<Box className={classes.hoverBox}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                {isFavourite || flashSale?.isFavorite ?
+                                                    <Box>
+                                                        <Icons.Favorite sx={{ color: 'red' }} onClick={() => AddToFavourite({ ProductId: flashSale.productId, ColorId: flashSale.colorId }, { vertical: 'top', horizontal: 'right' })}></Icons.Favorite>
+                                                        <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                            <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                                                <AlertAddToFav />
+                                                            </Alert>
+                                                        </Snackbar>
+                                                    </Box> :
+                                                    <Box>
+                                                        <Icons.FavoriteBorder onClick={() => AddToFavourite({ ProductId: flashSale.productId, ColorId: flashSale.colorId }, { vertical: 'top', horizontal: 'right' })} />
+                                                        <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                            <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                                                <AlertRemovedFromFav />
+                                                            </Alert>
+                                                        </Snackbar>
+                                                    </Box>}
+                                            </Box>
+                                            <Box>
+                                                {flashSale.isClicked ?
+                                                    (
+                                                        <Box className={classes.sizes}>
+                                                            {flashSale.sizes.map((siz: any, index: any) => {
+                                                                return (
+                                                                    <Box key={index}>
+                                                                        <Box className={classes.sizeBox} key={siz.sizeId} onClick={() => addToCart({ ProductId: flashSale.productId, ColorId: flashSale.colorId, SizeId: siz.sizeId }, { vertical: 'top', horizontal: 'right' })} >
+                                                                            {siz.name}
+                                                                        </Box>
+                                                                        <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                                            <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                                                                product added succussfully to Cart
+                                                                            </Alert>
+                                                                        </Snackbar>
+                                                                    </Box>
+                                                                )
+                                                            })}
+                                                        </Box>
+                                                    )
+                                                    : (<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e => { handleAddToCart(flashSale.productId) }} sx={{ color: 'white' }}>Add to Cart</Button></Box>)
+                                                }
+
+                                            </Box>
+                                        </Box>) : null}
+
+                                        {flashSale.onlyFewLeft ? (
+                                            <Box className={classes.fewLeftBox}>
+                                                <Typography sx={{ fontSize: '10px' }}>only few left</Typography>
+                                            </Box>
+                                        ) : null}
+
+                                        {flashSale.isSale ? (
+                                            <Box>
+                                                <Box className={classes.saleBox}>
+                                                    <Typography sx={{ fontSize: '14px', color: 'white' }}>Sale</Typography>
+                                                </Box>
+                                                <CardContent className={classes.cardContent}>
+                                                    <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                                                        {flashSale.title}
+                                                    </Typography>
+                                                    <Box className={classes.cardFooter}>
+                                                        <Typography color="text.secondary">{flashSale.category}</Typography>
+                                                        <Box sx={{ display: 'flex', gap: '10px' }}>
+                                                            <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{flashSale.orginalPrice}</Typography>
+                                                            <Typography sx={{ color: '#EA4335' }}>{flashSale.currentPrice}</Typography>
+                                                        </Box>
+                                                    </Box>
+                                                </CardContent>
+                                            </Box>
+                                        ) : <CardContent className={classes.cardContent}>
+                                            <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                                                {flashSale.title}
+                                            </Typography>
+                                            <Box className={classes.cardFooter}>
+                                                <Typography color="text.secondary">{flashSale.category}</Typography>
+                                                <Typography>{flashSale.orginalPrice}</Typography>
+                                            </Box>
+                                        </CardContent>}
                         </Card>
                         </Box>
                         </SplideSlide>

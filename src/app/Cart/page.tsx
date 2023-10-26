@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button, Stepper, Step, StepLabel, FormControl, TextField, Divider } from "@mui/material";
+import { Box, Typography, Button, Stepper, Step, StepLabel, TextField, Divider } from "@mui/material";
 import Header from "../Header";
 import Footer from "../Footer";
 import Image from "next/image";
@@ -16,6 +16,18 @@ import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import { CookiesProvider, useCookies } from "react-cookie";
+
+
+// images
+import masterCard from '../Assets/Images/visa.png';
+import paypal from '../Assets/Images/paypal.jpg';
+import fawry from '../Assets/Images/fawry.png';
 
 // styles
 import useStyles from "./Cart.Styles";
@@ -25,19 +37,39 @@ import Axios from 'axios';
 
 // Material ui
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Token } from "@mui/icons-material";
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 
 export default function Cart() {
     const { classes } = useStyles();
+    const [token, SetToken] = useState<any>(localStorage.getItem("Token"));
 
     // stepper
 
-    const steps = ['Cart', 'Sign In', 'Delivery', 'Payment', 'Confirmation'];
+    const steps = [
+        'Cart',
+        (token == null || token == undefined) ? '' :'Sign In',
+        'Delivery',
+        'Payment',
+        'Confirmation'];
+    const IndexSteper = [
+        0,
+        (token == null || token == undefined) ? 1:10,
+        (token == null || token == undefined) ? 2:1,
+        (token == null || token == undefined) ? 3:2,
+        (token == null || token == undefined) ? 4:3
+    ]
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const [TotlalPrice, setTotlalPRice] = useState<any>();
+    const [cookies, setCookie,removeCookie] = useCookies(["Product"]);
+    const [activeSteperIndex, setActiveSteperIndex] = useState<number>(0);
+
+    useEffect(()=>{
+        SetToken(localStorage.getItem("Token"));
+      },[localStorage.getItem("Token")])
 
     const isStepOptional = (step: number) => {
         return step === 1;
@@ -52,7 +84,7 @@ export default function Cart() {
             newSkipped = new Set(newSkipped.values());
             newSkipped.delete(activeStep);
         }
-
+        setActiveSteperIndex(IndexSteper.filter((item)=>item != 10 ).length - (activeStep-1) )
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setSkipped(newSkipped);
     };
@@ -99,8 +131,53 @@ export default function Cart() {
 
     // Call the fetchData function after the initial render
     useEffect(() => {
-        fetchData();
-    }, []);
+        !!token && fetchData();
+    }, [token]);
+
+    useEffect(()=>{
+        if((token == undefined || token == null) && cookies?.Product?.length!=0){
+            cookies?.Product?.map((product:any)=>{
+                if(!!data.filter((item:any)=>item.productId !== product.ProductId)){
+                    Axios.get(`${process.env.apiUrl}` + `Product/GetProductDetials?Id=${product.ProductId}&ColorId=${product.ColorId}`).then((res)=>{
+                        if(res.status=200){
+                            setData((prev:any)=>[...prev, {
+                                productId:res.data.productId,
+                                sizeName:res.data.sizes.filter((item:any) => item.sizeId === product.SizeId).map((item:any) => item.name),
+                                colorName:res.data.selectedColorName,
+                                productImage:res.data.images[0],
+                                productTitle:res.data.title,
+                                price:res.data.currentPrice,
+                                sizeId:product.SizeId,
+                                colorId:product.ColorId
+                            }])
+                        }
+                      });
+                }
+            })
+        }
+    
+    },[token, cookies.Product])
+
+    useEffect(()=>{
+        let x: any = 0;
+        if((token == undefined || token == null) && cookies?.Product?.length!=0){
+            data && data?.map((item: any) => {
+                x = x + item.price;
+            })
+            setTotlalPRice(x);
+        }
+        console.log(TotlalPrice)
+    },[data, token, cookies?.Product])
+
+    // let x: any = 0;
+    // data?.map((item: any) => {
+    //      x = x + (item.price);
+    //  })
+    //  setTotlalPRice(x);
+    //  console.log(TotlalPrice)
+
+
+
 
 
     {/* Alerts */ }
@@ -164,17 +241,28 @@ export default function Cart() {
 
 
     const RemoveFromCart = (remove: RemoveFromCartInterface, newState: SnackbarOrigin) => {
-        const Config = {
-            headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+        if(!!token){
+             const Config = {
+                headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+             }
+            Axios.delete(`${process.env.apiUrl}` + `Product/RemoveFromCart?ProductId=${remove.ProductId}&ColorId=${remove.ColorId}&SizeId=${remove.SizeId}`, Config).then((res) => {
+                setState({ ...newState, openTop: true });
+                setOpen(true)
+                // setData(data.filter((item: any) => {
+                //     return item.productId != remove.ProductId
+                // }))
+                fetchData();
+            })
+        }else
+        {
+            const myArray = cookies.Product || [];
+            const updatedArray = myArray.filter((item:any)=>(item.ProductId != remove.ProductId && item.ColorId != remove.ColorId));
+            //setData(data.filter((item:any)=>item.ProductId !== remove.ProductId));
+            setCookie('Product', updatedArray, { path: '/' });
+            setData(data.filter((item: any) => {
+                    return item.productId != remove.ProductId
+            }))
         }
-        Axios.delete(`${process.env.apiUrl}` + `Product/RemoveFromCart?ProductId=${remove.ProductId}&ColorId=${remove.ColorId}&SizeId=${remove.SizeId}`, Config).then((res) => {
-            setState({ ...newState, openTop: true });
-            setOpen(true)
-            // setData(data.filter((item: any) => {
-            //     return item.productId != remove.ProductId
-            // }))
-            fetchData();
-        })
     }
 
     // Increase Quantity
@@ -270,7 +358,6 @@ export default function Cart() {
         })
     }
 
-    console.log(discount);
 
     const [delivery, setDelivery] = useState<any>(50);
 
@@ -300,11 +387,13 @@ export default function Cart() {
                         if (isStepSkipped(index)) {
                             stepProps.completed = false;
                         }
-                        return (
-                            <Step key={label} {...stepProps}>
-                                <StepLabel {...labelProps}>{label}</StepLabel>
-                            </Step>
-                        );
+                        if(label?.trim() !== "" ){
+                            return (
+                                <Step key={label} {...stepProps}>
+                                   <StepLabel {...labelProps}>{label}</StepLabel>
+                               </Step>
+                           );
+                        }                        
                     })}
                 </Stepper>
                 {activeStep === steps.length ? (
@@ -320,7 +409,7 @@ export default function Cart() {
 
 
                     <React.Fragment>
-                        {activeStep === 0 &&
+                        {activeStep === IndexSteper[0] &&
                             <Box className={classes.container}>
                                 <Box className={classes.leftContent}>
                                     <Typography variant="h5">My Shopping Cart ({data ? data.length : 0} items)</Typography>
@@ -354,11 +443,13 @@ export default function Cart() {
                                                                 <AlertAddToFav />
                                                             </Alert>
                                                         </Snackbar>
-                                                        <Box className={classes.quantity}>
+                                                        { !!token && <Box className={classes.quantity}>
                                                             <Button className={classes.quantitiyBtn} onClick={() => DecreaseQunatity({ ProductId: data.productId, ColorId: data.colorId, SizeId: data.sizeId })} >-</Button>
                                                             <Typography>{data.quantity}</Typography>
                                                             <Button className={classes.quantitiyBtn} onClick={() => IncreaseQunatity({ ProductId: data.productId, ColorId: data.colorId, SizeId: data.sizeId })} >+</Button>
                                                         </Box>
+                                                        }
+
                                                     </Box>
                                                 </Box>
                                             </Box>
@@ -407,7 +498,7 @@ export default function Cart() {
 
 
                         {
-                            activeStep === 1 &&
+                            activeStep === IndexSteper[1] &&
                             <Box>
                                 <Typography>Sign In</Typography>
                                 <Button sx={{ width: '100%', backgroundColor: '#FF6F61', color: 'black', fontWeight: 600 }} onClick={handleNext}> {activeStep === steps.length - 1 ? 'Finish' : 'Continue to Checkout'} </Button>
@@ -419,7 +510,7 @@ export default function Cart() {
 
 
                         {
-                            activeStep === 2 &&
+                           activeStep === IndexSteper[2] &&
                             <Box>
                                 <Box className={classes.container}>
                                     <Box className={classes.leftContent}>
@@ -537,17 +628,45 @@ export default function Cart() {
                         {/* forth page of Cart Payment */}
 
 
-                        {
-                            activeStep === 3 &&
+                        {  activeStep === IndexSteper[3] && 
                             <Box className={classes.payment}>
+                                  <RadioGroup
+                                     aria-labelledby="demo-radio-buttons-group-label"
+                                      defaultValue="female"
+                                      name="radio-buttons-group"
+                                    >
                                 <Box className={classes.paymentOption}>
+                              
                                 <Accordion sx={{width:'100%'}}>
                                     <AccordionSummary
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"
                                             id="panel1a-header"
                                     >
-                                        <Typography>credit Card</Typography>
+                                          <FormControlLabel value="CreditCard" control={<Radio />} label="Credit Card" sx={{ width:'20ch'}} />
+                                        <Box sx={{display:'flex',justifyContent:'end',alignItems:'center', width:'100%'}}>
+                                        <Image src={masterCard} alt="credit card payment" width={40} height={25} />
+                                        </Box>
+                                    </AccordionSummary>
+                                        <AccordionDetails>
+                                                <Box sx={{display:'flex', gap:'10px',alignItems:'center'}}>
+                                                <Checkbox {...label} />
+                                                    <Typography>642 ElGiash Road, Alexandria , Egypt</Typography>
+                                                 
+                                                </Box>
+                                        </AccordionDetails>
+                                </Accordion>
+                                </Box>
+                                <Box  className={classes.paymentOption}>
+                                <Accordion sx={{width:'100%'}}>
+                                    <AccordionSummary
+                                            expandIcon={<ExpandMoreIcon />}
+                                            aria-controls="panel1a-content"
+                                            id="panel1a-header"
+                                    >     <FormControlLabel value="paypal" control={<Radio />} label="Paypal" />
+                                         <Box sx={{display:'flex',justifyContent:'end',alignItems:'center', width:'100%'}}>
+                                        <Image src={paypal} alt="paypal payment" width={40} height={25} />
+                                        </Box>
                                     </AccordionSummary>
                                         <AccordionDetails>
                                                 <Box sx={{display:'flex', gap:'10px',alignItems:'center'}}>
@@ -563,8 +682,10 @@ export default function Cart() {
                                             expandIcon={<ExpandMoreIcon />}
                                             aria-controls="panel1a-content"
                                             id="panel1a-header"
-                                    >
-                                        <Typography>Saved Address</Typography>
+                                    >    <FormControlLabel value="Fawry" control={<Radio />} label="Fawry" />
+                                        <Box sx={{display:'flex',justifyContent:'end',alignItems:'center', width:'100%'}}>
+                                        <Image src={fawry} alt="Fawry payment" width={40} height={25} />
+                                        </Box>
                                     </AccordionSummary>
                                         <AccordionDetails>
                                                 <Box sx={{display:'flex', gap:'10px',alignItems:'center'}}>
@@ -574,23 +695,7 @@ export default function Cart() {
                                         </AccordionDetails>
                                 </Accordion>
                                 </Box>
-                                <Box  className={classes.paymentOption}>
-                                <Accordion sx={{width:'100%'}}>
-                                    <AccordionSummary
-                                            expandIcon={<ExpandMoreIcon />}
-                                            aria-controls="panel1a-content"
-                                            id="panel1a-header"
-                                    >
-                                        <Typography>Saved Address</Typography>
-                                    </AccordionSummary>
-                                        <AccordionDetails>
-                                                <Box sx={{display:'flex', gap:'10px',alignItems:'center'}}>
-                                                <Checkbox {...label} />
-                                                    <Typography>642 ElGiash Road, Alexandria , Egypt</Typography>
-                                                </Box>
-                                        </AccordionDetails>
-                                </Accordion>
-                                </Box>
+                                </RadioGroup>
                                 <Button sx={{ width: '100%', backgroundColor: '#FF6F61', color: 'black', fontWeight: 600 }} onClick={handleNext}> {activeStep === steps.length - 1 ? 'Finish' : 'Continue to Checkout'} </Button>
                             </Box>
                         }
@@ -599,7 +704,7 @@ export default function Cart() {
 
 
                         {
-                            activeStep === 4 &&
+                             activeStep === IndexSteper[4]  &&
                             <Box>
                                 <Typography>Confirmation</Typography>
                                 <Button sx={{ width: '100%', backgroundColor: '#FF6F61', color: 'black', fontWeight: 600 }} onClick={handleNext}> {activeStep === steps.length - 1 ? 'Confirm' : 'Continue to Checkout'} </Button>
