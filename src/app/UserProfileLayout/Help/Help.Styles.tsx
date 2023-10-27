@@ -34,6 +34,71 @@ const useStyles = makeStyles()((theme: any)=>{
         footer:{
             display:'flex',
             width:'100%'
+        },
+        rootFAQ: {
+            display:'flex',
+            justifyContent:'center',
+            paddingLeft:'1ch',
+            paddingRight:'1ch',
+            [theme.breakpoints.down('md')]: {
+                paddingLeft:'1ch',
+                paddingRight:'1ch'
+            }
+        },
+        containerFAQ: {
+            width:'100%',
+            marginBottom:30,
+            '& h6': {
+                display:'flex',
+                justifyContent:'start',
+                fontSize:'20px',
+                textTransform:'uppercase',
+                marginTop:30,
+                marginBottom:10,
+            [theme.breakpoints.down('md')]: {
+                marginTop:'2ch',
+                marginBottom:'2ch',
+                fontSize:'18px'
+            }
+            },
+            '& p': {
+                display:'flex',
+                justifyContent:'start',
+                textAlign:'justify',
+                marginBottom:30
+            },
+        },
+        contentFAQ: {
+
+            '& h4':{
+                fontSize:'18px',
+                fontWeight:500,
+                marginBottom: 10,
+                [theme.breakpoints.down('md')]:{
+                    fontSize:'14px'
+                }
+            },
+            '& p':{
+                textAlign:'justify',
+                marginTop:10
+            }
+        },
+        contactUs:{
+            display:'flex',
+            flexDirection:'column',
+            alignItems:'center',
+            margin:'1ch',
+            [theme.breakpoints.down('md')]:{
+                width:'100%'
+            },
+            '& h5':{
+                textTransform:'uppercase',
+                fontSize:'25px',
+                fontWeight:500
+            },
+            '& p':{
+                justifyContent:'center',
+            }
         }
     }
 })

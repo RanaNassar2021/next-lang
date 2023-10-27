@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Typography, Button } from '@mui/material';
 import Header from '../Header';
 import Footer from '../Footer';
@@ -30,6 +30,9 @@ import Link from 'next/link';
 // material UI icons
 import * as MuiIcons from '@mui/icons-material';
 
+//Axios
+import Axios from 'axios';
+
 // Form validation
 import { useFormik, validateYupSchema } from 'formik';
 import * as yup from 'yup';
@@ -39,21 +42,21 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 // validation 
 const validationSchema = yup.object({
-    firstName: yup
+    First_Name: yup
         .string()
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('First Name is required'),
-    lastName: yup
+        Last_Name: yup
         .string()
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('Last Name is required'),
-    email: yup
+        email: yup
         .string()
         .email('Enter a valid email')
         .required('Email is required'),
-    password: yup
+        password: yup
         .string()
         .matches(/\w*[a-z]\w*/, "Password must have a small letter")
         .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
@@ -61,7 +64,7 @@ const validationSchema = yup.object({
         .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
         .min(8, ({ min }) => `Password must be at least ${min} characters`)
         .required('Please enter valid password. between 8 to 20 character, One uppercase, one lowercase, one special character and no spaces'),
-    confirmPassword: yup
+        confirmPassword: yup
         .string()
         .required('Required')
         .test(
@@ -71,12 +74,12 @@ const validationSchema = yup.object({
                 return this.parent.password === value
             }
         ),
-    phone: yup
+        phone: yup
         .string()
         .min(10, 'Mobile number must be 10 digits')
         .max(10, "Mobile number can't be more than 10 digits")
         .required('Phone is required'),
-    address: yup
+        FullAddress: yup
         .string()
         .required('Address is required'),
 
@@ -108,11 +111,18 @@ export default function SignUp() {
     const [country, setCountry] = React.useState('');
     const handleCountryChange = (event: { target: { value: string } }) => {
         setCountry(event.target.value);
+        console.log(country)
     };
+
 
     const [city, setCity] = React.useState('');
     const handleCityChange = (event: { target: { value: string } }) => {
         setCity(event.target.value);
+    };
+
+    const  [cityId, setCityId] = useState<any>('');
+    const handleCityId = (event: { target: { value: string } }) => {
+        setCityId(event.target.value);
     };
 
     const [validations, setValidation] = useState(validationsData)
@@ -162,21 +172,50 @@ export default function SignUp() {
 
     const formik = useFormik({
         initialValues: {
-            firstName: '',
-            lastName: '',
+            First_Name: '',
+            Last_Name: '',
             email: '',
             password: '',
             confirmPassword: '',
             phone: '',
-            address: '',
-            gender: ''
+            FullAddress: '',
+            gender: '',
+            cityId:'',
+            countyName:'',
+            cityName:''
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
             values.gender = gender;
+            values.cityId = cityId;
+            if(country == '1' ){
+                values.countyName = 'Egypt'
+            } else {values.countyName='Kuwait'};
+
+            if(cityId == '1' ){
+                values.cityName = 'Alex'
+            } else {values.cityName='Cairo'};
+            
+            Axios.post( `${process.env.apiUrl}` +`Auth/register`,values).then((response) => {
+                console.log('POST request successful:', response.data);
+              })
+              .catch((error) => {
+                console.error('Error making POST request:', error);
+              });
+           
             alert(JSON.stringify(values, null, 2));
         },
     });
+
+    useEffect(() => {
+        // Function to fetch data from the API
+        Axios.get(`${process.env.apiUrl}` + `Auth/RegisterCall`).then((response) => {
+            console.log('POST request successful:', response.data);
+          })
+          .catch((error) => {
+            console.error('Error making POST request:', error);
+          });
+        },[]);
 
 
 
@@ -194,23 +233,23 @@ export default function SignUp() {
                                 <Typography>please fill all form fields</Typography>
                                 <form onSubmit={formik.handleSubmit}>
                                     <FormControl fullWidth className={classes.textField}>
-                                        <TextField label="First Name *" size='small' type="text" id="firstName"
-                                            name="firstName"
-                                            value={formik.values.firstName}
+                                        <TextField label="First Name *" size='small' type="text" id="First_Name"
+                                            name="First_Name"
+                                            value={formik.values.First_Name}
                                             onChange={formik.handleChange}
                                             onBlur={formik.handleBlur}
-                                            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-                                            helperText={formik.touched.firstName && formik.errors.firstName}
+                                            error={formik.touched.First_Name && Boolean(formik.errors.First_Name)}
+                                            helperText={formik.touched.First_Name && formik.errors.First_Name}
                                         ></TextField>
                                     </FormControl>
                                     <FormControl fullWidth className={classes.textField}>
-                                        <TextField label="Last Name *" size='small' id="lastName"
-                                            name="lastName"
-                                            value={formik.values.lastName}
+                                        <TextField label="Last Name *" size='small' id="Last_Name"
+                                            name="Last_Name"
+                                            value={formik.values.Last_Name}
                                             onChange={formik.handleChange}
                                             onBlur={formik.handleBlur}
-                                            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-                                            helperText={formik.touched.lastName && formik.errors.lastName} ></TextField>
+                                            error={formik.touched.Last_Name && Boolean(formik.errors.Last_Name)}
+                                            helperText={formik.touched.Last_Name && formik.errors.Last_Name} ></TextField>
                                     </FormControl>
                                     <FormControl fullWidth className={classes.textField}>
                                         <TextField label="Email *" size='small' id="email"
@@ -336,8 +375,8 @@ export default function SignUp() {
                                                 label="Mobile Number"
                                                 onChange={handleCountryChange}
                                             >
-                                                <MenuItem value={10}>Egypt</MenuItem>
-                                                <MenuItem value={20}>Kuwait</MenuItem>
+                                                <MenuItem value={2}>Egypt</MenuItem>
+                                                <MenuItem value={1}>Kuwait</MenuItem>
                                             </Select>
                                         </FormControl>
                                         <FormControl size="small" className={classes.cityField}>
@@ -345,22 +384,22 @@ export default function SignUp() {
                                             <Select required
                                                 labelId="demo-select-small-label"
                                                 id="demo-select-small"
-                                                value={city}
+                                                value={cityId}
                                                 label="Mobile Number"
-                                                onChange={handleCityChange}
+                                                onChange={handleCityId}
                                             >
-                                                <MenuItem value={20}>Alex</MenuItem>
-                                                <MenuItem value={30}>Cairo</MenuItem>
+                                                <MenuItem value={2}>Alex</MenuItem>
+                                                <MenuItem value={1} >Cairo</MenuItem>
                                             </Select>
                                         </FormControl>
                                         <FormControl variant="standard" className={classes.fullAdress} size='small' >
-                                            <TextField label="Full Address" size='small' type="text" id="address"
-                                                name="address" className={classes.mobileDetail}
-                                                value={formik.values.address}
+                                            <TextField label="Full Address" size='small' type="text" id="FullAddress"
+                                                name="FullAddress" className={classes.mobileDetail}
+                                                value={formik.values.FullAddress}
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
-                                                error={formik.touched.address && Boolean(formik.errors.address)}
-                                                helperText={formik.touched.address && formik.errors.address}
+                                                error={formik.touched.FullAddress && Boolean(formik.errors.FullAddress)}
+                                                helperText={formik.touched.FullAddress && formik.errors.FullAddress}
                                             ></TextField>
                                         </FormControl>
                                     </Box>

@@ -38,13 +38,34 @@ const useStyles = makeStyles()((theme: any)=>{
         },
         promoContent:{
             display:'flex',
-            flexDirection:'column',
+            justifyContent:'space-evenly',
             width:'50%',
             height:'200px',
            backgroundSize:'cover',
            backgroundPosition:'center',
             [theme.breakpoints.down('md')]:{
                 width:'100%'
+            }
+        },
+        promoDetails:{
+            width:'30%',
+            display:'flex',
+            flexDirection:'column',
+            justifyContent:'center',
+            alignItems:'center',
+            gap:'1ch',
+            '& h4':{
+                fontSize:'25px',
+                fontWeight:600
+            },
+            '& h5':{
+                color:'red',
+                fontWeight:600,
+                fontSize:'25px',
+            },
+            '& h6':{
+                fontWeight:400,
+                fontSize:'18px'
             }
         },
         footer:{
