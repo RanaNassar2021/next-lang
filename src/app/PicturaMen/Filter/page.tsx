@@ -32,21 +32,8 @@ export default function Filter() {
         fetchFilter();
     },[categoriesId,colorId])
 
-    const concateCategoryId = (Id:number, event:any)=>{
-        if(event.target.checked){
-            SetCategoriesId((categoriesId:any) => [...categoriesId, Id]);
-        }else{
-            SetCategoriesId((categoriesId:any) =>categoriesId.filter((id:any) => id !== Id));
-        }
-    }
 
-    const concateColorId = (Id:number, event:any)=>{
-        if(event.target.checked){
-            SetColorId((colorId:any) => [...colorId, Id]);
-        }else{
-            SetColorId((colorId:any) =>colorId.filter((id:any) => id !== Id));
-        }
-    }
+   
 
     return (
         <React.Fragment>
@@ -61,7 +48,7 @@ export default function Filter() {
                         {filtersData?.categories?.map((item: any, index: number)=>{
                         return(
                         <ListItem key={index}>
-                            <Checkbox {...label}  onClick={(e)=>concateCategoryId(item.categoryId, e)}/>
+                            <Checkbox {...label} />
                             <Typography>{item.name}</Typography>
                         </ListItem>
                         )
@@ -73,7 +60,7 @@ export default function Filter() {
                         filtersData?.colors?.map((item: any, index: number)=>{
                             return(
                                 <ListItem  key={index}>
-                                <Checkbox {...label}  onClick={(e)=>concateColorId(item.colorId, e)}/>
+                                <Checkbox {...label} />
                                 <Typography>{item.name}</Typography>
                             </ListItem>
                             )

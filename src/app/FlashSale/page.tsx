@@ -34,6 +34,7 @@ export default function PicturaWomen() {
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
     const [cookies, setCookie] = useCookies(["Product"]);
+    const [favouriteCookies, setFavouriteCookies] = useCookies(["FavouriteProduct"]);
     const [token, SetToken] = useState(localStorage.getItem("Token"));
     const [data, setData] = useState<any>([]);
     const fetchData = async () => {
@@ -172,7 +173,6 @@ export default function PicturaWomen() {
         }
 
     }
-    console.log(cookies.Product || []);
     
 
     interface AddToFavouriteInrerface {
@@ -188,21 +188,38 @@ export default function PicturaWomen() {
         const Config = {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
-        Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body,Config).then((res) => {
-            console.log(res);
-            if (res.data == "Saved Successfully") {
-                setIsFavourite(true);
-                setStateFav({ ...newState, openTopFav: true });
-                setOpenFav(true)
-            } else {
-                console.log("removed")
-                setIsFavourite(false);
-                setStateFav({ ...newState, openTopFav: false });
-                setOpenFav(true)
-            }
-        })
-    }
+        if(!!token){
+            Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body,Config).then((res) => {
+                console.log(res);
+                if (res.data == "Saved Successfully") {
+                    setIsFavourite(true);
+                    setStateFav({ ...newState, openTopFav: true });
+                    setOpenFav(true)
+                } else {
+                    console.log("removed")
+                    setIsFavourite(false);
+                    setStateFav({ ...newState, openTopFav: false });
+                    setOpenFav(true)
+                }
+            })
+        } else{  if(favouriteCookies.FavouriteProduct?.filter((item:any)=>item.ProductId === AddToFavourite.ProductId).length == 0 || favouriteCookies.FavouriteProduct?.filter((item:any)=>item.ProductId === AddToFavourite.ProductId).length == undefined ){
+            const myArray = favouriteCookies.FavouriteProduct || [];
+            let updatedArray = [...myArray, AddToFavourite]
+            setState({ ...newState, openTop: true });
+            setOpen(true)
+            setFavouriteCookies('FavouriteProduct', updatedArray, { path: '/' });
+            setIsFavourite(true);
+            setStateFav({ ...newState, openTopFav: true });
+            setOpenFav(true)
 
+        }else{
+            return null;
+        }
+
+        }
+      
+    }
+console.log(favouriteCookies.FavouriteProduct)
 
     return (
         <React.Fragment>

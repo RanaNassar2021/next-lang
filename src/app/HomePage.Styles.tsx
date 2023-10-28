@@ -216,7 +216,7 @@ const useStyles = makeStyles()((theme: any) => {
             display: 'flex',
             justifyContent: 'center',
             marginTop:40,
-            marginBottom:40,
+            marginBottom:20,
             '& h4':{
                 fontFamily:'serif',
                 fontSize:'40px'
@@ -227,6 +227,69 @@ const useStyles = makeStyles()((theme: any) => {
                 marginBottom: 40,
                 fontFamily:'serif',
             },
+
+        },
+
+        BestSellerContainer:{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            overflow:'hidden',
+            paddingLeft: '20ch',
+            paddingRight: '20ch',
+            marginTop: 0,
+            height:'auto',
+            marginBottom: 40,
+            width: '100%',
+            '& .splide__arrow': {
+                backgroundColor: 'transparent !important',
+                marginTop: 4,
+                [theme.breakpoints.down('md')]: {
+                    marginTop: 0,
+                },
+            },
+            '& .splide__arrow--prev': {
+                left: '-80px',
+                fontSize: '25px',
+                [theme.breakpoints.down('md')]: {
+                    left: '10px',
+                    fontSize: '18px'
+                },
+            },
+            '& .splide__arrow--next': {
+                backgroundColor: 'transparent !important',
+                right: '-80px',
+                fontSize: '25px',
+                [theme.breakpoints.down('md')]: {
+                    right: '10px',
+                    fontSize: '18px',
+                    backgroundColor: 'transparent !important'
+                },
+            },
+            [theme.breakpoints.down('md')]: {
+                marginTop: 0,
+                marginBottom: 20,
+                paddingLeft: '1ch',
+                paddingRight: '1ch',
+                paddingBottom:20,
+                backgroundColor:'transparent'
+            },
+        },
+
+        BestSellerCard:{
+            backgroundColor:'blue',
+            width: '20ch',
+            [theme.breakpoints.down('md')]:{
+                width:'25ch',
+                marginRight:'3ch',
+                marginLeft:'4ch'
+            }
+        },
+        SellerContainer:{
+            backgroundColor:'orange',
+            display: 'grid',
+            gap: 2,
+            gridTemplateColumns: 'repeat(4, 1fr)',
 
         },
         slider: {
@@ -591,25 +654,16 @@ const useStyles = makeStyles()((theme: any) => {
             position:'relative',
         },
         hoverBox:{
+            backgroundColor:'#1E2832',
+            position:'absolute',
+            bottom:60,
+            width:'100%',
             color:'white',
             display:'flex',
-            flexDirection:'column',
-            position:'absolute',
-            bottom:0,
-            width:'100%',
-            height:'50%',
-            justifyContent:'center',
-            alignItems:'center',
-            padding: '1ch',
-            '&: before': {
-                content: '""',
-                backgroundColor:'#1E2832',
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-                opacity: 0.6,
+            justifyContent:'space-between',
+            padding: '1ch 2ch',
+            [theme.breakpoints.down('md')]:{
+                fontSize:'10px'
             }
         },
         voteMobileContainer:{
@@ -724,7 +778,7 @@ const useStyles = makeStyles()((theme: any) => {
             height:'30ch',
             overflow:'hidden',
             [theme.breakpoints.down('md')]:{
-                height:'auto'
+                height:'260px'
             }
         },
         sizes:{

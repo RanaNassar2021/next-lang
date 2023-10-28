@@ -29,6 +29,7 @@ export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [totalNumber,SetTotalNumber]  = useState<number>();
   const [cookies, setCookie,removeCookie] = useCookies(["Product"]);
+  const [favouriteCookies, setFavouriteCookies] = useCookies(["FavouriteProduct"]);
   const [totalNumberFavourite,SetTotalNumberFavourite]  = useState<number>();
 
 
@@ -40,15 +41,23 @@ export default function Header() {
     setAnchorEl(null);
   };
   const fetchData = async () => {
+
     const Config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
     }
-    // Make a GET Total number of cart and favourite in case of login
-    const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetUserCart?PageNumber=1&PageSize=10`, Config);
-    const responseFavourite = await Axios.get(`${process.env.apiUrl}` + `Product/FavoriteList?PageNumber=1&PageSize=10&Location=egypt`, Config);
 
-    SetTotalNumber(response.data.length);
-    SetTotalNumberFavourite(responseFavourite.data.length)
+    if (!!token) {
+      const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetUserCart?PageNumber=1&PageSize=10`, Config);
+      const responseFavourite = await Axios.get(`${process.env.apiUrl}` + `Product/FavoriteList?PageNumber=1&PageSize=10&Location=egypt`, Config);
+  
+      SetTotalNumber(response.data.length);
+      SetTotalNumberFavourite(responseFavourite.data.length)
+    } else {
+      SetTotalNumber(cookies.Product.length);
+      SetTotalNumberFavourite(favouriteCookies.FavouriteProduct.length)
+    }
+    // Make a GET Total number of cart and favourite in case of login
+  
 };
 
   useEffect(()=>{
@@ -56,8 +65,8 @@ export default function Header() {
   },[localStorage.getItem("Token")])
 
   useEffect(()=>{
-    token && fetchData();
-  },[token])
+     fetchData();
+  },[])
 
   useEffect(()=>{
     if(token != null && token != undefined){
@@ -181,7 +190,8 @@ export default function Header() {
                   <Badge badgeContent={totalNumberFavourite} color="error">
                   <Icons.FavoriteBorder />
                   </Badge>
-                </IconButton>:<Icons.FavoriteBorder/>}
+                </IconButton>:   <Badge badgeContent={favouriteCookies?.FavouriteProduct?.length} color="error" >
+                <Icons.FavoriteBorder/></Badge>}
                   </Link>
         </Box>
         <Box className={classes.mobileIcons}>

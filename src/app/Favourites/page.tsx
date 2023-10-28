@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import { CookiesProvider, useCookies } from "react-cookie";
 
 // styles
 import useStyles from "./favourites.Styles";
@@ -25,6 +26,12 @@ export default function Favourites() {
     const Icons: any = MuiIcons;
 
     const [data, setData] = useState<any>([]);
+    const [token, SetToken] = useState<any>(localStorage.getItem("Token"));
+    const [favouriteCookies, setFavouriteCookies] = useCookies(["FavouriteProduct"]);
+
+    useEffect(()=>{
+        SetToken(localStorage.getItem("Token"));
+      },[localStorage.getItem("Token")])
 
     const fetchData = async () => {
         const Config = {
@@ -37,8 +44,32 @@ export default function Favourites() {
     }
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        !!token &&  fetchData();
+    }, [token]);
+
+    useEffect(()=>{
+        if((token == undefined || token == null) && favouriteCookies?.FavouriteProduct?.length!=0){
+            favouriteCookies?.FavouriteProduct?.map((product:any)=>{
+                if(!!data.filter((item:any)=>item.productId !== product.ProductId)){
+                    Axios.get(`${process.env.apiUrl}` + `Product/GetProductDetials?Id=${product.ProductId}&ColorId=${product.ColorId}`).then((res)=>{
+                        if(res.status=200){
+                            setData((prev:any)=>[...prev, {
+                                productId:res.data.productId,
+                                sizeName:res.data.sizes.filter((item:any) => item.sizeId === product.SizeId).map((item:any) => item.name),
+                                colorName:res.data.selectedColorName,
+                                images:res.data.images,
+                                productTitle:res.data.title,
+                                price:res.data.currentPrice,
+                                sizeId:product.SizeId,
+                                colorId:product.ColorId
+                            }])
+                        }
+                      });
+                }
+            })
+        }
+    
+    },[token, favouriteCookies.FavouriteProduct])
 
     const handleMouseOver = (id: any, index: any) => {
         setData((prev: any) => prev.map((item: any, indexPrev: any) => {
@@ -148,16 +179,25 @@ export default function Favourites() {
         const Config = {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
-        Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body, Config).then((res) => {
-            setIsFavourite(true);
-            setStateFav({ ...newState, openTopFav: true });
-            setOpenFav(true)
+        if(!!token){
+            Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body, Config).then((res) => {
+                setIsFavourite(true);
+                setStateFav({ ...newState, openTopFav: true });
+                setOpenFav(true)
+                setData(data.filter((item: any) => {
+                    return item.productId != removeFavoute.ProductId
+                }));
+            })
+        }else{
+            const myArray = favouriteCookies.FavouriteProduct || [];
+            const updatedArray = myArray.filter((item:any)=>(item.ProductId != removeFavoute.ProductId && item.ColorId != removeFavoute.ColorId));
+            //setData(data.filter((item:any)=>item.ProductId !== remove.ProductId));
+            setFavouriteCookies('FavouriteProduct', updatedArray, { path: '/' });
             setData(data.filter((item: any) => {
-                return item.productId != removeFavoute.ProductId
-            }));
-
-
-        })
+                    return item.productId != removeFavoute.ProductId
+            }))
+        }
+       
     }
 
     const addToCart = (addToCart: RemoveFavouteOrAddCart, newState:SnackbarOrigin) => {
@@ -237,7 +277,7 @@ export default function Favourites() {
 
                                             ) : (
                                                 <Box className={classes.cardImage}>
-                                                    <Image src={data.images[1]} alt="product picture" unoptimized width={300} height={270} />
+                                                    <Image src={data.images[0]} alt="product picture" unoptimized width={300} height={270} />
                                                 </Box>
                                             )}
 

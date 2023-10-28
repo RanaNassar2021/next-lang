@@ -34,7 +34,6 @@ export default function PicturaMen() {
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
 
-
     const [data, setData] = useState<any>([]);
     const [filtersData, setFiltersData] = useState<any>([]);
     const [categoriesId, SetCategoriesId] = useState<any>([]);
@@ -81,6 +80,8 @@ export default function PicturaMen() {
         }
     }
 
+
+
     const concateColorId = (Id: number, event: any) => {
         if (event.target.checked) {
             SetColorId((colorId: any) => [...colorId, Id]);
@@ -96,6 +97,8 @@ export default function PicturaMen() {
             setIsSale(false)
         }
     }
+
+
     const concateOnlyFewLeft = (event: any) => {
         if (event.target.checked) {
             setOnlyFewLeft(true);
@@ -357,7 +360,7 @@ export default function PicturaMen() {
 
                                         ) : (
                                             <Box className={classes.cardImage}>
-                                                <Image src={data.images[0]} alt="product picture" height={250} width={270} />
+                                                <Image src={data.images[0]} alt="product picture" height={260} width={270} />
                                             </Box>
                                         )}
 

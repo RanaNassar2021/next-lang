@@ -36,7 +36,7 @@ export default function PicturaWomen() {
     const [data, setData] = useState<any>([]);
     const fetchData = async () => {
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetBestSellerProducts?PageNumber=1&PageSize=10`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetBestSellerProducts?PageNumber=1&PageSize=16`);
         // Update the state with the response data
         setData(response.data);
         console.log(response.data);
