@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme: any) =>{
         },
         cardContent: {
             alignItems: 'center',
-            height: '60px',
+            height: '70px',
             padding: '10px'
         },
         cardTitle: {
@@ -74,6 +74,7 @@ const useStyles = makeStyles()((theme: any) =>{
             padding: '1ch 2ch',
             [theme.breakpoints.down('md')]:{
                 fontSize:'10px',
+                bottom:70,
                 '& svg':{
                     fontSize:'12px'
                 }
@@ -134,7 +135,7 @@ const useStyles = makeStyles()((theme: any) =>{
             height:'30ch',
             overflow:'hidden',
             [theme.breakpoints.down('md')]:{
-                height:'260px'
+                height:'215px'
             }
         },
         filterMobile:{

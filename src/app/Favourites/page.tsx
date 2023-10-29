@@ -27,6 +27,7 @@ export default function Favourites() {
 
     const [data, setData] = useState<any>([]);
     const [token, SetToken] = useState<any>(localStorage.getItem("Token"));
+    const [cookies, setCookie] = useCookies(["Product"]);
     const [favouriteCookies, setFavouriteCookies] = useCookies(["FavouriteProduct"]);
 
     useEffect(()=>{
@@ -46,7 +47,8 @@ export default function Favourites() {
     useEffect(() => {
         !!token &&  fetchData();
     }, [token]);
-
+    console.log(cookies.Product);
+    
     useEffect(()=>{
         if((token == undefined || token == null) && favouriteCookies?.FavouriteProduct?.length!=0){
             favouriteCookies?.FavouriteProduct?.map((product:any)=>{
@@ -59,8 +61,9 @@ export default function Favourites() {
                                 colorName:res.data.selectedColorName,
                                 images:res.data.images,
                                 productTitle:res.data.title,
-                                price:res.data.currentPrice,
-                                sizeId:product.SizeId,
+                                CurrentPrice:res.data.currentPrice,
+                                OrignalPrice: res.data.orginalPrice,
+                                sizes:res.data.sizes,
                                 colorId:product.ColorId
                             }])
                         }
@@ -70,6 +73,8 @@ export default function Favourites() {
         }
     
     },[token, favouriteCookies.FavouriteProduct])
+
+    console.log(data[0] && data[0]?.sizes)
 
     const handleMouseOver = (id: any, index: any) => {
         setData((prev: any) => prev.map((item: any, indexPrev: any) => {
@@ -209,14 +214,36 @@ export default function Favourites() {
         const Config = {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
-        Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
-            setState({ ...newState, openTop: true });
-            setOpen(true)
-            setData(data.filter((item: any) => {
-                return item.productId != addToCart.ProductId
-            }))
-        })
+        if(!!token){
+            Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
+                setState({ ...newState, openTop: true });
+                setOpen(true)
+                setData(data.filter((item: any) => {
+                    return item.productId != addToCart.ProductId
+                }))
+            })
+        } else{
+            if(cookies.Product?.filter((item:any)=>item.ProductId === addToCart.ProductId).length == 0 || cookies.Product?.filter((item:any)=>item.ProductId === addToCart.ProductId).length == undefined ){
+                const myArray = cookies.Product || [];
+                let updatedArray = [...myArray, addToCart]
+                setState({ ...newState, openTop: true });
+                setOpen(true)
+                setCookie('Product', updatedArray, { path: '/' });
+                console.log(favouriteCookies?.FavouriteProduct.filter((item: any) => {
+                    return item.productId != addToCart.ProductId
+                }));
+                
+                setData(favouriteCookies?.FavouriteProduct.filter((item: any) => {
+                    return item.productId != addToCart.ProductId
+                }))
+            }else{
+                return null;
+            }
+        }
+      
     }
+    console.log(data);
+    
 
     const[selectedSize, setSelectedSize] = useState(false);
 
@@ -277,7 +304,7 @@ export default function Favourites() {
 
                                             ) : (
                                                 <Box className={classes.cardImage}>
-                                                    <Image src={data.images[0]} alt="product picture" unoptimized width={300} height={270} />
+                                                    <Image src={data && data.images[0]} alt="product picture" unoptimized width={300} height={260} />
                                                 </Box>
                                             )}
 
@@ -294,30 +321,30 @@ export default function Favourites() {
                                                     </Box>
                                                     <CardContent className={classes.cardContent}>
                                                         <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                                                            {data.title}
+                                                            {data.productTitle}
                                                         </Typography>
                                                         <Box className={classes.cardFooter}>
                                                             <Typography color="text.secondary">{data.category}</Typography>
                                                             <Box sx={{ display: 'flex', gap: '10px' }}>
-                                                                <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{data.orginalPrice}</Typography>
-                                                                <Typography sx={{ color: '#EA4335' }}>{data.currentPrice}</Typography>
+                                                                <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{data.OrginalPrice}</Typography>
+                                                                <Typography sx={{ color: '#EA4335' }}>{data.CurrentPrice}</Typography>
                                                             </Box>
                                                         </Box>
                                                     </CardContent>
                                                 </Box>
                                             ) : <CardContent className={classes.cardContent}>
                                                 <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                                                    {data.title}
+                                                    {data.productTitle}
                                                 </Typography>
                                                 <Box className={classes.cardFooter}>
                                                     <Typography color="text.secondary">{data.category}</Typography>
-                                                    <Typography>{data.orginalPrice}</Typography>
+                                                    <Typography>{data.price}</Typography>
                                                 </Box>
                                             </CardContent>}
                                         </Card>
                                             {selectedSize?(
                                             <Box  className={classes.sizes}>
-                                                {data.sizes.map((siz:any, index:any)=>{
+                                                {data?.sizes?.map((siz:any, index:any)=>{
                                                        return (
                                                         <Box>
                                                          <Box className={classes.sizeBox} key={siz.sizeId} onClick={()=>addToCart({ProductId:data.productId, ColorId:data.colorId, SizeId:siz.sizeId},{vertical: 'top', horizontal: 'right'})}>

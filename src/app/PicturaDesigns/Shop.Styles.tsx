@@ -79,7 +79,7 @@ const useStyles = makeStyles ()((theme:any) => {
             marginTop:10,
         },
         contentMobileMen: {
-            backgroundColor:'red',
+            height:'25%',
             '&: before':{
                 content: '""',
                 backgroundColor:'black',
@@ -92,7 +92,7 @@ const useStyles = makeStyles ()((theme:any) => {
             }
         },
         contentMobileWomen: {
-            position:'relative'
+            position:'relative',
         },
         maskWomenMobile:{
             position:'absolute',

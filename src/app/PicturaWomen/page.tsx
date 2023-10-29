@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, CardMedia, Button } from "@mui/material";
 import Header from "../Header";
 import Footer from "../Footer";
-import Filter from "../Filter/Filter";
+import Filter from "./Filter/page";
 import ImagesCard from "../Card/page";
 import Image from "next/image";
 import Link from "next/link";
@@ -256,6 +256,36 @@ export default function PicturaMen() {
     
         }
 
+        const handleCategoriesChild = (data:any) => {
+            SetCategoriesId(data);
+        };
+    
+        const handleColorChild = (data:any) => {
+            SetColorId(data);
+        };
+    
+        const handleDateChild = (data:any) => {
+            setDate(data);
+        };
+    
+        const handleSaleChild = (data:any) =>{
+            setIsSale(data)
+        }
+    
+        const handleOnlyFewLeftChild = (data: any) =>{
+            setOnlyFewLeft(data)
+        }
+    
+        const handleIsDecendingChild = (data: any) =>{
+            setIsDecending(data);
+            setPrices(data);
+        }
+    
+        const handleIsAscendingChild = (data: any) =>{
+            setIsDecending(data);
+            setPrices(data);
+        }
+
 
 
     return (
@@ -263,7 +293,7 @@ export default function PicturaMen() {
             <Header></Header>
             <Box className={classes.filterMobile} sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <Typography variant="h3">filter</Typography>
-                <Filter />
+                <Filter sendCategories={handleCategoriesChild} sendColors={handleColorChild} sendDate={handleDateChild} sendSale={handleSaleChild} sendOnlyFewLeft={handleOnlyFewLeftChild} sendIsDescending={handleIsDecendingChild} sendIsAcending={handleIsAscendingChild} />
             </Box>
             <Box className={classes.container}>
                 <Box className={classes.filterContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>

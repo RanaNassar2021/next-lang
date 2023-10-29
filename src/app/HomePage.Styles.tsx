@@ -500,8 +500,8 @@ const useStyles = makeStyles()((theme: any) => {
             width: '31ch',
             [theme.breakpoints.down('md')]:{
                 width:'25ch',
-                marginRight:'3ch',
-                marginLeft:'4ch'
+                marginRight:'4ch',
+                marginLeft:'4ch',
             }
         },
         buyNow:{
@@ -663,7 +663,8 @@ const useStyles = makeStyles()((theme: any) => {
             justifyContent:'space-between',
             padding: '1ch 2ch',
             [theme.breakpoints.down('md')]:{
-                fontSize:'10px'
+                fontSize:'10px',
+                width:'255px'
             }
         },
         voteMobileContainer:{
@@ -812,7 +813,11 @@ const useStyles = makeStyles()((theme: any) => {
             top:5,
             right:5,
             padding:'2px 5px',
-            color:'#EA4335'
+            color:'#EA4335',
+            [theme.breakpoints.down('md')]:{
+                top:10,
+                right:60
+            }
         },
 
         saleBox:{

@@ -524,8 +524,8 @@ export default function Home() {
                 bestSeller?.map((bestSeller: any, index: number) => {
                   if (index <= 6) {
                     return (
-                      <SplideSlide key={index} style={{ marginLeft: '3ch' }}>
-                        <Box style={{ display: 'flex', gap: 25 }}>
+                      <SplideSlide key={index} >
+                        <Box style={{ display:'flex', justifyContent:'center' }}>
                           <Card key={index} className={classes.flashSaleCard} onMouseOver={e => handleMouseOver(bestSeller.productId, index)} onMouseOut={e => handleMouseOut(bestSeller.productId, index)}>
                             {bestSeller.hoverImage ? (
                               <Box>
@@ -537,7 +537,7 @@ export default function Home() {
 
                             ) : (
                               <Box className={classes.cardImage}>
-                                <Image  src={bestSeller.images[0]} alt="product picture" unoptimized height={260} width={270} />
+                                <Image  src={bestSeller.images[0]} alt="product picture"  height={260} width={270} />
                               </Box>
                             )}
 
@@ -760,17 +760,19 @@ export default function Home() {
       {/* Mobile view */}
 
       <Box className={classes.flashSaleContainer} sx={{ display: { xs: 'flex', md: 'none' } }}>
-        <Image src={flashSale}
+       <Box sx={{ paddingTop:'2ch',paddingBottom:'2ch'}}>
+        <Image src={flashSaleBanner} 
           layout='resposive'
           alt="Pictura flashsale page" />
+          </Box>
         <Box>
           <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
           {
                 flashSale?.map((flashSale: any, index: number) => {
                   if (index <= 6) {
                     return (
-                      <SplideSlide key={index} style={{ marginLeft: '3ch' }}>
-                        <Box style={{ display: 'flex', gap: 25 }}>
+                      <SplideSlide key={index} >
+                        <Box style={{ display: 'flex', justifyContent:'center', marginLeft:'2ch' }}>
                           <Card key={index} className={classes.flashSaleCard} onMouseOver={e => handleMouseOver(flashSale.productId, index)} onMouseOut={e => handleMouseOut(flashSale.productId, index)}>
                             {flashSale.hoverImage ? (
                               <Box>

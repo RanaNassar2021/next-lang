@@ -27,11 +27,21 @@ export default function Header() {
   const [token, SetToken] = useState<any>(localStorage.getItem("Token"));
   const [show,SetShow] = useState<boolean>(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [curr, setCurr] = React.useState<null | HTMLElement>(null);
   const [totalNumber,SetTotalNumber]  = useState<number>();
   const [cookies, setCookie,removeCookie] = useCookies(["Product"]);
   const [favouriteCookies, setFavouriteCookies] = useCookies(["FavouriteProduct"]);
   const [totalNumberFavourite,SetTotalNumberFavourite]  = useState<number>();
+  const [currency, setCurrency] = useState<any>('Egypt');
 
+  const handleCurrencyEgy = () =>{
+    setCurrency('Egypt')
+  }
+
+  const handleCurrencyKuw = () =>{
+    setCurrency('kuwait')
+  }
+console.log(currency)
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,6 +50,17 @@ export default function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const openCurrency = Boolean(curr);
+  const handleClickCurrency = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setCurr(event.currentTarget);
+    
+  };
+  const handleCloseCurrency = () => {
+    setCurr(null);
+  };
+
+
   const fetchData = async () => {
 
     const Config = {
@@ -53,8 +74,8 @@ export default function Header() {
       SetTotalNumber(response.data.length);
       SetTotalNumberFavourite(responseFavourite.data.length)
     } else {
-      SetTotalNumber(cookies.Product.length);
-      SetTotalNumberFavourite(favouriteCookies.FavouriteProduct.length)
+      SetTotalNumber(cookies?.Product?.length);
+      SetTotalNumberFavourite(favouriteCookies?.FavouriteProduct?.length);
     }
     // Make a GET Total number of cart and favourite in case of login
   
@@ -66,7 +87,7 @@ export default function Header() {
 
   useEffect(()=>{
      fetchData();
-  },[])
+  },[totalNumber, totalNumberFavourite]);
 
   useEffect(()=>{
     if(token != null && token != undefined){
@@ -96,7 +117,8 @@ export default function Header() {
 //         removeCookie("Product");
 //       }
 //   },[token, cookies.Product]) }
-  
+
+
   return (
     <React.Fragment>
       <Box sx={{ display: { xs: 'none', md: 'block' } }}>
@@ -105,8 +127,23 @@ export default function Header() {
             <Box className={classes.topHeader}>
               <Link href="/Contact"><Button className={classes.btn}>Contact</Button> </Link>
               <Link href="/AboutUs"> <Button className={classes.btn}>About us</Button> </Link>
-              <Button className={classes.btn}>
+              <Button className={classes.btn} aria-controls={openCurrency ? 'currency-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={openCurrency ? 'true' : undefined}
+              onClick={handleClickCurrency}>
                 <Image src={egyptFlag} width={20} alt='flag' style={{ marginRight: 5 }} /> Egypt (English) EGP <Icons.ArrowDropDown />
+                <Menu
+              id="currency-menu"
+              anchorEl={curr}
+              open={openCurrency}
+              onClose={handleCloseCurrency}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleCloseCurrency}> <Typography onClick={handleCurrencyEgy}> Country : Egypt </Typography> </MenuItem>
+              <MenuItem onClick={handleCloseCurrency}><Typography onClick={handleCurrencyKuw}> Country : Kuwait </Typography> </MenuItem>
+            </Menu>
               </Button>
               <Box sx={{marginTop:'4.5ch',paddingLeft:'1ch'}}>
               <Icons.Search></Icons.Search>

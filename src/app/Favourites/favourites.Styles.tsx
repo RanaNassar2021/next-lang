@@ -31,7 +31,7 @@ const useStyles = makeStyles() ((theme: any ) =>{
         },
         cards:{
             width:'100%',
-            marginBottom:'2ch'
+            marginBottom:'2ch',
         },
         cardContent: {
             alignItems: 'center',
@@ -54,7 +54,7 @@ const useStyles = makeStyles() ((theme: any ) =>{
             }
         },
         card: {
-            position:'relative'
+            position:'relative',
         },
         hoverBox:{
             backgroundColor:'#1E2832',
