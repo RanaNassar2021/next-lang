@@ -97,6 +97,14 @@ export default function SignUp() {
 
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
+    const [countryData, setCountryData] = useState<any>([]);
+    const [selectedCountryId, setSelectedCountryId] = useState<any>(0);
+    const[selectedCityId, setSelectedCityId] = useState<any>(0);
+
+    console.log('slected city id: ', selectedCityId);
+    console.log('selected coutnry id: ', selectedCountryId);
+
+
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -111,7 +119,6 @@ export default function SignUp() {
     const [country, setCountry] = React.useState('');
     const handleCountryChange = (event: { target: { value: string } }) => {
         setCountry(event.target.value);
-        console.log(country)
     };
 
 
@@ -120,9 +127,9 @@ export default function SignUp() {
         setCity(event.target.value);
     };
 
-    const  [cityId, setCityId] = useState<any>('');
+    const  [cityName, setCityName] = useState<any>('');
     const handleCityId = (event: { target: { value: string } }) => {
-        setCityId(event.target.value);
+        setCityName(event.target.value);
     };
 
     const [validations, setValidation] = useState(validationsData)
@@ -137,6 +144,7 @@ export default function SignUp() {
             })
         )
     }
+
 
     function handleValidation(e: any) {
         const value = e.target.value
@@ -180,22 +188,16 @@ export default function SignUp() {
             phone: '',
             FullAddress: '',
             gender: '',
-            cityId:'',
-            countyName:'',
-            cityName:''
+            counrtyName: '',
+            cityName: '',
+            cityId:0,
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
             values.gender = gender;
-            values.cityId = cityId;
-            if(country == '1' ){
-                values.countyName = 'Egypt'
-            } else {values.countyName='Kuwait'};
-
-            if(cityId == '1' ){
-                values.cityName = 'Alex'
-            } else {values.cityName='Cairo'};
-            
+            values.counrtyName = country;
+            values.cityName = cityName;
+            values.cityId = selectedCityId;
             Axios.post( `${process.env.apiUrl}` +`Auth/register`,values).then((response) => {
                 console.log('POST request successful:', response.data);
               })
@@ -210,7 +212,9 @@ export default function SignUp() {
     useEffect(() => {
         // Function to fetch data from the API
         Axios.get(`${process.env.apiUrl}` + `Auth/RegisterCall`).then((response) => {
-            console.log('POST request successful:', response.data);
+            const data = response.data;
+            setCountryData(data);
+            console.log('Get request successful:', data );
           })
           .catch((error) => {
             console.error('Error making POST request:', error);
@@ -218,7 +222,7 @@ export default function SignUp() {
         },[]);
 
 
-
+//console.log('countryData Cities :', countryData[selectedCountryId]?.cities)
 
 
     return (
@@ -342,7 +346,7 @@ export default function SignUp() {
                                         </Box>
                                         <Box className={classes.mobField}>
                                             <FormControl variant="standard" >
-                                                <TextField label="Mobile Number *" size='small' type='number' id="phone"
+                                                <TextField label="Mobile Number *" size='small' type='string' id="phone"
                                                     name="phone"
                                                     value={formik.values.phone}
                                                     onChange={formik.handleChange}
@@ -375,8 +379,11 @@ export default function SignUp() {
                                                 label="Mobile Number"
                                                 onChange={handleCountryChange}
                                             >
-                                                <MenuItem value={2}>Egypt</MenuItem>
-                                                <MenuItem value={1}>Kuwait</MenuItem>
+                                                {countryData?.map((item: any, indexCountry: number)=>{
+                                                    return(
+                                                        <MenuItem value={item.countryName} key={indexCountry} onClick={()=>{setSelectedCountryId(item.countryId-1)}}>{item.countryName}</MenuItem>
+                                                    )
+                                                })}
                                             </Select>
                                         </FormControl>
                                         <FormControl size="small" className={classes.cityField}>
@@ -384,12 +391,15 @@ export default function SignUp() {
                                             <Select required
                                                 labelId="demo-select-small-label"
                                                 id="demo-select-small"
-                                                value={cityId}
+                                                value={cityName}
                                                 label="Mobile Number"
                                                 onChange={handleCityId}
                                             >
-                                                <MenuItem value={2}>Alex</MenuItem>
-                                                <MenuItem value={1} >Cairo</MenuItem>
+                                                 {countryData[selectedCountryId]?.cities?.map((item: any, index: number)=>{
+                                                    return(
+                                                        <MenuItem value={item.cityName} key={index} onClick={()=>{setSelectedCityId(item.cityId)}}>{item.cityName}</MenuItem>
+                                                    )
+                                                })}
                                             </Select>
                                         </FormControl>
                                         <FormControl variant="standard" className={classes.fullAdress} size='small' >

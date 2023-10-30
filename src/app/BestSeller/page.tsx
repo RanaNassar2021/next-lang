@@ -3,13 +3,17 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, Divider, Checkbox, Grid, Card, CardContent, Button } from "@mui/material";
 import Header from "../Header";
 import Footer from "../Footer";
-import Filter from "../Filter/Filter";
+import Filter from "./Filter/page";
 import Link from "next/link";
 import ImagesCard from "../Card/page";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import AlertAddToFav from "@/app/AlertAddToFav/page";
 import AlertRemovedFromFav from "@/app/AlertRemovedFromFav/page";
+import { useCookies } from "react-cookie";
 
 // styles
 import useStyles from "./BestSeller.Styles";
@@ -32,21 +36,127 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 export default function PicturaWomen() {
     const { classes } = useStyles();
     const Icons: any = MuiIcons;
-
+    const [cookies, setCookie] = useCookies(["Product"]);
+    const [favouriteCookies, setFavouriteCookies] = useCookies(["FavouriteProduct"]);
+    const [token, SetToken] = useState(localStorage.getItem("Token"));
     const [data, setData] = useState<any>([]);
+    const [filtersData, setFiltersData] = useState<any>([]);
+    const [categoriesId, SetCategoriesId] = useState<any>([]);
+    const [colorId, SetColorId] = useState<any>([]);
+    const [onlyFewLeft, setOnlyFewLeft] = useState<boolean>(false);
+    const [prices, setPrices] = useState<boolean>(false);
+    const [isDecending, setIsDecending] = useState<boolean>(false);
+    const [date, setDate] = useState<boolean>(false);
+    const [gender, setGender] = useState<any>();
+
+    const fetchFilter = async () => {
+        // Make a GET request using axios
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/DropDownListsDetials`);
+        // Update the state with the response data
+        setFiltersData(response.data);
+    };
+  
+
     const fetchData = async () => {
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetBestSellerProducts?PageNumber=1&PageSize=16`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetBestSellerProducts?PageNumber=1&PageSize=16&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${!!gender && 'gender='+gender}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}`);
         // Update the state with the response data
         setData(response.data);
-        console.log(response.data);
     };
 
     // Call the fetchData function after the initial render
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [categoriesId, colorId, onlyFewLeft, date, prices, isDecending, gender]);
 
+    useEffect(() => {
+        fetchFilter();
+    }, [categoriesId, colorId])
+
+    const concateCategoryId = (Id: number, event: any) => {
+        if (event.target.checked) {
+            SetCategoriesId((categoriesId: any) => [...categoriesId, Id]);
+        } else {
+            SetCategoriesId((categoriesId: any) => categoriesId.filter((id: any) => id !== Id));
+        }
+    }
+
+    
+    const concateColorId = (Id: number, event: any) => {
+        if (event.target.checked) {
+            SetColorId((colorId: any) => [...colorId, Id]);
+        } else {
+            SetColorId((colorId: any) => colorId.filter((id: any) => id !== Id));
+        }
+    }
+
+    const concateGenderMale = (event: any) =>{
+       const Male =   document?.getElementById('MaleChekBox');
+       const Female =  document.getElementById('FemalCheckBox');
+       if (Male instanceof HTMLInputElement && Female instanceof HTMLInputElement) {
+        if(Male?.checked && Female.checked){
+            setGender(undefined);
+            return;
+        }else if(event.target.checked){
+            setGender('male');
+             return;
+        }else if(Female.checked){
+            setGender('female');
+            return;
+        }else if(!Male?.checked && !Female.checked){
+            setGender(undefined);
+        }
+       }
+    }
+
+    const concateGenderWomen = (event:any)=>{
+        const Male =  document.getElementById("MaleChekBox");
+        const Female =  document.getElementById("FemalCheckBox");
+        if (Male instanceof HTMLInputElement && Female instanceof HTMLInputElement) {
+            if(Male?.checked && Female.checked){
+                setGender(undefined);
+                return;
+            }else if(event.target.checked){
+                setGender('female');
+                return;
+            }else if(Male.checked){
+                setGender('male');
+                return;
+            }else if(!Male?.checked && !Female.checked){
+                setGender(undefined);
+            }
+        }
+    }
+
+
+    const concateOnlyFewLeft = (event: any) => {
+        if (event.target.checked) {
+            setOnlyFewLeft(true);
+        } else {
+            setOnlyFewLeft(false)
+        }
+    }
+    const concateNewIn = (event: any) => {
+        if (event.target.checked) {
+            setDate(true)
+        } else {
+            setDate(false)
+        }
+    }
+
+    const IsDecending = () => {
+        setIsDecending(true);
+        setPrices(true)
+    }
+    const IsAscending = () => {
+        setIsDecending(false);
+        setPrices(true)
+    }
+
+    
+    useEffect(() => {
+        SetToken(localStorage.getItem("Token"));
+    }, [localStorage.getItem("Token")])
 
     const handleMouseOver = (id: any, index: any) => {
         setData((prev: any) => prev.map((item: any, indexPrev: any) => {
@@ -136,19 +246,32 @@ interface AddToCartInrerface {
 }
 
 const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin ) =>{
-    let body ={
+    let body = {
         productId: addToCart.ProductId,
         colorId: addToCart.ColorId,
-        sizeId:addToCart.SizeId
+        sizeId: addToCart.SizeId
     }
     const Config = {
         headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
     }
-    Axios.post(`${process.env.apiUrl}` +`Product/AddCart`, body,Config).then((res)=>{
-      console.log(res);
-      setState({ ...newState, openTop: true });
-      setOpen(true)
-    })
+    if (!!token) {
+        Axios.post(`${process.env.apiUrl}` + `Product/AddCart`, body, Config).then((res) => {
+            console.log(res);
+            setState({ ...newState, openTop: true });
+            setOpen(true)
+        })
+    } else {
+        if (cookies.Product?.filter((item: any) => item.ProductId === addToCart.ProductId).length == 0 || cookies.Product?.filter((item: any) => item.ProductId === addToCart.ProductId).length == undefined) {
+            const myArray = cookies.Product || [];
+            let updatedArray = [...myArray, addToCart]
+            setState({ ...newState, openTop: true });
+            setOpen(true)
+            setCookie('Product', updatedArray, { path: '/' });
+
+        } else {
+            return null;
+        }
+    }
     }
 
     interface AddToFavouriteInrerface {
@@ -157,28 +280,71 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin ) =>{
     }
 
     const AddToFavourite = (AddToFavourite: AddToFavouriteInrerface, newState: SnackbarOrigin) =>{
-        let body ={
+        let body = {
             productId: AddToFavourite.ProductId,
             colorId: AddToFavourite.ColorId,
         }
         const Config = {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
-        Axios.post(`${process.env.apiUrl}` +`Product/ChangeFaviorate`, body,Config).then((res)=>{
-            console.log(res);
-            if(res.data == "Saved Successfully"){
+        if (!!token) {
+            Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body, Config).then((res) => {
+                console.log(res);
+                if (res.data == "Saved Successfully") {
+                    setIsFavourite(true);
+                    setStateFav({ ...newState, openTopFav: true });
+                    setOpenFav(true)
+                } else {
+                    console.log("removed")
+                    setIsFavourite(false);
+                    setStateFav({ ...newState, openTopFav: false });
+                    setOpenFav(true)
+                }
+            })
+        } else {
+            if (favouriteCookies.FavouriteProduct?.filter((item: any) => item.ProductId === AddToFavourite.ProductId).length == 0 || favouriteCookies.FavouriteProduct?.filter((item: any) => item.ProductId === AddToFavourite.ProductId).length == undefined) {
+                const myArray = favouriteCookies.FavouriteProduct || [];
+                let updatedArray = [...myArray, AddToFavourite]
+                setState({ ...newState, openTop: true });
+                setOpen(true)
+                setFavouriteCookies('FavouriteProduct', updatedArray, { path: '/' });
                 setIsFavourite(true);
                 setStateFav({ ...newState, openTopFav: true });
                 setOpenFav(true)
-            }else {
-                console.log("removed")
-                setIsFavourite(false);
-                setStateFav({ ...newState, openTopFav: false });
-                setOpenFav(true)
-            }
-           
-         })
 
+            } else {
+                return null;
+            }
+
+        }
+
+    }
+
+    const handleCategoriesChild = (data: any) => {
+        SetCategoriesId(data);
+    };
+
+    const handleColorChild = (data: any) => {
+        SetColorId(data);
+    };
+
+    const handleDateChild = (data: any) => {
+        setDate(data);
+    };
+
+
+    const handleOnlyFewLeftChild = (data: any) => {
+        setOnlyFewLeft(data)
+    }
+
+    const handleIsDecendingChild = (data: any) => {
+        setIsDecending(data);
+        setPrices(data);
+    }
+
+    const handleIsAscendingChild = (data: any) => {
+        setIsDecending(data);
+        setPrices(data);
     }
 
 
@@ -187,7 +353,7 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin ) =>{
             <Header></Header>
             <Box className={classes.filterMobile} sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <Typography variant="h3">filter</Typography>
-                <Filter />
+                <Filter sendCategories={handleCategoriesChild} sendColors={handleColorChild} sendDate={handleDateChild} sendOnlyFewLeft={handleOnlyFewLeftChild} sendIsDescending={handleIsDecendingChild} sendIsAcending={handleIsAscendingChild} />
             </Box>
             <Box className={classes.container}>
                 <Box className={classes.filterContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -195,89 +361,61 @@ const addToCart = (addToCart:AddToCartInrerface, newState:SnackbarOrigin ) =>{
                     <Divider></Divider>
                     <Typography variant="h3"> Catergories </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>T-Shirts</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Polo</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>High-Neck</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>V-Neck</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Shirts</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Hoodies</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Top Rated</Typography>
-                    </Box>
+                    {filtersData?.categories?.map((item: any, index: number) => {
+                        return (
+                            <Box className={classes.options} key={index}>
+                                <Checkbox {...label} onClick={(e) => concateCategoryId(item.categoryId, e)} />
+                                <Typography>{item.name}</Typography>
+                            </Box>
+                        )
+                    })}
                     <Divider></Divider>
                     <Typography variant="h3"> Color </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Black</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>white</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Gray</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Red</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Blue</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Yellow</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Orange</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Green</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Purple</Typography>
-                    </Box>
+                    {
+                        filtersData?.colors?.map((item: any, index: number) => {
+                            return (
+                                <Box className={classes.options} key={index}>
+                                    <Checkbox {...label} onClick={(e) => concateColorId(item.colorId, e)} />
+                                    <Typography>{item.name}</Typography>
+                                </Box>
+                            )
+                        })
+                    }
                     <Typography variant="h4"> <Icons.Sort></Icons.Sort> sort by</Typography>
                     <Divider></Divider>
+                    <Typography variant="h3"> gender </Typography>
+                    <Divider style={{ width: '40px' }}></Divider>
                     <Box className={classes.options}>
-                        <Checkbox {...label} />
+                        <Checkbox id="MaleChekBox" {...label} onClick={(e) => concateGenderMale(e)} />
+                        <Typography>Male</Typography>
+                    </Box>
+                    <Box className={classes.options}>
+                        <Checkbox id="FemalCheckBox" {...label} onClick={(e) => concateGenderWomen(e)} />
+                        <Typography>Female</Typography>
+                    </Box>
+                    <Divider style={{ width: '40px' }}></Divider>
+                    <Box className={classes.options}>
+                        <Checkbox {...label}  onClick={(e) => concateNewIn(e)} />
                         <Typography>New In</Typography>
+                    </Box>
+                    <Box className={classes.options}>
+                        <Checkbox {...label}  onClick={(e) => concateOnlyFewLeft(e)} />
+                        <Typography>Only Few Left</Typography>
                     </Box>
                     <Typography variant="h3"> Price </Typography>
                     <Divider style={{ width: '40px' }}></Divider>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>Low to High</Typography>
-                    </Box>
-                    <Box className={classes.options}>
-                        <Checkbox {...label} />
-                        <Typography>High to low</Typography>
-                    </Box>
+                    <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        name="radio-buttons-group">
+                        <Box className={classes.options}>
+                            <FormControlLabel value="low" control={<Radio />} label="Low to High" onClick={IsAscending} className={classes.radio} sx={{ '& .MuiFormControlLabel-label': { fontSize: '12px' } }} />
+                        </Box>
+                        <Box className={classes.options}>
+                            <FormControlLabel value="High" control={<Radio />} label="High to Low" onClick={IsDecending} className={classes.radio} sx={{ '& .MuiFormControlLabel-label': { fontSize: '12px' } }} />
+
+                        </Box>
+                    </RadioGroup>
                 </Box>
                 <Box className={classes.cards}>
                     <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>

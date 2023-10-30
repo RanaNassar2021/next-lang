@@ -346,7 +346,7 @@ export default function Favourites() {
                                             <Box  className={classes.sizes}>
                                                 {data?.sizes?.map((siz:any, index:any)=>{
                                                        return (
-                                                        <Box>
+                                                        <Box key={index}>
                                                          <Box className={classes.sizeBox} key={siz.sizeId} onClick={()=>addToCart({ProductId:data.productId, ColorId:data.colorId, SizeId:siz.sizeId},{vertical: 'top', horizontal: 'right'})}>
                                                          {siz.name}
                                                          </Box>

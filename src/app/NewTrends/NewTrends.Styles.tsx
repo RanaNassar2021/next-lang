@@ -148,6 +148,9 @@ const useStyles = makeStyles()((theme: any) =>{
                 fontSize:'20px',
                 paddingRight:10
             }
+        },
+        radio:{
+            marginLeft:'5px',
         }
     }
 })

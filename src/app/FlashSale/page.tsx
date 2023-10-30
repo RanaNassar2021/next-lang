@@ -5,6 +5,7 @@ import Header from "../Header";
 import Footer from "../Footer";
 import Link from "next/link";
 import ImagesCard from "../Card/page";
+import Filter from './Filter/page';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import Radio from '@mui/material/Radio';
@@ -60,7 +61,7 @@ export default function PicturaWomen() {
 
     const fetchData = async () => {
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetFalshSaleProducts?PageNumber=1&PageSize=10&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${!!gender && 'gender='+gender}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetFalshSaleProducts?PageNumber=1&PageSize=10&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${!!gender && 'gender=' + gender}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}`);
         // Update the state with the response data
         setData(response.data);
         console.log(response.data);
@@ -71,7 +72,7 @@ export default function PicturaWomen() {
         fetchData();
     }, [categoriesId, colorId, onlyFewLeft, date, prices, isDecending, gender]);
 
-    
+
     useEffect(() => {
         fetchFilter();
     }, [categoriesId, colorId])
@@ -84,7 +85,7 @@ export default function PicturaWomen() {
         }
     }
 
-    
+
     const concateColorId = (Id: number, event: any) => {
         if (event.target.checked) {
             SetColorId((colorId: any) => [...colorId, Id]);
@@ -93,39 +94,39 @@ export default function PicturaWomen() {
         }
     }
 
-    const concateGenderMale = (event: any) =>{
-       const Male =   document?.getElementById('MaleChekBox');
-       const Female =  document.getElementById('FemalCheckBox');
-       if (Male instanceof HTMLInputElement && Female instanceof HTMLInputElement) {
-        if(Male?.checked && Female.checked){
-            setGender(undefined);
-            return;
-        }else if(event.target.checked){
-            setGender('male');
-             return;
-        }else if(Female.checked){
-            setGender('female');
-            return;
-        }else if(!Male?.checked && !Female.checked){
-            setGender(undefined);
-        }
-       }
-    }
-
-    const concateGenderWomen = (event:any)=>{
-        const Male =  document.getElementById("MaleChekBox");
-        const Female =  document.getElementById("FemalCheckBox");
+    const concateGenderMale = (event: any) => {
+        const Male = document?.getElementById('MaleChekBox');
+        const Female = document.getElementById('FemalCheckBox');
         if (Male instanceof HTMLInputElement && Female instanceof HTMLInputElement) {
-            if(Male?.checked && Female.checked){
+            if (Male?.checked && Female.checked) {
                 setGender(undefined);
                 return;
-            }else if(event.target.checked){
-                setGender('female');
-                return;
-            }else if(Male.checked){
+            } else if (event.target.checked) {
                 setGender('male');
                 return;
-            }else if(!Male?.checked && !Female.checked){
+            } else if (Female.checked) {
+                setGender('female');
+                return;
+            } else if (!Male?.checked && !Female.checked) {
+                setGender(undefined);
+            }
+        }
+    }
+
+    const concateGenderWomen = (event: any) => {
+        const Male = document.getElementById("MaleChekBox");
+        const Female = document.getElementById("FemalCheckBox");
+        if (Male instanceof HTMLInputElement && Female instanceof HTMLInputElement) {
+            if (Male?.checked && Female.checked) {
+                setGender(undefined);
+                return;
+            } else if (event.target.checked) {
+                setGender('female');
+                return;
+            } else if (Male.checked) {
+                setGender('male');
+                return;
+            } else if (!Male?.checked && !Female.checked) {
                 setGender(undefined);
             }
         }
@@ -267,20 +268,20 @@ export default function PicturaWomen() {
                 setOpen(true)
             })
         } else {
-            if(cookies.Product?.filter((item:any)=>item.ProductId === addToCart.ProductId).length == 0 || cookies.Product?.filter((item:any)=>item.ProductId === addToCart.ProductId).length == undefined ){
+            if (cookies.Product?.filter((item: any) => item.ProductId === addToCart.ProductId).length == 0 || cookies.Product?.filter((item: any) => item.ProductId === addToCart.ProductId).length == undefined) {
                 const myArray = cookies.Product || [];
                 let updatedArray = [...myArray, addToCart]
                 setState({ ...newState, openTop: true });
                 setOpen(true)
                 setCookie('Product', updatedArray, { path: '/' });
 
-            }else{
+            } else {
                 return null;
             }
         }
 
     }
-    
+
 
     interface AddToFavouriteInrerface {
         ProductId: string;
@@ -295,8 +296,8 @@ export default function PicturaWomen() {
         const Config = {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
-        if(!!token){
-            Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body,Config).then((res) => {
+        if (!!token) {
+            Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body, Config).then((res) => {
                 console.log(res);
                 if (res.data == "Saved Successfully") {
                     setIsFavourite(true);
@@ -309,31 +310,59 @@ export default function PicturaWomen() {
                     setOpenFav(true)
                 }
             })
-        } else{  if(favouriteCookies.FavouriteProduct?.filter((item:any)=>item.ProductId === AddToFavourite.ProductId).length == 0 || favouriteCookies.FavouriteProduct?.filter((item:any)=>item.ProductId === AddToFavourite.ProductId).length == undefined ){
-            const myArray = favouriteCookies.FavouriteProduct || [];
-            let updatedArray = [...myArray, AddToFavourite]
-            setState({ ...newState, openTop: true });
-            setOpen(true)
-            setFavouriteCookies('FavouriteProduct', updatedArray, { path: '/' });
-            setIsFavourite(true);
-            setStateFav({ ...newState, openTopFav: true });
-            setOpenFav(true)
+        } else {
+            if (favouriteCookies.FavouriteProduct?.filter((item: any) => item.ProductId === AddToFavourite.ProductId).length == 0 || favouriteCookies.FavouriteProduct?.filter((item: any) => item.ProductId === AddToFavourite.ProductId).length == undefined) {
+                const myArray = favouriteCookies.FavouriteProduct || [];
+                let updatedArray = [...myArray, AddToFavourite]
+                setState({ ...newState, openTop: true });
+                setOpen(true)
+                setFavouriteCookies('FavouriteProduct', updatedArray, { path: '/' });
+                setIsFavourite(true);
+                setStateFav({ ...newState, openTopFav: true });
+                setOpenFav(true)
 
-        }else{
-            return null;
+            } else {
+                return null;
+            }
+
         }
 
-        }
-      
     }
-console.log(favouriteCookies.FavouriteProduct)
+
+    const handleCategoriesChild = (data: any) => {
+        SetCategoriesId(data);
+    };
+
+    const handleColorChild = (data: any) => {
+        SetColorId(data);
+    };
+
+    const handleDateChild = (data: any) => {
+        setDate(data);
+    };
+
+
+    const handleOnlyFewLeftChild = (data: any) => {
+        setOnlyFewLeft(data)
+    }
+
+    const handleIsDecendingChild = (data: any) => {
+        setIsDecending(data);
+        setPrices(data);
+    }
+
+    const handleIsAscendingChild = (data: any) => {
+        setIsDecending(data);
+        setPrices(data);
+    }
 
     return (
         <React.Fragment>
             <Header></Header>
             <Box className={classes.filterMobile} sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <Typography variant="h3">filter</Typography>
-               
+                <Filter sendCategories={handleCategoriesChild} sendColors={handleColorChild} sendDate={handleDateChild} sendOnlyFewLeft={handleOnlyFewLeftChild} sendIsDescending={handleIsDecendingChild} sendIsAcending={handleIsAscendingChild} />
+
             </Box>
             <Box className={classes.container}>
                 <Box className={classes.filterContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -379,9 +408,9 @@ console.log(favouriteCookies.FavouriteProduct)
                         <Checkbox {...label} onClick={(e) => concateNewIn(e)} />
                         <Typography>New In</Typography>
                     </Box>
-                  
+
                     <Box className={classes.options}>
-                        <Checkbox {...label}  onClick={(e) => concateOnlyFewLeft(e)} />
+                        <Checkbox {...label} onClick={(e) => concateOnlyFewLeft(e)} />
                         <Typography>Only Few Left</Typography>
                     </Box>
                     <Typography variant="h3"> Price </Typography>
