@@ -52,6 +52,12 @@ export default function PicturaWomen() {
     const [isDecending, setIsDecending] = useState<boolean>(false);
     const [date, setDate] = useState<boolean>(false);
     const [gender, setGender] = useState<any>();
+    const [currency, setCurrency] = useState<any>('Egypt');
+
+    const currencyFromHeader = (data: any)=>{
+        setCurrency(data);
+       
+}
 
     const fetchFilter = async () => {
         // Make a GET request using axios
@@ -63,7 +69,7 @@ export default function PicturaWomen() {
 
     const fetchData = async () => {
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetTrendingProducts?PageNumber=1&PageSize=10&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${!!gender && 'gender='+gender}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetTrendingProducts?PageNumber=1&PageSize=10&Location=${currency}&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${!!gender && 'gender='+gender}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}`);
         // Update the state with the response data
         setData(response.data);
     };
@@ -352,7 +358,7 @@ export default function PicturaWomen() {
 
     return (
         <React.Fragment>
-            <Header></Header>
+            <Header sendCurrency={currencyFromHeader}></Header>
             <Box className={classes.filterMobile} sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <Typography variant="h3">filter</Typography>
                 <Filter sendCategories={handleCategoriesChild} sendColors={handleColorChild} sendDate={handleDateChild} sendOnlyFewLeft={handleOnlyFewLeftChild} sendIsDescending={handleIsDecendingChild} sendIsAcending={handleIsAscendingChild} />

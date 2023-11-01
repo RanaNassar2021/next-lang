@@ -49,6 +49,14 @@ export default function PicturaWomen() {
     const [isDecending, setIsDecending] = useState<boolean>(false);
     const [date, setDate] = useState<boolean>(false);
     const [gender, setGender] = useState<any>();
+    const [currency, setCurrency] = useState<any>('Egypt');
+
+    const currencyFromHeader = (data: any)=>{
+            setCurrency(data);
+           
+    }
+
+    console.log("Flash Sale Currency: ",currency)
 
 
     const fetchFilter = async () => {
@@ -56,21 +64,19 @@ export default function PicturaWomen() {
         const response = await Axios.get(`${process.env.apiUrl}` + `Product/DropDownListsDetials`);
         // Update the state with the response data
         setFiltersData(response.data);
-        console.log(response.data);
     };
 
     const fetchData = async () => {
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetFalshSaleProducts?PageNumber=1&PageSize=10&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${!!gender && 'gender=' + gender}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetFalshSaleProducts?PageNumber=1&PageSize=10&Location=${currency}&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${!!gender && 'gender=' + gender}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}`);
         // Update the state with the response data
         setData(response.data);
-        console.log(response.data);
     };
 
     // Call the fetchData function after the initial render
     useEffect(() => {
         fetchData();
-    }, [categoriesId, colorId, onlyFewLeft, date, prices, isDecending, gender]);
+    }, [categoriesId, colorId, onlyFewLeft, date, prices, isDecending, gender, currency]);
 
 
     useEffect(() => {
@@ -227,6 +233,16 @@ export default function PicturaWomen() {
         horizontal: 'right',
     })
 
+    const addFavouriteIconCookies = ( id: any, index: any) =>{
+        setData((prev: any) => prev.map((item: any, indexPrev: any) => {
+            if (item.productId == id && index == indexPrev) {
+                setIsFavourite(true)
+            }
+            return item
+        }))
+
+    }
+
 
     const handleCloseAlert = (event?: React.SyntheticEvent | Event, reason?: string) => {
         setState({ ...state, openTop: false });
@@ -274,6 +290,7 @@ export default function PicturaWomen() {
                 setState({ ...newState, openTop: true });
                 setOpen(true)
                 setCookie('Product', updatedArray, { path: '/' });
+                console.log(cookies.Product)
 
             } else {
                 return null;
@@ -358,7 +375,7 @@ export default function PicturaWomen() {
 
     return (
         <React.Fragment>
-            <Header></Header>
+            <Header sendCurrency={currencyFromHeader}></Header>
             <Box className={classes.filterMobile} sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <Typography variant="h3">filter</Typography>
                 <Filter sendCategories={handleCategoriesChild} sendColors={handleColorChild} sendDate={handleDateChild} sendOnlyFewLeft={handleOnlyFewLeftChild} sendIsDescending={handleIsDecendingChild} sendIsAcending={handleIsAscendingChild} />
@@ -454,7 +471,7 @@ export default function PicturaWomen() {
                                                 {isFavourite || data?.isFavorite ?
                                                     <Box>
                                                         <Icons.Favorite sx={{ color: 'red' }} onClick={() => AddToFavourite({ ProductId: data.productId, ColorId: data.colorId }, { vertical: 'top', horizontal: 'right' })}></Icons.Favorite>
-                                                        <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                        <Snackbar open={openFav} autoHideDuration={2000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
                                                             <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
                                                                 <AlertAddToFav />
                                                             </Alert>
@@ -462,7 +479,7 @@ export default function PicturaWomen() {
                                                     </Box> :
                                                     <Box>
                                                         <Icons.FavoriteBorder onClick={() => AddToFavourite({ ProductId: data.productId, ColorId: data.colorId }, { vertical: 'top', horizontal: 'right' })} />
-                                                        <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                        <Snackbar open={openFav} autoHideDuration={2000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
                                                             <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
                                                                 <AlertRemovedFromFav />
                                                             </Alert>
@@ -479,7 +496,7 @@ export default function PicturaWomen() {
                                                                         <Box className={classes.sizeBox} key={siz.sizeId} onClick={() => addToCart({ ProductId: data.productId, ColorId: data.colorId, SizeId: siz.sizeId }, { vertical: 'top', horizontal: 'right' })} >
                                                                             {siz.name}
                                                                         </Box>
-                                                                        <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                                        <Snackbar open={open} autoHideDuration={2000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
                                                                             <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
                                                                                 product added succussfully to Cart
                                                                             </Alert>

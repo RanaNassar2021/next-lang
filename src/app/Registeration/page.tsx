@@ -101,10 +101,6 @@ export default function SignUp() {
     const [selectedCountryId, setSelectedCountryId] = useState<any>(0);
     const[selectedCityId, setSelectedCityId] = useState<any>(0);
 
-    console.log('slected city id: ', selectedCityId);
-    console.log('selected coutnry id: ', selectedCountryId);
-
-
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -221,6 +217,17 @@ export default function SignUp() {
           });
         },[]);
 
+        const RegisterWithGoogle = (AccessToken:string)=>{
+            const Config = {
+                headers: { AccessToken: `${AccessToken}` }
+              }
+            Axios.post( `${process.env.apiUrl}` +`Auth/RegisterWithGoogle`, null, Config).then((response) => {
+                console.log('POST request successful:', response.data);
+            })
+              .catch((error) => {
+                console.error('Error making POST request:', error);
+            });
+        }
 
 //console.log('countryData Cities :', countryData[selectedCountryId]?.cities)
 
@@ -430,6 +437,9 @@ export default function SignUp() {
                                    <Box style={{width:'100%', marginTop:10}}>
                                     <GoogleLogin  
                                         onSuccess={credentialResponse => {
+                                            if(!!credentialResponse.credential){
+                                                RegisterWithGoogle(credentialResponse.credential);
+                                            }
                                             console.log(credentialResponse);
                                         }}
 

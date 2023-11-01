@@ -50,22 +50,20 @@ export default function Cart() {
 
     const steps = [
         'Cart',
-        (token == null || token == undefined) ? '' :'Sign In',
         'Delivery',
         'Payment',
         'Confirmation'];
-    const IndexSteper = [
-        0,
-        (token == null || token == undefined) ? 1:10,
-        (token == null || token == undefined) ? 2:1,
-        (token == null || token == undefined) ? 3:2,
-        (token == null || token == undefined) ? 4:3
+
+    const loginSteps = [
+        'Cart',
+        'Sign In'
     ]
+   
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const [TotlalPrice, setTotlalPRice] = useState<any>();
     const [cookies, setCookie,removeCookie] = useCookies(["Product"]);
-    const [activeSteperIndex, setActiveSteperIndex] = useState<number>(0);
+    const [favouriteCookies, setFavouriteCookies] = useCookies(["FavouriteProduct"]);
 
     useEffect(()=>{
         SetToken(localStorage.getItem("Token"));
@@ -80,13 +78,13 @@ export default function Cart() {
     };
     const handleNext = () => {
         let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
-        setActiveSteperIndex(IndexSteper.filter((item)=>item != 10 ).length - (activeStep-1) )
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
     };
 
     const handleBack = () => {
@@ -135,6 +133,7 @@ export default function Cart() {
     }, [token]);
 
     useEffect(()=>{
+        setData([]);
         if((token == undefined || token == null) && cookies?.Product?.length!=0){
             cookies?.Product?.map((product:any)=>{
                 if(!!data.filter((item:any)=>item.productId !== product.ProductId)){
@@ -311,8 +310,9 @@ export default function Cart() {
         const Config = {
             headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         }
+
+        if(!!token){
         Axios.post(`${process.env.apiUrl}` + `Product/ChangeFaviorate`, body, Config).then((res) => {
-            console.log(res);
             setData(data.filter((item: any) => {
                 return item.productId != AddToFavourite.ProductId
             }))
@@ -328,7 +328,30 @@ export default function Cart() {
                 setOpenFav(true)
             }
 
-        })
+        })  } else{
+            console.log("Else Log");
+            
+            if (favouriteCookies.FavouriteProduct?.filter((item: any) => item.ProductId === AddToFavourite.ProductId).length == 0 || favouriteCookies.FavouriteProduct?.filter((item: any) => item.ProductId === AddToFavourite.ProductId).length == undefined) {
+                console.log("Else If Done");
+                const myArray = cookies.Product || [];
+                const updatedArray = myArray.filter((item:any)=>(item.ProductId != AddToFavourite.ProductId && item.ColorId != AddToFavourite.ColorId));
+                //setData(data.filter((item:any)=>item.ProductId !== remove.ProductId));
+                setCookie('Product', updatedArray, { path: '/' });
+                // setData(data.filter((item: any) => {
+                //         return item.productId != AddToFavourite.ProductId
+                // }))
+                const myArray2 = favouriteCookies.FavouriteProduct || [];
+                let updatedArray2 = [...myArray2, AddToFavourite]
+                setState({ ...newState, openTop: true });
+                setFavouriteCookies('FavouriteProduct', updatedArray2, { path: '/' });
+                setIsFavourite(true);
+                setStateFav({ ...newState, openTopFav: true });
+                setOpenFav(true)
+
+            } else {
+                return null;
+            }
+        }
 
     }
 
@@ -374,9 +397,9 @@ export default function Cart() {
         <React.Fragment>
             <Header></Header>
 
-            {/* stepper */}
+            {/* stepper Incase of Login */}
 
-            <Box className={classes.stepper}>
+          { !!token?  <Box className={classes.stepper}>
                 <Stepper activeStep={activeStep}>
                     {steps.map((label, index) => {
                         const stepProps: { completed?: boolean } = {};
@@ -409,7 +432,7 @@ export default function Cart() {
 
 
                     <React.Fragment>
-                        {activeStep === IndexSteper[0] &&
+                        {activeStep === 0 &&
                             <Box className={classes.container}>
                                 <Box className={classes.leftContent}>
                                     <Typography variant="h5">My Shopping Cart ({data ? data.length : 0} items)</Typography>
@@ -497,20 +520,12 @@ export default function Cart() {
                         {/* second page of Cart LogIn */}
 
 
-                        {
-                            activeStep === IndexSteper[1] &&
-                            <Box>
-                                <Typography>Sign In</Typography>
-                                <Button sx={{ width: '100%', backgroundColor: '#FF6F61', color: 'black', fontWeight: 600 }} onClick={handleNext}> {activeStep === steps.length - 1 ? 'Finish' : 'Continue to Checkout'} </Button>
-                            </Box>
-                        }
 
-
-                        {/* Third page of Cart Delivery */}
+                        {/* second page of Cart Delivery */}
 
 
                         {
-                           activeStep === IndexSteper[2] &&
+                           activeStep === 1 &&
                             <Box>
                                 <Box className={classes.container}>
                                     <Box className={classes.leftContent}>
@@ -625,10 +640,11 @@ export default function Cart() {
 
                         }
 
-                        {/* forth page of Cart Payment */}
+                        {/* third page of Cart Payment */}
 
+                       
 
-                        {  activeStep === IndexSteper[3] && 
+                        {  activeStep === 2 && 
                             <Box className={classes.payment}>
                                   <RadioGroup
                                      aria-labelledby="demo-radio-buttons-group-label"
@@ -704,7 +720,7 @@ export default function Cart() {
 
 
                         {
-                             activeStep === IndexSteper[4]  &&
+                             activeStep === 3  &&
                             <Box>
                                 <Typography>Confirmation</Typography>
                                 <Button sx={{ width: '100%', backgroundColor: '#FF6F61', color: 'black', fontWeight: 600 }} onClick={handleNext}> {activeStep === steps.length - 1 ? 'Confirm' : 'Continue to Checkout'} </Button>
@@ -730,7 +746,158 @@ export default function Cart() {
                         </Box>
                     </React.Fragment>
                 )}
-            </Box>
+
+
+            </Box>:  <Box className={classes.stepper}>
+                <Stepper activeStep={activeStep}>
+                    {loginSteps.map((label, index) => {
+                        const stepProps: { completed?: boolean } = {};
+                        const labelProps: {
+                            optional?: React.ReactNode;
+                        } = {};
+
+                        if (isStepSkipped(index)) {
+                            stepProps.completed = false;
+                        }
+                        if(label?.trim() !== "" ){
+                            return (
+                                <Step key={label} {...stepProps}>
+                                   <StepLabel {...labelProps}>{label}</StepLabel>
+                               </Step>
+                           );
+                        }
+                    })}
+                </Stepper>
+                {activeStep === steps.length ? (
+                    <React.Fragment>
+                        <Typography sx={{ mt: 2, mb: 1 }}>
+                            All steps completed - you&apos;re finished
+                        </Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                            <Box sx={{ flex: '1 1 auto' }} />
+                        </Box>
+                    </React.Fragment>
+                ) : (
+
+
+                    <React.Fragment>
+                        {activeStep === 0 &&
+                            <Box className={classes.container}>
+                                <Box className={classes.leftContent}>
+                                    <Typography variant="h5">My Shopping Cart ({data ? data.length : 0} items)</Typography>
+                                    {data.map((data: any, index: number) => {
+                                        return (
+                                            <Box className={classes.card} key={index}>
+                                                <Box>
+                                                    <Image src={data.productImage} width={200} height={100} alt="product image" />
+                                                </Box>
+                                                <Box sx={{ width: '60%' }}>
+                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <Typography variant="h6">{data.productTitle}</Typography>
+                                                        <DeleteIcon sx={{ marginTop: '10px', marginRight: '10px' }} onClick={() => RemoveFromCart({ ProductId: data.productId, ColorId: data.colorId, SizeId: data.sizeId }, { vertical: 'top', horizontal: 'right' })}></DeleteIcon>
+                                                    </Box>
+                                                    <Box>
+                                                        <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                            <Alert onClose={handleCloseAlert} severity="error" sx={{ width: '100%' }}>
+                                                                product Removed succussfully from Cart
+                                                            </Alert>
+                                                        </Snackbar>
+                                                    </Box>
+                                                    <Typography>Price: {data.price}</Typography>
+                                                    <Typography>Color: {data.colorName}</Typography>
+                                                    <Typography>Size: {data.sizeName}</Typography>
+                                                    <Box sx={{ display: "flex", justifyContent: 'space-between' }}>
+                                                        <Box>
+                                                            <Typography sx={{ textDecoration: "underline" }} onClick={() => AddToFavourite({ ProductId: data.productId, ColorId: data.colorId }, { vertical: 'top', horizontal: 'right' })}>Move to favourites</Typography>
+                                                        </Box>
+                                                        <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                                            <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                                                <AlertAddToFav />
+                                                            </Alert>
+                                                        </Snackbar>
+                                                        { !!token && <Box className={classes.quantity}>
+                                                            <Button className={classes.quantitiyBtn} onClick={() => DecreaseQunatity({ ProductId: data.productId, ColorId: data.colorId, SizeId: data.sizeId })} >-</Button>
+                                                            <Typography>{data.quantity}</Typography>
+                                                            <Button className={classes.quantitiyBtn} onClick={() => IncreaseQunatity({ ProductId: data.productId, ColorId: data.colorId, SizeId: data.sizeId })} >+</Button>
+                                                        </Box>
+                                                        }
+
+                                                    </Box>
+                                                </Box>
+                                            </Box>
+                                        )
+                                    })}
+                                </Box>
+                                <Box className={classes.rightContent}>
+                                    <Typography variant="h6">Have a promo code ?</Typography>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: '2ch', paddingBottom: '2ch' }}>
+                                        <FormControl>
+                                            <TextField error={discount == undefined} helperText={discount == undefined ? "Invalid Promo Code" : null} label="Promo Code" size='small' id="PromoCode" className={classes.promoText}
+                                                onChange={handlePromoCode} name="PromoCode"></TextField>
+                                        </FormControl>
+                                        <Button className={classes.doneBtn} onClick={() => CheckPromoCode({ promo: promo })}>Done</Button>
+                                    </Box>
+                                    <Typography variant="h6">Order Summary</Typography>
+                                    <Box sx={{ backgroundColor: 'white' }}>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1ch' }}>
+                                            <Typography>Subtotal</Typography>
+                                            <Typography>{TotlalPrice ?? 0} EGP</Typography>
+                                        </Box>
+                                        {(!!discount) && <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1ch' }}>
+                                            <Typography sx={{ color: 'red' }}>Discount</Typography>
+                                            <Typography sx={{ color: 'red' }}>{discount} EGP</Typography>
+                                        </Box>}
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1ch' }}>
+                                            <Typography>VAT</Typography>
+                                            <Typography>{TotlalPrice && (((TotlalPrice - (discount != undefined ? discount : 0))) * (14 / 100)).toFixed(2)} EGP</Typography>
+                                        </Box>
+                                        <Divider></Divider>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1ch' }}>
+                                            <Typography>Total Price</Typography>
+                                            <Typography>{TotlalPrice && (TotlalPrice - (discount != undefined ? discount : 0) + (((TotlalPrice - (discount != undefined ? discount : 0))) * (14 / 100))).toFixed(2)} EGP</Typography>
+                                        </Box>
+
+                                        <Box sx={{ padding: '1ch' }}>
+                                            <Button sx={{ width: '100%', backgroundColor: '#FF6F61', color: 'black', fontWeight: 600 }} onClick={handleNext}> {activeStep === steps.length - 1 ? 'Finish' : 'Continue to Checkout'} </Button>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        }
+
+
+                        {/* second page of Cart LogIn */}
+
+                        {
+                            activeStep == 1 &&
+                            <Box>
+                               <Typography sx={{display: 'flex', justifyContent:'center', fontSize:'25px', marginTop:'2ch'}}>To complete your Order please, Sign In first.</Typography>
+                              <Box sx={{ padding: '2ch', marginTop:'2ch', display:'flex', justifyContent:'center'}}>
+                              <Link href="/LogIn"><Button sx={{ width: '100%', backgroundColor: '#FF6F61', color: 'black', fontWeight: 600 }}>Go to sign in page</Button></Link>
+                          </Box>
+                          </Box>
+                        }
+
+                        <Box sx={{ display: 'flex', flexDirection: 'column', pt: 2 }}>
+                            <Button
+                                color="inherit"
+                                disabled={activeStep === 0}
+                                onClick={handleBack}
+                                sx={{ mr: 1 }}
+                            >
+                                Back
+                            </Button>
+                            <Box sx={{ flex: '1 1 auto' }} />
+                            {/* <Button onClick={handleNext}>
+                                {activeStep === steps.length - 1 ? 'Finish' : 'Continue to Checkout'}
+                               </Button> */}
+                        </Box>
+                    </React.Fragment>
+                )}
+
+
+            </Box>}
+
             <Footer></Footer>
         </React.Fragment>
     )

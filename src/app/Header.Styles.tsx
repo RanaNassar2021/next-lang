@@ -70,7 +70,9 @@ const useStyles = makeStyles()((theme: any) => {
             margin: 0
         },
         mobileIcons: {
-        }
+        },
+
+
     }
 })
 

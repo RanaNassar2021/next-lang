@@ -47,12 +47,12 @@ export default function Favourites() {
     useEffect(() => {
         !!token &&  fetchData();
     }, [token]);
-    console.log(cookies.Product);
     
     useEffect(()=>{
+        setData([]);
         if((token == undefined || token == null) && favouriteCookies?.FavouriteProduct?.length!=0){
             favouriteCookies?.FavouriteProduct?.map((product:any)=>{
-                if(!!data.filter((item:any)=>item.productId !== product.ProductId)){
+                if(!!data.filter((item:any)=>item.productId !== product.productId  )){
                     Axios.get(`${process.env.apiUrl}` + `Product/GetProductDetials?Id=${product.ProductId}&ColorId=${product.ColorId}`).then((res)=>{
                         if(res.status=200){
                             setData((prev:any)=>[...prev, {
@@ -61,20 +61,42 @@ export default function Favourites() {
                                 colorName:res.data.selectedColorName,
                                 images:res.data.images,
                                 productTitle:res.data.title,
+                                Category : res.data.category,
                                 CurrentPrice:res.data.currentPrice,
                                 OrignalPrice: res.data.orginalPrice,
                                 sizes:res.data.sizes,
                                 colorId:product.ColorId
                             }])
+
+                          
+                           
+
                         }
                       });
+
                 }
+               
             })
         }
+      
     
     },[token, favouriteCookies.FavouriteProduct])
 
-    console.log(data[0] && data[0]?.sizes)
+    //  data.filter((value:any, index:any, self:any) => {
+    //                 setData(()=>{ index ===
+    //                  self.findIndex((t:any) => t.id === value.id && t.name === value.name)
+    //                  })
+    //                  console.log("can you see me?", data)
+    //            })
+
+
+   // console.log("cookies data: ", favouriteCookies.FavouriteProduct)
+
+   // console.log("data", data);
+
+
+
+
 
     const handleMouseOver = (id: any, index: any) => {
         setData((prev: any) => prev.map((item: any, indexPrev: any) => {
@@ -198,9 +220,9 @@ export default function Favourites() {
             const updatedArray = myArray.filter((item:any)=>(item.ProductId != removeFavoute.ProductId && item.ColorId != removeFavoute.ColorId));
             //setData(data.filter((item:any)=>item.ProductId !== remove.ProductId));
             setFavouriteCookies('FavouriteProduct', updatedArray, { path: '/' });
-            setData(data.filter((item: any) => {
-                    return item.productId != removeFavoute.ProductId
-            }))
+            // setData(data.filter((item: any) => {
+            //         return item.productId != removeFavoute.ProductId
+            // }))
         }
        
     }
@@ -242,7 +264,6 @@ export default function Favourites() {
         }
       
     }
-    console.log(data);
     
 
     const[selectedSize, setSelectedSize] = useState(false);
@@ -257,7 +278,7 @@ export default function Favourites() {
             <Header></Header>
             <Box className={classes.container}>
                 <Box className={classes.title}>
-                    <Typography variant="h6"> my favourites ({data.length}) </Typography>
+                    <Typography variant="h6"> my favourites ({data ? data.length : 0} items) </Typography>
                     <Box>
                         <Button sx={{ color: 'black' }}
                             id="basic-button"
@@ -289,7 +310,7 @@ export default function Favourites() {
                 <Box className={classes.cardsContainer}>
                     <Box className={classes.cards}>
                         <Grid container spacing={{ xs: 2, md: 5 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                            {data.map((data: any, index: number) => {
+                            {data?.map((data: any, index: number) => {
                                 return (
                                     <Grid item xs={2} sm={4} md={4} key={index}>
                                         <Card sx={{ maxWidth: 345 }} onMouseOver={e => handleMouseOver(data.productId, index)} onMouseOut={e => handleMouseOut(data.productId, index)}
@@ -324,9 +345,8 @@ export default function Favourites() {
                                                             {data.productTitle}
                                                         </Typography>
                                                         <Box className={classes.cardFooter}>
-                                                            <Typography color="text.secondary">{data.category}</Typography>
+                                                            <Typography color="text.secondary">{data.Category}</Typography>
                                                             <Box sx={{ display: 'flex', gap: '10px' }}>
-                                                                <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{data.OrginalPrice}</Typography>
                                                                 <Typography sx={{ color: '#EA4335' }}>{data.CurrentPrice}</Typography>
                                                             </Box>
                                                         </Box>
@@ -337,8 +357,8 @@ export default function Favourites() {
                                                     {data.productTitle}
                                                 </Typography>
                                                 <Box className={classes.cardFooter}>
-                                                    <Typography color="text.secondary">{data.category}</Typography>
-                                                    <Typography>{data.price}</Typography>
+                                                    <Typography color="text.secondary">{data.Category}</Typography>
+                                                    <Typography>{data.CurrentPrice}</Typography>
                                                 </Box>
                                             </CardContent>}
                                         </Card>

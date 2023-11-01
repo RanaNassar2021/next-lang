@@ -43,6 +43,12 @@ export default function PicturaMen() {
     const [prices, setPrices] = useState<boolean>(false);
     const [isDecending, setIsDecending] = useState<boolean>(false);
     const [date, setDate] = useState<boolean>(false);
+    const [currency, setCurrency] = useState<any>('Egypt');
+
+    const currencyFromHeader = (data: any)=>{
+            setCurrency(data);
+           
+    }
 
     const fetchFilter = async () => {
         // Make a GET request using axios
@@ -57,7 +63,7 @@ export default function PicturaMen() {
         //     headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
         // }
         // Make a GET request using axios
-        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=male&pageNumber=${1}&pageSize=10&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}&FlashSale=${isSale}`);
+        const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProduct?gender=male&pageNumber=${1}&pageSize=10&Location=${currency}&${categoriesId.length != 0 ? 'category=' + categoriesId.join(',') : ''}&${colorId.length != 0 ? 'color=' + colorId.join(',') : ''}&${date && 'sortBy=Date'}&${prices && 'sortBy=Price&isDescending=' + isDecending}&OnlyFewLeft=${onlyFewLeft}&FlashSale=${isSale}`);
         // Update the state with the response data
         setData(response.data);
         console.log(response.data);
@@ -309,7 +315,7 @@ export default function PicturaMen() {
 
     return (
         <React.Fragment>
-            <Header></Header>
+            <Header sendCurrency={currencyFromHeader}></Header>
             <Box className={classes.filterMobile} sx={{ display: { xs: 'flex', md: 'none' } }}>
                 <Typography variant="h3">filter</Typography>
                 <Filter sendCategories={handleCategoriesChild} sendColors={handleColorChild} sendDate={handleDateChild} sendSale={handleSaleChild} sendOnlyFewLeft={handleOnlyFewLeftChild} sendIsDescending={handleIsDecendingChild} sendIsAcending={handleIsAscendingChild} />
