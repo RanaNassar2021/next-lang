@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
-const { i18n } = require('./src/app/next-i18next.config')
+
+// const withNextIntl = require('next-intl/plugin')(
+//   // This is the default (also the `src` folder is supported out of the box)
+//   './i18n.ts'
+// );
 
 const nextConfig = {
-    i18n,
-    reactStrictMode: true,
     env: {
         apiUrl: 'http://localhost:7011/api/',
       },
@@ -20,5 +22,6 @@ const nextConfig = {
       }
 }
 
-module.exports = nextConfig
+
+module.exports = nextConfig ;
 
