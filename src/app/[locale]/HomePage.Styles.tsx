@@ -1,6 +1,7 @@
 
 import { makeStyles } from 'tss-react/mui';
 
+
 const useStyles = makeStyles()((theme: any) => {
     return {
         container: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles()((theme: any) => {
                 gap: 0
             },
         },
+
         theDesigner: {
             width: '55ch',
             height: 300,
@@ -657,6 +659,11 @@ const useStyles = makeStyles()((theme: any) => {
         },
         voteBox:{
             position:'relative',
+            overflow:'hidden',
+           '& img':{
+            height:'250px',
+            overflow:'hidden'
+           }
         },
         hoverBox:{
             backgroundColor:'#1E2832',

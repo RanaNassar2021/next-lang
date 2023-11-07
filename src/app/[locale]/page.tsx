@@ -10,7 +10,7 @@ import AlertRemovedFromFav from "./AlertRemovedFromFav/page";
 import ImagesCard from "./Card/page";
 import { CookiesProvider, useCookies } from "react-cookie";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
-import {useTranslations} from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 // SSR and TSS
 
@@ -19,19 +19,19 @@ import {useTranslations} from 'next-intl';
 // Images
 import Designer from './Assets/Images/theDesigner.jpg';
 //const Designer =require("./Assets/Images/theDesigner.jpg");
-const Design1 =require('./Assets/Images/design1.jpg');
-const Design2 =require('./Assets/Images/design2.jpg');
-const Design3 =require('./Assets/Images/design3.jpg');
-const flashSaleBanner =require('./Assets/Images/flashSaleBanner.png');
-const buyNow =require('./Assets/Images/BuyNow.png');
+const Design1 = require('./Assets/Images/design1.jpg');
+const Design2 = require('./Assets/Images/design2.jpg');
+const Design3 = require('./Assets/Images/design3.jpg');
+const flashSaleBanner = require('./Assets/Images/flashSaleBanner.png');
+const buyNow = require('./Assets/Images/BuyNow.png');
 //const newTrendG =require('./Assets/Images/newTrendG.jpg');
-import newTrendG from './Assets/Images/newTrendM.jpg';
+import newTrendG from './Assets/Images/newTrendG.jpg';
 //const newTrendM =require('./Assets/Images/newTrendM.jpg');
 import newTrendM from './Assets/Images/newTrendM.jpg';
-const tiktok =require('./Assets/Images/tiktok.jpg');
-const tiktokIcon =require('./Assets/Images/tiktokb.png');
-const instagram =require('./Assets/Images/insta.jpg');
-const facebook =require('./Assets/Images/facebook.jpg');
+const tiktok = require('./Assets/Images/tiktok.jpg');
+const tiktokIcon = require('./Assets/Images/tiktokb.png');
+const instagram = require('./Assets/Images/insta.jpg');
+const facebook = require('./Assets/Images/facebook.jpg');
 
 
 import Image from 'next/image';
@@ -84,12 +84,13 @@ export default function Index() {
   const [token, SetToken] = useState(localStorage.getItem("Token"));
   const [flashSale, setFlashSale] = useState<any>([]);
   const [bestSeller, setBestSeller] = useState<any>([]);
+  const [voteAndWin, setVoteAndWin] = useState<any>([]);
 
   const [currency, setCurrency] = useState<any>('Egypt');
   const t = useTranslations('Index');
 
-  const currencyFromHeader = (data: any)=>{
-          setCurrency(data);
+  const currencyFromHeader = (data: any) => {
+    setCurrency(data);
 
   }
 
@@ -283,9 +284,16 @@ export default function Index() {
 
   }
 
+  const fetchVoteAndWin = async () => {
+    const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProductsVoteAndWin`);
+    const data = response.data;
+    setVoteAndWin(data)
+  }
+
   useEffect(() => {
     fetchFlashSale();
     fetchBestSeller();
+    fetchVoteAndWin();
   }, [currency])
 
 
@@ -293,9 +301,19 @@ export default function Index() {
 
 
   const [openVote, setOpenVote] = React.useState(false);
-  const handleClickOpen = () => {
+  const [userVote, setUserVote] = useState<any>(false);
+  const handleClickVoteOpen = () => {
     setOpenVote(true);
   };
+  const handleCloseVote = () => {
+    setOpenVote(false)
+  }
+
+  const handleCloseVoteUser = ()=>{
+    setOpenVote(false);
+    setUserVote(true)
+  }
+  console.log("user vote: ", userVote)
 
   const handleClose = () => {
     setOpen(false);
@@ -328,7 +346,22 @@ export default function Index() {
     );
   }
 
+  const elements = document.querySelectorAll('[dir="rtl"]');
+  elements.forEach((element) => {
+    element.classList.add('rtl-class');
+  });
 
+  const DesignerStyles = {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: 'orange',
+    gap: 0,
+    marginTop: '2ch',
+    '.rtl-class': {
+      backgroundColor: 'blue',
+    }
+  }
   return (
 
     <React.Fragment>
@@ -405,122 +438,122 @@ export default function Index() {
           <Box className={classes.title}>
             <Typography variant='h4'>{t('best_seller')}</Typography>
           </Box>
-          </Box>
-          
-          {/* best seller slider map using grid */}
-          <Box className={classes.BestSellerContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Box>
-              <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 3000, pagination: false, gap: '1rem', perPage: 4 }} style={{ width: '100%' }}>
-                {
-                  bestSeller?.map((bestSeller: any, index: number) => {
-                    if (index <= 16) {
-                      return (
-                        <SplideSlide key={index}>
-                            <Card key={index}  style={{ width: '230px' }} onMouseOver={e => handleMouseOver(bestSeller.productId, index)} onMouseOut={e => handleMouseOut(bestSeller.productId, index)}>
-                              {bestSeller.hoverImage ? (
+        </Box>
+
+        {/* best seller slider map using grid */}
+        <Box className={classes.BestSellerContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box>
+            <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 3000, pagination: false, gap: '1rem', perPage: 4 }} style={{ width: '100%' }}>
+              {
+                bestSeller?.map((bestSeller: any, index: number) => {
+                  if (index <= 16) {
+                    return (
+                      <SplideSlide key={index}>
+                        <Card key={index} style={{ width: '230px' }} onMouseOver={e => handleMouseOver(bestSeller.productId, index)} onMouseOut={e => handleMouseOut(bestSeller.productId, index)}>
+                          {bestSeller.hoverImage ? (
+                            <Box>
+                              <Link href={'/cardDetails/' + bestSeller.productId + "/" + bestSeller.colorId}>
+                                <Box className={classes.productDetailsLink}></Box>
+                              </Link>
+                              <ImagesCard images={bestSeller?.images}></ImagesCard>
+                            </Box>
+
+                          ) : (
+                            <Box className={classes.cardImage}>
+                              <Image src={bestSeller.images[0]} alt="product picture" unoptimized height={250} width={270} />
+                            </Box>
+                          )}
+
+                          {bestSeller.isMouseOver ? (<Box className={classes.hoverBox}>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              {isFavourite || bestSeller?.isFavorite ?
                                 <Box>
-                                  <Link href={'/cardDetails/' + bestSeller.productId + "/" + bestSeller.colorId}>
-                                    <Box className={classes.productDetailsLink}></Box>
-                                  </Link>
-                                  <ImagesCard images={bestSeller?.images}></ImagesCard>
-                                </Box>
-
-                              ) : (
-                                <Box className={classes.cardImage}>
-                                  <Image src={bestSeller.images[0]} alt="product picture" unoptimized height={250} width={270} />
-                                </Box>
-                              )}
-
-                              {bestSeller.isMouseOver ? (<Box className={classes.hoverBox}>
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                  {isFavourite || bestSeller?.isFavorite ?
-                                    <Box>
-                                      <Icons.Favorite sx={{ color: 'red' }} onClick={() => AddToFavourite({ ProductId: bestSeller.productId, ColorId: bestSeller.colorId }, { vertical: 'top', horizontal: 'right' })}></Icons.Favorite>
-                                      <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                        <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
-                                          <AlertAddToFav />
-                                        </Alert>
-                                      </Snackbar>
-                                    </Box> :
-                                    <Box>
-                                      <Icons.FavoriteBorder onClick={() => AddToFavourite({ ProductId: bestSeller.productId, ColorId: bestSeller.colorId }, { vertical: 'top', horizontal: 'right' })} />
-                                      <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                        <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
-                                          <AlertRemovedFromFav />
-                                        </Alert>
-                                      </Snackbar>
-                                    </Box>}
-                                </Box>
+                                  <Icons.Favorite sx={{ color: 'red' }} onClick={() => AddToFavourite({ ProductId: bestSeller.productId, ColorId: bestSeller.colorId }, { vertical: 'top', horizontal: 'right' })}></Icons.Favorite>
+                                  <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                    <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                      <AlertAddToFav />
+                                    </Alert>
+                                  </Snackbar>
+                                </Box> :
                                 <Box>
-                                  {bestSeller.isClicked ?
-                                    (
-                                      <Box className={classes.sizes}>
-                                        {bestSeller.sizes.map((siz: any, index: any) => {
-                                          return (
-                                            <Box key={index}>
-                                              <Box className={classes.sizeBox} key={siz.sizeId} onClick={() => addToCart({ ProductId: bestSeller.productId, ColorId: bestSeller.colorId, SizeId: siz.sizeId }, { vertical: 'top', horizontal: 'right' })} >
-                                                {siz.name}
-                                              </Box>
-                                              <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                                <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
-                                                  product added succussfully to Cart
-                                                </Alert>
-                                              </Snackbar>
-                                            </Box>
-                                          )
-                                        })}
-                                      </Box>
-                                    )
-                                    : (<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e => { handleAddToCart(bestSeller.productId) }} sx={{ color: 'white' }}>Add to Cart</Button></Box>)
-                                  }
-
-                                </Box>
-                              </Box>) : null}
-
-                              {bestSeller.onlyFewLeft ? (
-                                <Box className={classes.fewLeftBox}>
-                                  <Typography sx={{ fontSize: '10px' }}>only few left</Typography>
-                                </Box>
-                              ) : null}
-
-                              {bestSeller.isSale ? (
-                                <Box>
-                                  <Box className={classes.saleBox}>
-                                    <Typography sx={{ fontSize: '14px', color: 'white' }}>Sale</Typography>
+                                  <Icons.FavoriteBorder onClick={() => AddToFavourite({ ProductId: bestSeller.productId, ColorId: bestSeller.colorId }, { vertical: 'top', horizontal: 'right' })} />
+                                  <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                    <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                      <AlertRemovedFromFav />
+                                    </Alert>
+                                  </Snackbar>
+                                </Box>}
+                            </Box>
+                            <Box>
+                              {bestSeller.isClicked ?
+                                (
+                                  <Box className={classes.sizes}>
+                                    {bestSeller.sizes.map((siz: any, index: any) => {
+                                      return (
+                                        <Box key={index}>
+                                          <Box className={classes.sizeBox} key={siz.sizeId} onClick={() => addToCart({ ProductId: bestSeller.productId, ColorId: bestSeller.colorId, SizeId: siz.sizeId }, { vertical: 'top', horizontal: 'right' })} >
+                                            {siz.name}
+                                          </Box>
+                                          <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                            <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                              product added succussfully to Cart
+                                            </Alert>
+                                          </Snackbar>
+                                        </Box>
+                                      )
+                                    })}
                                   </Box>
-                                  <CardContent className={classes.cardContent}>
-                                    <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                                      {bestSeller.title}
-                                    </Typography>
-                                    <Box className={classes.cardFooter}>
-                                      <Typography color="text.secondary">{bestSeller.category}</Typography>
-                                      <Box sx={{ display: 'flex', gap: '10px' }}>
-                                        <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{bestSeller.orginalPrice}</Typography>
-                                        <Typography sx={{ color: '#EA4335' }}>{bestSeller.currentPrice}</Typography>
-                                      </Box>
-                                    </Box>
-                                  </CardContent>
-                                </Box>
-                              ) : <CardContent className={classes.cardContent}>
+                                )
+                                : (<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e => { handleAddToCart(bestSeller.productId) }} sx={{ color: 'white' }}>Add to Cart</Button></Box>)
+                              }
+
+                            </Box>
+                          </Box>) : null}
+
+                          {bestSeller.onlyFewLeft ? (
+                            <Box className={classes.fewLeftBox}>
+                              <Typography sx={{ fontSize: '10px' }}>only few left</Typography>
+                            </Box>
+                          ) : null}
+
+                          {bestSeller.isSale ? (
+                            <Box>
+                              <Box className={classes.saleBox}>
+                                <Typography sx={{ fontSize: '14px', color: 'white' }}>Sale</Typography>
+                              </Box>
+                              <CardContent className={classes.cardContent}>
                                 <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
                                   {bestSeller.title}
                                 </Typography>
                                 <Box className={classes.cardFooter}>
                                   <Typography color="text.secondary">{bestSeller.category}</Typography>
-                                  <Typography>{bestSeller.orginalPrice}</Typography>
+                                  <Box sx={{ display: 'flex', gap: '10px' }}>
+                                    <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{bestSeller.orginalPrice}</Typography>
+                                    <Typography sx={{ color: '#EA4335' }}>{bestSeller.currentPrice}</Typography>
+                                  </Box>
                                 </Box>
-                              </CardContent>}
-                            </Card>
-                        </SplideSlide>
-                      )
-                    }
-                  })
-                }
-              </Splide>
-            </Box>
+                              </CardContent>
+                            </Box>
+                          ) : <CardContent className={classes.cardContent}>
+                            <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                              {bestSeller.title}
+                            </Typography>
+                            <Box className={classes.cardFooter}>
+                              <Typography color="text.secondary">{bestSeller.category}</Typography>
+                              <Typography>{bestSeller.orginalPrice}</Typography>
+                            </Box>
+                          </CardContent>}
+                        </Card>
+                      </SplideSlide>
+                    )
+                  }
+                })
+              }
+            </Splide>
           </Box>
-        
-        
+        </Box>
+
+
 
         {/* Mobile view */}
 
@@ -531,12 +564,12 @@ export default function Index() {
           </Box>
           <Box className={classes.slider}>
             <Splide className={classes.slider} options={{ type: 'loop', autoWidth: false, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
-            {
+              {
                 bestSeller?.map((bestSeller: any, index: number) => {
                   if (index <= 6) {
                     return (
                       <SplideSlide key={index} >
-                        <Box style={{ display:'flex', justifyContent:'center' }}>
+                        <Box style={{ display: 'flex', justifyContent: 'center' }}>
                           <Card key={index} className={classes.flashSaleCard} onMouseOver={e => handleMouseOver(bestSeller.productId, index)} onMouseOut={e => handleMouseOut(bestSeller.productId, index)}>
                             {bestSeller.hoverImage ? (
                               <Box>
@@ -548,7 +581,7 @@ export default function Index() {
 
                             ) : (
                               <Box className={classes.cardImage}>
-                                <Image  src={bestSeller.images[0]} alt="product picture"  height={260} width={270} />
+                                <Image src={bestSeller.images[0]} alt="product picture" height={260} width={270} />
                               </Box>
                             )}
 
@@ -771,120 +804,120 @@ export default function Index() {
       {/* Mobile view */}
 
       <Box className={classes.flashSaleContainer} sx={{ display: { xs: 'flex', md: 'none' } }}>
-       <Box sx={{ paddingTop:'2ch',paddingBottom:'2ch'}}>
-        <Image src={flashSaleBanner} 
-          layout='resposive'
-          alt="Pictura flashsale page" />
-          </Box>
+        <Box sx={{ paddingTop: '2ch', paddingBottom: '2ch' }}>
+          <Image src={flashSaleBanner}
+            layout='resposive'
+            alt="Pictura flashsale page" />
+        </Box>
         <Box>
           <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 2000, pagination: false }}>
-          {
-                flashSale?.map((flashSale: any, index: number) => {
-                  if (index <= 6) {
-                    return (
-                      <SplideSlide key={index} >
-                        <Box style={{ display: 'flex', justifyContent:'center', marginLeft:'2ch' }}>
-                          <Card key={index} className={classes.flashSaleCard} onMouseOver={e => handleMouseOver(flashSale.productId, index)} onMouseOut={e => handleMouseOut(flashSale.productId, index)}>
-                            {flashSale.hoverImage ? (
-                              <Box>
-                                <Link href={'/cardDetails/' + flashSale.productId + "/" + flashSale.colorId}>
-                                  <Box className={classes.productDetailsLink}></Box>
-                                </Link>
-                                <ImagesCard images={flashSale?.images}></ImagesCard>
-                              </Box>
+            {
+              flashSale?.map((flashSale: any, index: number) => {
+                if (index <= 6) {
+                  return (
+                    <SplideSlide key={index} >
+                      <Box style={{ display: 'flex', justifyContent: 'center', marginLeft: '2ch' }}>
+                        <Card key={index} className={classes.flashSaleCard} onMouseOver={e => handleMouseOver(flashSale.productId, index)} onMouseOut={e => handleMouseOut(flashSale.productId, index)}>
+                          {flashSale.hoverImage ? (
+                            <Box>
+                              <Link href={'/cardDetails/' + flashSale.productId + "/" + flashSale.colorId}>
+                                <Box className={classes.productDetailsLink}></Box>
+                              </Link>
+                              <ImagesCard images={flashSale?.images}></ImagesCard>
+                            </Box>
 
-                            ) : (
-                              <Box className={classes.cardImage}>
-                                <Image  src={flashSale.images[0]} alt="product picture" unoptimized height={260} width={270} />
-                              </Box>
-                            )}
+                          ) : (
+                            <Box className={classes.cardImage}>
+                              <Image src={flashSale.images[0]} alt="product picture" unoptimized height={260} width={270} />
+                            </Box>
+                          )}
 
-                            {flashSale.isMouseOver ? (<Box className={classes.hoverBox}>
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                {isFavourite || flashSale?.isFavorite ?
-                                  <Box>
-                                    <Icons.Favorite sx={{ color: 'red' }} onClick={() => AddToFavourite({ ProductId: flashSale.productId, ColorId: flashSale.colorId }, { vertical: 'top', horizontal: 'right' })}></Icons.Favorite>
-                                    <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                      <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
-                                        <AlertAddToFav />
-                                      </Alert>
-                                    </Snackbar>
-                                  </Box> :
-                                  <Box>
-                                    <Icons.FavoriteBorder onClick={() => AddToFavourite({ ProductId: flashSale.productId, ColorId: flashSale.colorId }, { vertical: 'top', horizontal: 'right' })} />
-                                    <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                      <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
-                                        <AlertRemovedFromFav />
-                                      </Alert>
-                                    </Snackbar>
-                                  </Box>}
-                              </Box>
-                              <Box>
-                                {flashSale.isClicked ?
-                                  (
-                                    <Box className={classes.sizes}>
-                                      {flashSale.sizes.map((siz: any, index: any) => {
-                                        return (
-                                          <Box key={index}>
-                                            <Box className={classes.sizeBox} key={siz.sizeId} onClick={() => addToCart({ ProductId: flashSale.productId, ColorId: flashSale.colorId, SizeId: siz.sizeId }, { vertical: 'top', horizontal: 'right' })} >
-                                              {siz.name}
-                                            </Box>
-                                            <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
-                                              <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
-                                                product added succussfully to Cart
-                                              </Alert>
-                                            </Snackbar>
+                          {flashSale.isMouseOver ? (<Box className={classes.hoverBox}>
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                              {isFavourite || flashSale?.isFavorite ?
+                                <Box>
+                                  <Icons.Favorite sx={{ color: 'red' }} onClick={() => AddToFavourite({ ProductId: flashSale.productId, ColorId: flashSale.colorId }, { vertical: 'top', horizontal: 'right' })}></Icons.Favorite>
+                                  <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                    <Alert onClose={handleCloseAlertFav} severity="success" sx={{ width: '100%' }}>
+                                      <AlertAddToFav />
+                                    </Alert>
+                                  </Snackbar>
+                                </Box> :
+                                <Box>
+                                  <Icons.FavoriteBorder onClick={() => AddToFavourite({ ProductId: flashSale.productId, ColorId: flashSale.colorId }, { vertical: 'top', horizontal: 'right' })} />
+                                  <Snackbar open={openFav} autoHideDuration={4000} onClose={handleCloseAlertFav} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                    <Alert onClose={handleCloseAlertFav} severity="error" sx={{ width: '100%' }}>
+                                      <AlertRemovedFromFav />
+                                    </Alert>
+                                  </Snackbar>
+                                </Box>}
+                            </Box>
+                            <Box>
+                              {flashSale.isClicked ?
+                                (
+                                  <Box className={classes.sizes}>
+                                    {flashSale.sizes.map((siz: any, index: any) => {
+                                      return (
+                                        <Box key={index}>
+                                          <Box className={classes.sizeBox} key={siz.sizeId} onClick={() => addToCart({ ProductId: flashSale.productId, ColorId: flashSale.colorId, SizeId: siz.sizeId }, { vertical: 'top', horizontal: 'right' })} >
+                                            {siz.name}
                                           </Box>
-                                        )
-                                      })}
-                                    </Box>
-                                  )
-                                  : (<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e => { handleAddToCart(flashSale.productId) }} sx={{ color: 'white' }}>Add to Cart</Button></Box>)
-                                }
-
-                              </Box>
-                            </Box>) : null}
-
-                            {flashSale.onlyFewLeft ? (
-                              <Box className={classes.fewLeftBox}>
-                                <Typography sx={{ fontSize: '10px' }}>only few left</Typography>
-                              </Box>
-                            ) : null}
-
-                            {flashSale.isSale ? (
-                              <Box>
-                                <Box className={classes.saleBox}>
-                                  <Typography sx={{ fontSize: '14px', color: 'white' }}>Sale</Typography>
-                                </Box>
-                                <CardContent className={classes.cardContent}>
-                                  <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                                    {flashSale.title}
-                                  </Typography>
-                                  <Box className={classes.cardFooter}>
-                                    <Typography color="text.secondary">{flashSale.category}</Typography>
-                                    <Box sx={{ display: 'flex', gap: '10px' }}>
-                                      <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{flashSale.orginalPrice}</Typography>
-                                      <Typography sx={{ color: '#EA4335' }}>{flashSale.currentPrice}</Typography>
-                                    </Box>
+                                          <Snackbar open={open} autoHideDuration={5000} onClose={handleCloseAlert} key={vertical + horizontal} anchorOrigin={{ vertical, horizontal }}>
+                                            <Alert onClose={handleCloseAlert} severity="success" sx={{ width: '100%' }}>
+                                              product added succussfully to Cart
+                                            </Alert>
+                                          </Snackbar>
+                                        </Box>
+                                      )
+                                    })}
                                   </Box>
-                                </CardContent>
+                                )
+                                : (<Box className={classes.cartMobile}><LocalMallIcon></LocalMallIcon> <Button className={classes.btnCart} onClick={e => { handleAddToCart(flashSale.productId) }} sx={{ color: 'white' }}>Add to Cart</Button></Box>)
+                              }
+
+                            </Box>
+                          </Box>) : null}
+
+                          {flashSale.onlyFewLeft ? (
+                            <Box className={classes.fewLeftBox}>
+                              <Typography sx={{ fontSize: '10px' }}>only few left</Typography>
+                            </Box>
+                          ) : null}
+
+                          {flashSale.isSale ? (
+                            <Box>
+                              <Box className={classes.saleBox}>
+                                <Typography sx={{ fontSize: '14px', color: 'white' }}>Sale</Typography>
                               </Box>
-                            ) : <CardContent className={classes.cardContent}>
-                              <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
-                                {flashSale.title}
-                              </Typography>
-                              <Box className={classes.cardFooter}>
-                                <Typography color="text.secondary">{flashSale.category}</Typography>
-                                <Typography>{flashSale.orginalPrice}</Typography>
-                              </Box>
-                            </CardContent>}
-                          </Card>
-                        </Box>
-                      </SplideSlide>
-                    )
-                  }
-                })
-              }
+                              <CardContent className={classes.cardContent}>
+                                <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                                  {flashSale.title}
+                                </Typography>
+                                <Box className={classes.cardFooter}>
+                                  <Typography color="text.secondary">{flashSale.category}</Typography>
+                                  <Box sx={{ display: 'flex', gap: '10px' }}>
+                                    <Typography sx={{ opacity: 0.8, textDecoration: 'line-through' }}>{flashSale.orginalPrice}</Typography>
+                                    <Typography sx={{ color: '#EA4335' }}>{flashSale.currentPrice}</Typography>
+                                  </Box>
+                                </Box>
+                              </CardContent>
+                            </Box>
+                          ) : <CardContent className={classes.cardContent}>
+                            <Typography gutterBottom variant="h5" component="div" className={classes.cardTitle}>
+                              {flashSale.title}
+                            </Typography>
+                            <Box className={classes.cardFooter}>
+                              <Typography color="text.secondary">{flashSale.category}</Typography>
+                              <Typography>{flashSale.orginalPrice}</Typography>
+                            </Box>
+                          </CardContent>}
+                        </Card>
+                      </Box>
+                    </SplideSlide>
+                  )
+                }
+              })
+            }
           </Splide>
         </Box>
         <Box className={classes.buyNow}>
@@ -940,40 +973,73 @@ export default function Index() {
         </Box>
       </Box>
 
+
       {/* vote & win section */}
       <Box sx={{ display: { xs: 'none', md: 'block' } }}>
         <Box className={classes.voteContainer} id="VoteWin">
           <Typography variant='h6'>Vote & Win</Typography>
           <Typography>Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.</Typography>
         </Box>
-        <Box className={classes.voteCardsContainer}>
-          {votes.map(vote => {
+      
+          {!!token ? <Box>
+         {!! userVote?<Box className={classes.voteCardsContainer}>{voteAndWin.map((vote: any, index: number) => {
             return (
-              <Box key={vote.id} className={classes.voteBox} onClick={handleClickOpen}>
-                <Image width={200} height={300} src={vote.image} alt='vote & win first design' onMouseOver={e => handleMouseOverVote(vote.id)} onMouseOut={e => handleMouseOutVote(vote.id)} />
-                {vote.isMouseOver && <Heading />}
+              <Box key={index} className={classes.voteBox} >
+                <Image width={200} height={300} src={vote.image} alt='vote & win designs' onClick={handleClickVoteOpen} />
+                <Typography>user Voted</Typography>
+              </Box>
+            )
+          })} </Box>:<Box className={classes.voteCardsContainer}> {voteAndWin.map((vote: any, index: number) => {
+            return (
+              <Box key={index} className={classes.voteBox} >
+                <Image width={200} height={300} src={vote.image} alt='vote & win designs' onClick={handleClickVoteOpen} />
+                {/* {vote.isMouseOver && <Heading />} */}
               </Box>
             )
           })}
-          <Dialog
-            open={open}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={handleClose}
-            aria-describedby="alert-dialog-slide-description"
-          >
-            <DialogTitle>{"Vote & Win"}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
-                Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Log In</Button>
-              <Button onClick={handleClose}>Sign Up</Button>
-            </DialogActions>
-          </Dialog>
-        </Box>
+            <Dialog
+              open={openVote}
+              TransitionComponent={Transition}
+              keepMounted
+              onClose={handleCloseVote}
+              aria-describedby="alert-dialog-slide-description"
+            >
+                 <DialogTitle>Thanks for voting , now you can enjoy your discount</DialogTitle>
+              <DialogActions>
+                <Button onClick={handleCloseVoteUser}>close</Button>
+                </DialogActions>
+            </Dialog></Box>}
+                     </Box>
+             : <Box  className={classes.voteCardsContainer}>
+              {voteAndWin.map((vote: any, index: number) => {
+            return (
+              <Box key={index} className={classes.voteBox} onClick={handleClickVoteOpen}>
+                <Image width={200} height={300} src={vote.image} alt='vote & win designs' onMouseOver={e => handleMouseOverVote(vote.voteId)} onMouseOut={e => handleMouseOutVote(vote.voteId)} />
+                {/* {vote.isMouseOver && <Heading />} */}
+              </Box>
+            )
+          })}
+
+            <Dialog
+              open={openVote}
+              TransitionComponent={Transition}
+              keepMounted
+              onClose={handleCloseVote}
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogTitle>{"Vote & Win"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                  Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Link href="/LogIn"><Button>Log In</Button></Link>
+                <Link href="/Registeration"><Button>Sign Up</Button></Link>
+              </DialogActions>
+            </Dialog>  </Box>}
+
+      
       </Box>
 
       {/* Mobile view */}
