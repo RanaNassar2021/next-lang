@@ -11,6 +11,7 @@ import SideBar from './SideBar/SideBar';
 import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import { CookiesProvider, useCookies } from "react-cookie";
+import { useRouter } from 'next/navigation';
 import {useTranslations} from 'next-intl';
 
 //import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -19,7 +20,7 @@ import {useTranslations} from 'next-intl';
 
 //Axios
 import Axios from 'axios';
-import { useRouter } from 'next/navigation';
+
 
 
 // material UI icons
@@ -31,6 +32,9 @@ import useStyles from './Header.Styles';
 
 
 export default function Header(props: any) {
+
+
+
   const { classes } = useStyles();
   const Icons: any = MuiIcons;
   const [token, SetToken] = useState<any>(localStorage.getItem("Token"));
@@ -50,9 +54,10 @@ export default function Header(props: any) {
   const [curName, setCurName] = useState<string>('EGP');
   const [language, setLanguage] = useState('en');
   const [langName, setLangName] = useState<string>('English');
-  const router = useRouter();
+ 
 
   const t = useTranslations('Index');
+  const router = useRouter();
  
 
 
@@ -216,7 +221,7 @@ export default function Header(props: any) {
         removeFavouriteCookies("FavouriteProduct")  
   }},[token, favouriteCookies.FavouriteProduct]);
 
-
+  
   return (
     <React.Fragment>
       <Box sx={{ display: { xs: 'none', md: 'block' } }}>

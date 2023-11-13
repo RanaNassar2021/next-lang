@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, } from '@mui/material';
 import Slide from '@mui/material/Slide';
+import { styled } from '@mui/material/styles';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 import { TransitionProps } from '@mui/material/transitions';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
@@ -12,7 +14,25 @@ import { CookiesProvider, useCookies } from "react-cookie";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import { useTranslations } from 'next-intl';
 
-// SSR and TSS
+// right to left direction styles
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { makeStyles } from 'tss-react/mui';
+
+const useStylesRtl = makeStyles()((theme: any) => {
+  return {
+      container: {
+          padding: theme.spacing(2),
+              ...(theme.direction === 'rtl' ? {  backgroundColor: 'blue' } : { backgroundColor: 'orange' }),
+      },
+  }
+})
+
+
+
+
+interface YourComponentProps {};
+
+
 
 
 
@@ -43,6 +63,8 @@ import * as MuiIcons from '@mui/icons-material';
 import useStyles from './HomePage.Styles';
 
 
+
+
 // static Data
 import votesData from './Assets/StaticData/Vote.json'
 
@@ -51,7 +73,6 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 
 import Header from './Header';
 import Footer from './Footer';
-import CustomizedProgressBars from './Progress/Progress';
 import '@splidejs/react-splide/css';
 
 //Axios
@@ -73,9 +94,37 @@ const Transition = React.forwardRef(function Transition(
 });
 
 
+// progress bar for vote & Win
+
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+  height: 10,
+  borderRadius: 5,
+  [`&.${linearProgressClasses.colorPrimary}`]: {
+    backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+  },
+  [`& .${linearProgressClasses.bar}`]: {
+    borderRadius: 5,
+    backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+  },
+}));
 
 
-export default function Index() {
+
+const  Index:React.FC<YourComponentProps> = (props: any) => {
+
+  const [textDirection, setTextDirection] = useState<'ltr' | 'rtl'>('ltr');
+  const  classesRtl:any  = useStylesRtl();
+
+  const toggleTextDirection = () => {
+    setTextDirection((prevDirection) => (prevDirection === 'ltr' ? 'rtl' : 'ltr'));
+    console.log('text direction =', textDirection)
+};
+
+// Dynamically create a theme with the updated text direction
+const theme = createTheme({
+    direction: textDirection,
+    
+});
 
   const Icons: any = MuiIcons;
   const { classes } = useStyles();
@@ -84,6 +133,7 @@ export default function Index() {
   const [token, SetToken] = useState(localStorage.getItem("Token"));
   const [flashSale, setFlashSale] = useState<any>([]);
   const [bestSeller, setBestSeller] = useState<any>([]);
+  const [newTrend, setNewTrend] = useState<any>([]);
   const [voteAndWin, setVoteAndWin] = useState<any>([]);
 
   const [currency, setCurrency] = useState<any>('Egypt');
@@ -265,6 +315,24 @@ export default function Index() {
     })
   }
 
+  interface voteAndWinInterface {
+    ProductId: string;
+    ColorId: number;
+  }
+
+  const userVoting = (userVote: voteAndWinInterface) =>{
+ 
+    const Config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("Token")}` }
+    }
+    Axios.post(`${process.env.apiUrl}` + `Product/UserVote?productId=${userVote.ProductId}&colorId=${userVote.ColorId}`,Config).then((res) => {
+      console.log("user voted successfully ", res)
+      setUserVote(true);
+      setOpenVote(true);
+    })
+    
+  }
+
   // useEffect(()=>{
   //   Axios.get(`${process.env.apiUrl}` + `Tag/GetFalshSaleProducts?PageNumber=1&PageSize=10`)
   //   .then((res) => {setFlashSale(res.flashSale)}
@@ -284,6 +352,12 @@ export default function Index() {
 
   }
 
+  const fetchNewTrend = async ()=>{
+    const response = await Axios.get(`${process.env.apiUrl}` + `Tag/GetTrendingProducts?PageNumber=1&PageSize=2&Location=${currency}`);
+    const data = response.data;
+    setNewTrend(data);
+  }
+
   const fetchVoteAndWin = async () => {
     const response = await Axios.get(`${process.env.apiUrl}` + `Product/GetAllProductsVoteAndWin`);
     const data = response.data;
@@ -293,6 +367,7 @@ export default function Index() {
   useEffect(() => {
     fetchFlashSale();
     fetchBestSeller();
+    fetchNewTrend();
     fetchVoteAndWin();
   }, [currency])
 
@@ -309,11 +384,11 @@ export default function Index() {
     setOpenVote(false)
   }
 
-  const handleCloseVoteUser = ()=>{
+  const handleCloseVoteUser = () => {
     setOpenVote(false);
     setUserVote(true)
   }
-  console.log("user vote: ", userVote)
+ 
 
   const handleClose = () => {
     setOpen(false);
@@ -336,42 +411,35 @@ export default function Index() {
 
 
 
-  function Heading() {
-    return (
-      <Box className={classes.hoverBox}>
-        <Box style={{ width: '100%', color: 'white' }}>
-          <CustomizedProgressBars />
-        </Box>
-      </Box>
-    );
-  }
 
   const elements = document.querySelectorAll('[dir="rtl"]');
   elements.forEach((element) => {
     element.classList.add('rtl-class');
   });
 
-  const DesignerStyles = {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    backgroundColor: 'orange',
-    gap: 0,
-    marginTop: '2ch',
-    '.rtl-class': {
-      backgroundColor: 'blue',
-    }
-  }
+
   return (
 
     <React.Fragment>
       <Header sendCurrency={currencyFromHeader}></Header>
       <Box className="flex  flex-col items-center justify-between">
-
+        {/* polygon */}
+          <Box>
+          <ThemeProvider theme={theme}>
+            <React.Fragment>
+                <Box className={classesRtl.container}>
+                    {/* Your component content goes here */}
+                    <Button variant="contained" color="primary" onClick={toggleTextDirection}>
+                        Toggle Text Direction
+                    </Button>
+                </Box>
+            </React.Fragment>
+        </ThemeProvider>
+          </Box>
         {/* The dsigner & Pictura designs */}
         <Box className={classes.container} sx={{ display: { xs: 'none', md: 'flex' } }}>
           <Box className={classes.theDesigner} style={{ backgroundImage: `url(${Designer.src})`, backgroundSize: 'cover' }}>
-            <Box className={classes.designerContent}>
+            <Box className={classes.designerContent} >
               <Typography variant='h6'>{t('The_Designer')}</Typography>
               <Typography>{t('designer_description')}</Typography>
             </Box>
@@ -401,7 +469,7 @@ export default function Index() {
 
         {/* mobile view */}
 
-        <Box className={classes.container} sx={{ display: { xs: 'flex', md: 'none' } }}>
+        <Box className={classes.container}  sx={{ display: { xs: 'flex', md: 'none' } }}>
           <Box className={classes.theDesignerMob} style={{ backgroundImage: `url(${Designer.src})`, backgroundSize: 'cover' }}>
             <Box className={classes.theDesignerContentMob}>
               <Typography variant='h6'>{t('The_Designer')}</Typography>
@@ -928,7 +996,19 @@ export default function Index() {
       </Box>
       {/* New Trends Section */}
       <Box className={classes.newTrendsContainer} sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <Box className={classes.newTrendsCard}>
+       {newTrend.map((trend: any, index: number)=>{
+        if(index<2){
+        return(
+          <Box className={classes.newTrendsCard}>
+          <Card>
+            <CardMedia sx={{ height: '100vh' }}
+              image={trend.images[0]}
+              title="product image" />
+          </Card>
+        </Box>
+        )}
+       })}
+        {/* <Box className={classes.newTrendsCard}>
           <Card>
             <CardMedia sx={{ height: '100vh' }}
               image={newTrendG.src}
@@ -941,7 +1021,7 @@ export default function Index() {
               image={newTrendM.src}
               title="product image" />
           </Card>
-        </Box>
+        </Box> */}
         <Box className={classes.newTrendAbs}>
           <Link href="NewTrends">
             <Typography variant='h5'>New Trends</Typography>
@@ -980,20 +1060,23 @@ export default function Index() {
           <Typography variant='h6'>Vote & Win</Typography>
           <Typography>Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.</Typography>
         </Box>
-      
-          {!!token ? <Box>
-         {!! userVote?<Box className={classes.voteCardsContainer}>{voteAndWin.map((vote: any, index: number) => {
+
+        {!!token ? <Box>
+          {!!userVote ? <Box className={classes.voteCardsContainer}>{voteAndWin.map((vote: any, index: number) => {
             return (
               <Box key={index} className={classes.voteBox} >
                 <Image width={200} height={300} src={vote.image} alt='vote & win designs' onClick={handleClickVoteOpen} />
-                <Typography>user Voted</Typography>
+                <Box className={classes.userVote}> <Box sx={{ flexGrow: 1 }}>
+                  <Typography sx={{ display: 'flex', justifyContent: 'center', color: 'white' }}>{vote.voteCount} %</Typography>
+                  <br />
+                  <BorderLinearProgress variant="determinate" value={vote.voteCount} />
+                </Box></Box>
               </Box>
             )
-          })} </Box>:<Box className={classes.voteCardsContainer}> {voteAndWin.map((vote: any, index: number) => {
+          })} </Box> : <Box className={classes.voteCardsContainer}> {voteAndWin.map((vote: any, index: number) => {
             return (
               <Box key={index} className={classes.voteBox} >
-                <Image width={200} height={300} src={vote.image} alt='vote & win designs' onClick={handleClickVoteOpen} />
-                {/* {vote.isMouseOver && <Heading />} */}
+                <Image width={200} height={300} src={vote.image} alt='vote & win designs' onClick={()=>{userVoting({ProductId: vote.productId, ColorId: vote.colorId})}} />
               </Box>
             )
           })}
@@ -1004,21 +1087,20 @@ export default function Index() {
               onClose={handleCloseVote}
               aria-describedby="alert-dialog-slide-description"
             >
-                 <DialogTitle>Thanks for voting , now you can enjoy your discount</DialogTitle>
+              <DialogTitle>Thanks for voting , now you can enjoy your discount</DialogTitle>
               <DialogActions>
                 <Button onClick={handleCloseVoteUser}>close</Button>
-                </DialogActions>
+              </DialogActions>
             </Dialog></Box>}
-                     </Box>
-             : <Box  className={classes.voteCardsContainer}>
-              {voteAndWin.map((vote: any, index: number) => {
-            return (
-              <Box key={index} className={classes.voteBox} onClick={handleClickVoteOpen}>
-                <Image width={200} height={300} src={vote.image} alt='vote & win designs' onMouseOver={e => handleMouseOverVote(vote.voteId)} onMouseOut={e => handleMouseOutVote(vote.voteId)} />
-                {/* {vote.isMouseOver && <Heading />} */}
-              </Box>
-            )
-          })}
+        </Box>
+          : <Box className={classes.voteCardsContainer}>
+            {voteAndWin.map((vote: any, index: number) => {
+              return (
+                <Box key={index} className={classes.voteBox} onClick={handleClickVoteOpen}>
+                  <Image width={200} height={300} src={vote.image} alt='vote & win designs' onMouseOver={e => handleMouseOverVote(vote.voteId)} onMouseOut={e => handleMouseOutVote(vote.voteId)} />
+                </Box>
+              )
+            })}
 
             <Dialog
               open={openVote}
@@ -1039,7 +1121,7 @@ export default function Index() {
               </DialogActions>
             </Dialog>  </Box>}
 
-      
+
       </Box>
 
       {/* Mobile view */}
@@ -1049,12 +1131,11 @@ export default function Index() {
           <Typography>Choose The Best Design And Get A 5% Discount On Your Next Purchase For A Month.</Typography>
           <Splide options={{ type: 'loop', autoWidth: true, perMove: 1, autoplay: false, speed: 3000, pagination: false }} style={{ width: '100%' }}>
 
-            {votes.map(vote => {
+            {voteAndWin.map((vote: any , index: number) => {
               return (
                 <SplideSlide>
-                  <Box key={vote.id}>
-                    <Image width={200} height={300} src={vote.image} alt='vote & win first design' onMouseOver={e => handleMouseOverVote(vote.id)} onMouseOut={e => handleMouseOutVote(vote.id)} />
-                    {vote.isMouseOver && <Heading />}
+                  <Box key={index}  className={classes.voteBox}>
+                    {!!token ? <Image width={200} height={300} src={vote.image} alt='vote & win design'/>:<Box>no Token</Box> }
                   </Box>
                 </SplideSlide>
               )
@@ -1101,3 +1182,5 @@ export default function Index() {
 
   )
 }
+
+export default Index;

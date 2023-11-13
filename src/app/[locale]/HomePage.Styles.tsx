@@ -10,6 +10,7 @@ const useStyles = makeStyles()((theme: any) => {
             flexDirection: 'row',
             gap: 0,
             marginTop: '2ch',
+           // ...(theme.direction === 'rtl' ? { backgroundColor: 'red' } : { backgroundColor: 'blue' }),
             [theme.breakpoints.down('md')]: {
                 marginLeft: 0,
                 marginRight: 0,
@@ -20,7 +21,9 @@ const useStyles = makeStyles()((theme: any) => {
                 alignItems: 'center',
                 gap: 0
             },
+          
         },
+    
 
         theDesigner: {
             width: '55ch',
@@ -557,6 +560,7 @@ const useStyles = makeStyles()((theme: any) => {
                 color:'white',
                 fontSize:'40px',
                 fontFamily:'serif',
+                textShadow:'4px 2px gray'
             }
 
         },
@@ -664,6 +668,14 @@ const useStyles = makeStyles()((theme: any) => {
             height:'250px',
             overflow:'hidden'
            }
+        },
+        userVote:{
+            backgroundColor:'#0A183D',
+            position:'absolute',
+            bottom:0,
+            width:'100%',
+            padding:'1ch',
+            color:'white'
         },
         hoverBox:{
             backgroundColor:'#1E2832',

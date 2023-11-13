@@ -1,3 +1,4 @@
+
 import './globals.css'
 import React from 'react';
 import type { Metadata } from 'next'
@@ -27,6 +28,7 @@ export default async  function RootLayout({
 
 }) {
 
+ 
 
   let messages;
   try {
@@ -34,6 +36,7 @@ export default async  function RootLayout({
   } catch (error) {
     notFound();
   }
+
 
   return (
     <html lang={locale}>
