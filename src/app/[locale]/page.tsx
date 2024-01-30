@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Box, Typography, Grid, Card, CardContent, CardMedia, Button, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, } from '@mui/material';
+import { Box, Typography, Card, CardContent, CardMedia, Button, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, } from '@mui/material';
 import Slide from '@mui/material/Slide';
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
@@ -13,27 +13,6 @@ import ImagesCard from "./Card/page";
 import { CookiesProvider, useCookies } from "react-cookie";
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import { useTranslations } from 'next-intl';
-
-// right to left direction styles
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { makeStyles } from 'tss-react/mui';
-
-const useStylesRtl = makeStyles()((theme: any) => {
-  return {
-      container: {
-          padding: theme.spacing(2),
-              ...(theme.direction === 'rtl' ? {  backgroundColor: 'blue' } : { backgroundColor: 'orange' }),
-      },
-  }
-})
-
-
-
-
-interface YourComponentProps {};
-
-
-
 
 
 // Images
@@ -110,21 +89,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 
 
 
-const  Index:React.FC<YourComponentProps> = (props: any) => {
-
-  const [textDirection, setTextDirection] = useState<'ltr' | 'rtl'>('ltr');
-  const  classesRtl:any  = useStylesRtl();
-
-  const toggleTextDirection = () => {
-    setTextDirection((prevDirection) => (prevDirection === 'ltr' ? 'rtl' : 'ltr'));
-    console.log('text direction =', textDirection)
-};
-
-// Dynamically create a theme with the updated text direction
-const theme = createTheme({
-    direction: textDirection,
-    
-});
+export default function Index() {
 
   const Icons: any = MuiIcons;
   const { classes } = useStyles();
@@ -423,21 +388,8 @@ const theme = createTheme({
     <React.Fragment>
       <Header sendCurrency={currencyFromHeader}></Header>
       <Box className="flex  flex-col items-center justify-between">
-        {/* polygon */}
-          <Box>
-          <ThemeProvider theme={theme}>
-            <React.Fragment>
-                <Box className={classesRtl.container}>
-                    {/* Your component content goes here */}
-                    <Button variant="contained" color="primary" onClick={toggleTextDirection}>
-                        Toggle Text Direction
-                    </Button>
-                </Box>
-            </React.Fragment>
-        </ThemeProvider>
-          </Box>
         {/* The dsigner & Pictura designs */}
-        <Box className={classes.container} sx={{ display: { xs: 'none', md: 'flex' } }}>
+        <Box className={classes.container} >
           <Box className={classes.theDesigner} style={{ backgroundImage: `url(${Designer.src})`, backgroundSize: 'cover' }}>
             <Box className={classes.designerContent} >
               <Typography variant='h6'>{t('The_Designer')}</Typography>
@@ -1008,20 +960,7 @@ const theme = createTheme({
         </Box>
         )}
        })}
-        {/* <Box className={classes.newTrendsCard}>
-          <Card>
-            <CardMedia sx={{ height: '100vh' }}
-              image={newTrendG.src}
-              title="product image" />
-          </Card>
-        </Box>
-        <Box className={classes.newTrendsCard}>
-          <Card>
-            <CardMedia sx={{ height: '100vh' }}
-              image={newTrendM.src}
-              title="product image" />
-          </Card>
-        </Box> */}
+    
         <Box className={classes.newTrendAbs}>
           <Link href="NewTrends">
             <Typography variant='h5'>New Trends</Typography>
@@ -1183,4 +1122,3 @@ const theme = createTheme({
   )
 }
 
-export default Index;
